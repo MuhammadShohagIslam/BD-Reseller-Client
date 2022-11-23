@@ -1,11 +1,12 @@
 import React from "react";
-import Navbar from "../../../components/shared/Navbar/Navbar";
+import Main from "../../../Layout/Main";
+import Banner from "../Banner/Banner";
 
 const Home = () => {
     return (
-        <>
-            <Navbar />
-        </>
+      <Main>
+        <Banner/>
+      </Main>
     );
 };
 

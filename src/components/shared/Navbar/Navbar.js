@@ -16,7 +16,7 @@ const Navbar = () => {
                 <li>
                     <Link
                         className="hover:bg-transparent text-primary hover:text-success text-lg"
-                        to="/blog"
+                        to="/blogs"
                     >
                         Blogs
                     </Link>
@@ -88,7 +88,7 @@ const Navbar = () => {
                         </ul>
                     </div>
                     <Link className="text-3xl sm:text-2xl md:text-2xl italic text-primary">
-                        BdSellerFurniture
+                        BdSellerComputer
                     </Link>
                 </div>
                 <div className="navbar-center hidden lg:flex">
