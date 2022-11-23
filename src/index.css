@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .container {
+        max-width: 1350px;
+        width: 91.66% !important;
+        margin: 0 auto;
+    }
+}
