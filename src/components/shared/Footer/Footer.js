@@ -8,48 +8,51 @@ const Footer = () => {
     return (
         <div className="bg-secondary mt-10">
             <div className="container">
-                <footer className="footer p-10 sm:p-5 text-base-content">
+                <footer className="grid gap-7 grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 p-10 sm:p-5 text-base-content">
                     <div>
                         <Link
                             to="/"
-                            className="text-success italic font-bold text-4xl  cursor-pointer"
+                            className="text-success italic font-bold text-4xl lg:text-3xl sm:text-3xl cursor-pointer"
                         >
-                           BdSellerComputer
+                            <span className="mb-2">BdSellerComputer</span>
                         </Link>
-                        <p className="text-primary">
+                        <p className="text-primary mt-2">
                             BdSellerComputer Industries Ltd.
                             <br />
                             Providing reliable products since 2022
                         </p>
                     </div>
-                    <div>
-                        <span className="text-md uppercase text-success font-bold">
+                    <div className="mt-1">
+                        <div className="text-md md:text-lg sm:text-lg uppercase text-success font-bold">
                             Company
-                        </span>
-                        <Link
-                            to="/blogs"
-                            className="link text-primary link-hover hover:text-success transition ease-in-out delay-15"
-                        >
-                            Blogs
-                        </Link>
-                       
+                        </div>
+                        <div className="mt-1">
+                            <Link
+                                to="/blogs"
+                                className="link block text-primary link-hover hover:text-success transition ease-in-out delay-15"
+                            >
+                                Blogs
+                            </Link>
+                        </div>
                     </div>
                     <div>
-                        <span className="text-md  uppercase text-success font-bold">
+                        <div className="text-md md:text-lg sm:text-lg  uppercase text-success font-bold">
                             Legal
-                        </span>
-                        <Link
-                            to=""
-                            className="link text-primary link-hover hover:text-success transition ease-in-out delay-15"
-                        >
-                           Privacy Policy
-                        </Link>
-                        <Link
-                            to=""
-                            className="link text-primary link-hover hover:text-success transition ease-in-out delay-15"
-                        >
-                            Terms & Conditions
-                        </Link>
+                        </div>
+                        <div className="mt-1">
+                            <Link
+                                to=""
+                                className="link block text-primary link-hover hover:text-success transition ease-in-out delay-15"
+                            >
+                                Privacy Policy
+                            </Link>
+                            <Link
+                                to=""
+                                className="link block text-primary link-hover hover:text-success transition ease-in-out delay-15"
+                            >
+                                Terms & Conditions
+                            </Link>
+                        </div>
                     </div>
                     <div>
                         <span className="text-md uppercase text-success font-bold">
@@ -92,7 +95,9 @@ const Footer = () => {
                     </div>
                 </footer>
                 <footer className="footer flex justify-center px-10 sm:px-0 py-4 border-t bg-secondary text-base-content border-base-300 text-center">
-                    <p className="text-primary">Copyright © 2022 - All right reserved by Shohag</p>
+                    <p className="text-primary">
+                        Copyright © 2022 - All right reserved by Shohag
+                    </p>
                 </footer>
             </div>
         </div>

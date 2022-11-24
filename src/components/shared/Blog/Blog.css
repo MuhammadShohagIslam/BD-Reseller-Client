@@ -1,0 +1,79 @@
+.slick-slider.slick-initialized {
+    top: 21px;
+}
+.slick-list {
+    margin: 0 0px !important;
+}
+.slick-slide > div {
+  
+    margin-bottom: 35px;
+}
+.slick-next:before {
+    content: "Next";
+}
+.slick-prev:before {
+    content: "Prev";
+}
+.slick-prev {
+    right: 9% !important;
+    left: auto !important;
+}
+.slick-next {
+    right: 4.3% !important;
+}
+.slick-prev,
+.slick-next {
+    top: 0 !important;
+    transition: all 0.3s;
+}
+.slick-prev:hover,
+.slick-prev:focus,
+.slick-next:hover,
+.slick-next:focus {
+    color: #000 !important;
+    outline: none;
+    background: transparent;
+}
+.slick-prev:before,
+.slick-next:before {
+    font-family: "slick";
+    font-size: 18px;
+    line-height: .1;
+    padding: 5px 10px;
+    opacity: 1;
+    color: #fff;
+    border-radius: 4px;
+    transition: all 0.3s;
+    background-color: #36d399;
+    border: 2px solid #36d399;
+}
+.slick-prev:hover:before,
+.slick-next:hover:before {
+    color: #000;
+    background-color:transparent;
+}
+
+/* Start Small Devices */
+@media only screen and (max-width: 767px) {
+    .singleBlog {
+        padding: 20px !important;
+    }
+    .blogTitle {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+    .blogDescription {
+        font-size: 16px;
+    }
+} /* End Small Devices */
+
+/* Start Medium Devices */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+ 
+} /* End Medium Devices */
+
+/* Start Large Devices */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+   
+} /* End Large Devices */
+

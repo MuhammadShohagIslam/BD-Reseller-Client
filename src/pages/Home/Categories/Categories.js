@@ -27,7 +27,7 @@ const Categories = () => {
                 onBeforeInit={(swiper) => {
                     swiperRef.current = swiper;
                 }}
-                className="sm:h-52"
+                className="sm:h-56"
                 breakpoints={{
                     640: {
                         slidesPerView: 1,

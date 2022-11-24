@@ -6,6 +6,7 @@ import BannerImg1 from "../../../assets/banner/laptop1Banner.jpg";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "./Banner.css";
+import CustomButton from "../../../components/UI/CustomButton/CustomButton";
 
 const Banner = () => {
     return (
@@ -33,9 +34,9 @@ const Banner = () => {
                             <h2 className="text-5xl sm:text-3xl text-primary w-[34rem] sm:w-64 ">
                                 Smartest and Affordable Devices
                             </h2>
-                            <button className="btn btn-outline btn-primary mt-10 sm:mt-5">
+                            <CustomButton className="mt-10 sm:mt-5">
                                 Shop Now
-                            </button>
+                            </CustomButton>
                         </div>
                     </div>
                 </SwiperSlide>
@@ -51,9 +52,9 @@ const Banner = () => {
                             <h2 className="text-5xl sm:text-3xl text-primary w-[34rem] sm:w-64">
                                 Smartest and Affordable Devices
                             </h2>
-                            <button className="btn btn-outline btn-primary mt-10 sm:mt-5">
+                            <CustomButton className="mt-10 sm:mt-5">
                                 Shop Now
-                            </button>
+                            </CustomButton>
                         </div>
                     </div>
                 </SwiperSlide>

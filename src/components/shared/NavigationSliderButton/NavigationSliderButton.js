@@ -1,11 +1,13 @@
 import React from "react";
 
 const NavigationSliderButton = ({ swiperRef, isMobile }) => {
-    console.log(swiperRef.current)
+
     return (
         <div
             className={`flex justify-end pb-2  ${
-                isMobile ? "lg:hidden md:hidden mt-3" : "sm:hidden"
+                isMobile
+                    ? "hidden md:hidden sm:block sm:text-end"
+                    : "sm:hidden"
             }`}
         >
             <button

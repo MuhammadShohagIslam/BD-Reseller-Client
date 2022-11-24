@@ -63,7 +63,7 @@ const Navbar = () => {
                     <div className="dropdown">
                         <label
                             tabIndex={0}
-                            className="btn btn-primary lg:hidden"
+                            className="btn btn-primary hidden  md:flex sm:flex "
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -87,11 +87,11 @@ const Navbar = () => {
                             {menuListItem()}
                         </ul>
                     </div>
-                    <Link className="text-3xl sm:text-2xl md:text-2xl italic text-primary">
+                    <Link className="text-3xl sm:text-2xl md:text-2xl italic text-success font-bold">
                         BdSellerComputer
                     </Link>
                 </div>
-                <div className="navbar-center hidden lg:flex">
+                <div className="navbar-center lg:flex md:hidden sm:hidden flex">
                     <ul className="menu menu-horizontal p-0">
                         {menuListItem()}
                     </ul>
