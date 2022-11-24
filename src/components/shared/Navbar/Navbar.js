@@ -50,7 +50,7 @@ const Navbar = () => {
                         className="hover:bg-transparent text-primary hover:text-success text-lg"
                         to="/register"
                     >
-                        Registration
+                        Register
                     </Link>
                 </li>
             </>

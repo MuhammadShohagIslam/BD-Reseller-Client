@@ -31,7 +31,7 @@ const BookingForm = () => {
                         <div className="mb-3">
                             <label
                                 htmlFor="name"
-                                class="block mb-2 text-sm font-medium text-primary"
+                                className="block mb-2 text-sm font-medium text-primary"
                             >
                                 Name
                             </label>
@@ -46,7 +46,7 @@ const BookingForm = () => {
                         <div className="mb-3">
                             <label
                                 htmlFor="email"
-                                class="block mb-2 text-sm font-medium text-primary"
+                                className="block mb-2 text-sm font-medium text-primary"
                             >
                                 Email
                             </label>
@@ -61,7 +61,7 @@ const BookingForm = () => {
                         <div className="mb-3">
                             <label
                                 htmlFor="productName"
-                                class="block mb-2 text-sm font-medium text-primary"
+                                className="block mb-2 text-sm font-medium text-primary"
                             >
                                 Product Name
                             </label>
@@ -76,7 +76,7 @@ const BookingForm = () => {
                         <div className="mb-3">
                             <label
                                 htmlFor="price"
-                                class="block mb-2 text-sm font-medium text-primary"
+                                className="block mb-2 text-sm font-medium text-primary"
                             >
                                 Price
                             </label>
@@ -91,7 +91,7 @@ const BookingForm = () => {
                         <div className="mb-3">
                             <label
                                 htmlFor="phone"
-                                class="block mb-2 text-sm font-medium text-primary"
+                                className="block mb-2 text-sm font-medium text-primary"
                             >
                                 Phone Number
                             </label>
@@ -106,7 +106,7 @@ const BookingForm = () => {
                         <div className="mb-3">
                             <label
                                 htmlFor="meeting"
-                                class="block mb-2 text-sm font-medium text-primary"
+                                className="block mb-2 text-sm font-medium text-primary"
                             >
                                 Meeting Location
                             </label>
