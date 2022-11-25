@@ -9,3 +9,7 @@
         margin: 0 auto;
     }
 }
+.customTooltip::before{
+    @apply py-2 px-8 text-white flex justify-center items-center bg-gray-800
+}
+
