@@ -86,7 +86,7 @@ const SidebarList = ({ toggleAdminSidebar }) => {
                 )}
             </SideBarListItem>
             <SideBarListItem
-                navigationLink="/dashboard/allBuyers"
+                navigationLink="/dashboard/admin/allBuyers"
                 tooltipName="My Buyers"
                 toggleAdminSidebar={toggleAdminSidebar}
             >
@@ -98,7 +98,7 @@ const SidebarList = ({ toggleAdminSidebar }) => {
                 )}
             </SideBarListItem>
             <SideBarListItem
-                navigationLink="/dashboard/allSellers"
+                navigationLink="/dashboard/admin/allSellers"
                 tooltipName="All Sellers"
                 toggleAdminSidebar={toggleAdminSidebar}
             >
