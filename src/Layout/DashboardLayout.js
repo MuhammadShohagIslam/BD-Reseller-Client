@@ -10,9 +10,9 @@ const DashboardLayout = () => {
     return (
         <>
             <DashboardNavbar />
-            <div className="flex h-screen max-h-screen">
+            <div className="flex h-full max-h-full min-h-full">
                 <aside className={`w-72 ${toggleAdminSidebar ? "w-16" : ""}`}>
-                    <div className="relative min-h-screen py-4 bg-gray-50 dark:bg-gray-800 flex flex-col justify-between">
+                    <div className="relative h-full min-h-screen py-4 bg-gray-50 dark:bg-gray-800 flex flex-col justify-between">
                         <SidebarList toggleAdminSidebar={toggleAdminSidebar} />
                         <SideBarCollapseButton
                             toggleAdminSidebar={toggleAdminSidebar}

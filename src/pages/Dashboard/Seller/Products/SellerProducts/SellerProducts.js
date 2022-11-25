@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import SectionTitle from "../../../../components/shared/SectionTitle/SectionTitle";
-import SellerProduct from "../../../../components/shared/SellerProduct/SellerProduct";
+import SectionTitle from './../../../../../components/shared/SectionTitle/SectionTitle';
+import SellerProduct from './../../../../../components/shared/SellerProduct/SellerProduct';
+
+
 
 const SellerProducts = () => {
     const [count, setCount] = useState(50);

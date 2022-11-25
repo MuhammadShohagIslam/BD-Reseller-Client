@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { DayPicker } from "react-day-picker";
+import { useDropzone } from "react-dropzone";
 
 const AddProduct = () => {
     const [selected, setSelected] = React.useState();
@@ -9,17 +9,55 @@ const AddProduct = () => {
         register,
         formState: { errors },
     } = useForm();
+    const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+        maxFiles: 7,
+    });
+
+    const acceptedFileItems = acceptedFiles.map((file) => file.name);
+
     const handleAddProduct = (data) => {
+        if (acceptedFileItems.length === 0) {
+            return;
+        }
         console.log(data);
     };
 
     return (
-        <div className="container">
-            <div className="bg-secondary p-6">
+        <div className="container py-10">
+            <div className="bg-secondary p-6 rounded-lg">
                 <h2 className="text-center font-semibold text-primary text-2xl">
                     Add New Product
                 </h2>
-                <form onSubmit={handleSubmit(handleAddProduct)} className="mt-5">
+                <form
+                    onSubmit={handleSubmit(handleAddProduct)}
+                    className="mt-5"
+                >
+                    <div className="grid grid-cols-2">
+                        <div className="mb-3 border-[1px] border-dashed border-success p-4 cursor-pointer">
+                            <div {...getRootProps({ className: "dropzone" })}>
+                                <input {...getInputProps()} />
+                                <p className="text-success">
+                                    Drag 'n' drop some image here, or click to
+                                    select image
+                                </p>
+                                <em className="text-primary">
+                                    (7 files are the maximum number of images you
+                                    can drop here)
+                                </em>
+                            </div>
+                        </div>
+                        <div className="p-5">
+                            {acceptedFileItems.length ? (
+                                acceptedFileItems.map((file, index) => (
+                                    <img src={file} alt="good" key={index} />
+                                ))
+                            ) : (
+                                <h2 className="text-primary">
+                                    No Image Upload
+                                </h2>
+                            )}
+                        </div>
+                    </div>
                     <div className="grid gap-6 mb-6 grid-cols-2">
                         <div>
                             <label
@@ -183,7 +221,7 @@ const AddProduct = () => {
                         )}
                     </div>
 
-                    <div className="mb-6 w-96">
+                    <div className="mb-6">
                         <label
                             htmlFor="date"
                             className="block mb-2 text-sm font-medium text-primary"
@@ -215,7 +253,7 @@ const AddProduct = () => {
                             {...register("description", {
                                 required: "Product Description Is Required!",
                             })}
-                            className="textarea textarea-success w-full"
+                            className="textarea textarea-success w-full text-primary"
                             placeholder="Leave to product description"
                         ></textarea>
                         {errors.description && (
@@ -228,7 +266,7 @@ const AddProduct = () => {
                     <input
                         type="submit"
                         value="Add Product"
-                        className="btn btn-primary text-white mt-2"
+                        className="btn hover:bg-transparent hover:text-primary text-white btn-primary  mt-2"
                     />
                 </form>
             </div>

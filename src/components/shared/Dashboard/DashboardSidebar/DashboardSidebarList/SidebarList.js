@@ -52,17 +52,17 @@ const SidebarList = ({ toggleAdminSidebar }) => {
                 isDropdownList
             >
                 <SideBarDropdownListItem
-                    dropdownNavigationLink="/dashboard/allCategories"
+                    dropdownNavigationLink="/dashboard/seller/allCategories"
                     name="All Categories"
                 />
                 <SideBarDropdownListItem
-                    dropdownNavigationLink="/dashboard/addCategories"
+                    dropdownNavigationLink="/dashboard/seller/addCategories"
                     name="Add Category"
                 />
             </SideBarListItem>
 
             <SideBarListItem
-                navigationLink="/dashboard/wishList"
+                navigationLink="/dashboard/buyer/wishlist"
                 tooltipName="My WishList"
                 toggleAdminSidebar={toggleAdminSidebar}
             >

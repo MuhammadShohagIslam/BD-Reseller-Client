@@ -6,8 +6,11 @@ import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import ProductsByCategory from "./../pages/ProductsByCategory/ProductsByCategory";
 import DashboardLayout from "../Layout/DashboardLayout";
-import SellerProducts from "../pages/Dashboard/Seller/SellerProducts/SellerProducts";
-import AddProduct from "../pages/Dashboard/Seller/AddProduct/AddProduct";
+import SellerProducts from "../pages/Dashboard/Seller/Products/SellerProducts/SellerProducts";
+import AddProduct from "../pages/Dashboard/Seller/Products/AddProduct/AddProduct";
+import BuyerWishLists from "../pages/Dashboard/Buyer/BuyerWishLists/BuyerWishLists";
+import AllCategories from "../pages/Dashboard/Seller/Categories/AllCategories/AllCategories";
+import AddCategory from "../pages/Dashboard/Seller/Categories/AddCategory/AddCategory";
 
 const router = createBrowserRouter([
     {
@@ -48,6 +51,19 @@ const router = createBrowserRouter([
                 path: "/dashboard/seller/addProduct",
                 element: <AddProduct />,
             },
+            {
+                path: "/dashboard/seller/allCategories",
+                element: <AllCategories/>,
+            },
+            {
+                path: "/dashboard/seller/addCategories",
+                element: <AddCategory/>,
+            },
+            {
+                path: "/dashboard/buyer/wishlist",
+                element: <BuyerWishLists/>,
+            },
+           
         ],
     },
 ]);
