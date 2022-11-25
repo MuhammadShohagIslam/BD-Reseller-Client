@@ -1,11 +1,11 @@
 import React from "react";
-import { BsFillBookmarkFill } from "react-icons/bs";
-import { FaHeart } from "react-icons/fa";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { BsCalendarDate, BsHouseDoorFill } from "react-icons/bs";
 import { BiUserPlus } from "react-icons/bi";
-import { MdLocationOn } from "react-icons/md";
+import { MdLocationOn, MdOutlineVerifiedUser } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
-const Product = () => {
+const SellerProduct = () => {
     return (
         <div className="max-w-sm rounded-lg shadow-md group cursor-pointer">
             <div className="h-72 relative">
@@ -18,17 +18,17 @@ const Product = () => {
                 <ul className="transition duration-300 ease-in-out invisible flex absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 group-hover:visible">
                     <li
                         className="py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary"
-                        data-tip="Add To WishList "
+                        data-tip="Delete Product"
                     >
-                        <FaHeart />
+                        <AiFillDelete />
                     </li>
 
                     <label htmlFor="my-modal-3">
                         <li
                             className="py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary"
-                            data-tip="Book Now"
+                            data-tip="Edit Product"
                         >
-                            <BsFillBookmarkFill />
+                            <AiFillEdit />
                         </li>
                     </label>
                 </ul>
@@ -47,6 +47,7 @@ const Product = () => {
                     <div className="flex items-center ml-3 sm:mr-2 text-primary">
                         <BiUserPlus className="text-success" />
                         <span className="ml-1">User</span>
+                        <MdOutlineVerifiedUser />
                     </div>
                     <div className="flex items-center ml-3 sm:ml-0 text-primary">
                         <MdLocationOn className="text-success" />
@@ -57,11 +58,11 @@ const Product = () => {
                         <span className="ml-1">2 years used</span>
                     </div>
                 </div>
-                <a href="#">
+                <Link to="/dashboard/products/productId">
                     <h5 className="my-2 text-xl font-semibold tracking-tight text-primary">
                         Noteworthy technology acquisitions 2021
                     </h5>
-                </a>
+                </Link>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                     Here are the biggest enterprise technology acquisitions...
                 </p>
@@ -78,4 +79,4 @@ const Product = () => {
     );
 };
 
-export default Product;
+export default SellerProduct;

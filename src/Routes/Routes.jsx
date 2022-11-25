@@ -7,6 +7,7 @@ import Register from "../pages/Register/Register";
 import ProductsByCategory from "./../pages/ProductsByCategory/ProductsByCategory";
 import Dashboard from "./../pages/Dashboard/Dashboard";
 import DashboardLayout from "../Layout/DashboardLayout";
+import SellerProducts from "../pages/Dashboard/SellerProducts/SellerProducts";
 
 const router = createBrowserRouter([
     {
@@ -40,8 +41,8 @@ const router = createBrowserRouter([
         element: <DashboardLayout></DashboardLayout>,
         children: [
             {
-                path: "/dashboard",
-                element: <Dashboard />,
+                path: "/dashboard/allProducts",
+                element: <SellerProducts />,
             },
         ],
     },
