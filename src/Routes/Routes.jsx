@@ -5,9 +5,9 @@ import Home from "../pages/Home/Home/Home";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import ProductsByCategory from "./../pages/ProductsByCategory/ProductsByCategory";
-import Dashboard from "./../pages/Dashboard/Dashboard";
 import DashboardLayout from "../Layout/DashboardLayout";
-import SellerProducts from "../pages/Dashboard/SellerProducts/SellerProducts";
+import SellerProducts from "../pages/Dashboard/Seller/SellerProducts/SellerProducts";
+import AddProduct from "../pages/Dashboard/Seller/AddProduct/AddProduct";
 
 const router = createBrowserRouter([
     {
@@ -41,8 +41,12 @@ const router = createBrowserRouter([
         element: <DashboardLayout></DashboardLayout>,
         children: [
             {
-                path: "/dashboard/allProducts",
+                path: "/dashboard/seller/allProducts",
                 element: <SellerProducts />,
+            },
+            {
+                path: "/dashboard/seller/addProduct",
+                element: <AddProduct />,
             },
         ],
     },

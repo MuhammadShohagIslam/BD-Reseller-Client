@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SectionTitle from "../../../components/shared/SectionTitle/SectionTitle";
-import SellerProduct from "../../../components/shared/SellerProduct/SellerProduct";
+import SectionTitle from "../../../../components/shared/SectionTitle/SectionTitle";
+import SellerProduct from "../../../../components/shared/SellerProduct/SellerProduct";
 
 const SellerProducts = () => {
     const [count, setCount] = useState(50);
@@ -11,7 +11,7 @@ const SellerProducts = () => {
     return (
         <div className="container mt-10">
             <SectionTitle title="All Products of Seller" />
-            <div className="grid grid-cols-3 mt-7 gap-3">
+            <div className="grid grid-cols-3 mt-7 gap-5">
                 <SellerProduct />
                 <SellerProduct />
                 <SellerProduct />

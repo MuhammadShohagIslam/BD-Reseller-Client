@@ -34,11 +34,11 @@ const SidebarList = ({ toggleAdminSidebar }) => {
                 tooltipName="Products"
             >
                 <SideBarDropdownListItem
-                    dropdownNavigationLink="/dashboard/allProducts"
+                    dropdownNavigationLink="/dashboard/seller/allProducts"
                     name="All Products"
                 />
                 <SideBarDropdownListItem
-                    dropdownNavigationLink="/dashboard/addProduct"
+                    dropdownNavigationLink="/dashboard/seller/addProduct"
                     name="Add Product"
                 />
             </SideBarListItem>

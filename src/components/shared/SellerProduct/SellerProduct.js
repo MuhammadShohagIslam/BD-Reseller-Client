@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 const SellerProduct = () => {
     return (
-        <div className="max-w-sm rounded-lg shadow-md group cursor-pointer">
+        <div className="max-w-lg rounded-lg shadow-md group cursor-pointer">
             <div className="h-72 relative">
                 <div className="absolute top-3 rounded-full left-3 w-14 h-14 bg-success flex justify-center items-center flex-col">
                     <span className="text-white -mb-2">Off</span>
@@ -49,11 +49,11 @@ const SellerProduct = () => {
                         <span className="ml-1">User</span>
                         <MdOutlineVerifiedUser />
                     </div>
-                    <div className="flex items-center ml-3 sm:ml-0 text-primary">
+                    <div className="flex items-center ml-4 sm:ml-0 text-primary">
                         <MdLocationOn className="text-success" />
                         <span className="ml-1">Location</span>
                     </div>
-                    <div className="flex mt-1 sm:ml-3 items-center text-primary">
+                    <div className="flex mt-1  sm:ml-3 items-center text-primary">
                         <BsHouseDoorFill className="text-success" />
                         <span className="ml-1">2 years used</span>
                     </div>
