@@ -1,25 +1,43 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDropzone } from "react-dropzone";
+import { createNewProduct } from "./../../../../../api/product";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+
 
 const AddProduct = () => {
-    const [selected, setSelected] = React.useState();
+    const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
     const {
         handleSubmit,
         register,
         formState: { errors },
+        reset,
     } = useForm();
-    const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
-        maxFiles: 7,
-    });
 
-    const acceptedFileItems = acceptedFiles.map((file) => file.name);
 
-    const handleAddProduct = (data) => {
-        if (acceptedFileItems.length === 0) {
-            return;
-        }
-        console.log(data);
+    const handleAddProduct = (formValues) => {
+        const productImage = formValues.productImg[0];
+        const formData = new FormData();
+        formData.append("image", productImage);
+        axios
+            .post(url, formData)
+            .then((imgData) => {
+                const productImgUrl = imgData.data.data.url;
+
+                const product = {
+                    ...formValues,
+                    productImg: productImgUrl,
+                };
+                createNewProduct(product).then((data) => {
+                    if (data.data.acknowledged) {
+                        toast.success(`${formValues.name} is Created!`);
+                        reset();
+                    }
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     return (
@@ -33,29 +51,14 @@ const AddProduct = () => {
                     className="mt-5"
                 >
                     <div className="grid grid-cols-2">
-                        <div className="mb-3 border-[1px] border-dashed border-success p-4 cursor-pointer">
-                            <div {...getRootProps({ className: "dropzone" })}>
-                                <input {...getInputProps()} />
-                                <p className="text-success">
-                                    Drag 'n' drop some image here, or click to
-                                    select image
-                                </p>
-                                <em className="text-primary">
-                                    (7 files are the maximum number of images you
-                                    can drop here)
-                                </em>
-                            </div>
-                        </div>
-                        <div className="p-5">
-                            {acceptedFileItems.length ? (
-                                acceptedFileItems.map((file, index) => (
-                                    <img src={file} alt="good" key={index} />
-                                ))
-                            ) : (
-                                <h2 className="text-primary">
-                                    No Image Upload
-                                </h2>
-                            )}
+                        <div className="my-5">
+                            <input
+                                type="file"
+                                {...register("productImg", {
+                                    required: "product Img Is Required!",
+                                })}
+                                className="file-input file-input-bordered file-input-success w-full max-w-xs"
+                            />
                         </div>
                     </div>
                     <div className="grid gap-6 mb-6 grid-cols-2">

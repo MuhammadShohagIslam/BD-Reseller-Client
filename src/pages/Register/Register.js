@@ -1,6 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
+import { toast } from "react-hot-toast";
+import { GoogleAuthProvider } from "firebase/auth";
+import { useAuth } from './../../context/AuthProvider/AuthProvider';
+import {useNavigate} from 'react-router-dom'
 
 const Register = () => {
     const {
@@ -8,11 +12,69 @@ const Register = () => {
         register,
         formState: { errors },
     } = useForm();
+
+    const {
+        createUser,
+        userProfileUpdate,
+        registerAndLoginWithProvider,
+        setLoading,
+    } = useAuth();
+
+    const googleProvider = new GoogleAuthProvider();
+    const navigate = useNavigate();
+
+
+
     const handleRegister = (data) => {
-        console.log(data);
+        const profileURL = data.profileImg[0].name
+        const {name, password, email } = data;
+    
+        createUser(email, password)
+            .then((result) => {
+                handleProfileUpdate(name, profileURL);
+            })
+            .catch((error) => {
+                toast.error(error.message.split("Firebase: ").join(""));
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
-    const handleSignUpWithProvider = () => {};
+    const handleProfileUpdate = (name, photoURL) => {
+        const profile = {
+            displayName: name,
+            photoURL,
+        };
+        userProfileUpdate(profile)
+            .then(() => {})
+            .catch((error) => {
+                toast.error(error.message);
+            });
+    };
+
+    const handleSignUpWithProvider = (event, providerName) => {
+        event.preventDefault();
+        if (providerName === "google") {
+            popupForSignInProvider(googleProvider);
+        }
+    };
+
+    const popupForSignInProvider = (provider) => {
+        registerAndLoginWithProvider(provider)
+            .then((result) => {
+                navigate("/");
+            })
+            .catch((error) => {
+                toast.error(error?.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
+
+
     return (
         <div className="container my-14 sm:my-8">
             <div className="w-[560px] sm:w-[280px] m-auto p-8 sm:p-4 bg-secondary rounded-lg">
