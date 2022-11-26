@@ -3,17 +3,18 @@ import { useForm } from "react-hook-form";
 import { createNewProduct } from "./../../../../../api/product";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-
+import { useAuth } from "../../../../../context/AuthProvider/AuthProvider";
 
 const AddProduct = () => {
     const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
+    const { user } = useAuth();
+    console.log(user);
     const {
         handleSubmit,
         register,
         formState: { errors },
         reset,
     } = useForm();
-
 
     const handleAddProduct = (formValues) => {
         const productImage = formValues.productImg[0];
@@ -26,11 +27,15 @@ const AddProduct = () => {
 
                 const product = {
                     ...formValues,
+                    sellerName: user?.displayName,
+                    sellerEmail: user?.email,
                     productImg: productImgUrl,
                 };
                 createNewProduct(product).then((data) => {
                     if (data.data.acknowledged) {
-                        toast.success(`${formValues.name} is Created!`);
+                        toast.success(
+                            `${formValues.productName} Product is Created!`
+                        );
                         reset();
                     }
                 });
@@ -105,6 +110,28 @@ const AddProduct = () => {
                                 </p>
                             )}
                         </div>
+                        <div>
+                            <label
+                                htmlFor="originalPrice"
+                                className="block mb-2 text-sm font-medium text-primary"
+                            >
+                                Original Price
+                            </label>
+                            <input
+                                {...register("originalPrice", {
+                                    required:
+                                        "Product Original Price Is Required!",
+                                })}
+                                type="text"
+                                placeholder="Enter Your Product Original Price"
+                                className="input input-bordered input-success w-full text-primary"
+                            />
+                            {errors.originalPrice && (
+                                <p className="text-red-600">
+                                    {errors.originalPrice?.message}
+                                </p>
+                            )}
+                        </div>
 
                         <div>
                             <label
@@ -145,6 +172,26 @@ const AddProduct = () => {
                             {errors.location && (
                                 <p className="text-red-600">
                                     {errors.location?.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="mb-6">
+                            <label
+                                htmlFor="date"
+                                className="block mb-2 text-sm font-medium text-primary"
+                            >
+                                Year Of Purchase
+                            </label>
+                            <input
+                                {...register("date", {
+                                    required: "Purchase of Year Is Required!",
+                                })}
+                                type="date"
+                                className="input input-bordered input-success w-full text-primary"
+                            />
+                            {errors.date && (
+                                <p className="text-red-600">
+                                    {errors.date?.message}
                                 </p>
                             )}
                         </div>
@@ -220,27 +267,6 @@ const AddProduct = () => {
                         {errors.productCategory && (
                             <p className="text-red-600">
                                 {errors.productCategory?.message}
-                            </p>
-                        )}
-                    </div>
-
-                    <div className="mb-6">
-                        <label
-                            htmlFor="date"
-                            className="block mb-2 text-sm font-medium text-primary"
-                        >
-                            Year Of Purchase
-                        </label>
-                        <input
-                            {...register("date", {
-                                required: "Purchase of Year Is Required!",
-                            })}
-                            type="date"
-                            className="input input-bordered input-success w-full text-primary"
-                        />
-                        {errors.date && (
-                            <p className="text-red-600">
-                                {errors.date?.message}
                             </p>
                         )}
                     </div>
