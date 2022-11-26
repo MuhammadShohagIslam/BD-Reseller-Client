@@ -2,31 +2,45 @@ import React, { useState } from "react";
 import SectionTitle from "./../../../../../components/shared/SectionTitle/SectionTitle";
 import SellerProduct from "./../../../../../components/shared/SellerProduct/SellerProduct";
 import { useQuery } from "@tanstack/react-query";
-import { getAllProducts } from "../../../../../api/product";
+import { deleteProductByProductId, getAllProducts } from "../../../../../api/product";
 import Loader from "./../../../../../components/shared/Loader/Loader";
+import { toast } from 'react-hot-toast';
 
 const SellerProducts = () => {
-    const [count, setCount] = useState(50);
+    const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(10);
+    const [size, setSize] = useState(3);
 
     const {
         isLoading,
         error,
-        data:{ data } = [],
+        refetch,
+        data,
     } = useQuery({
-        queryKey: ["products"],
+        queryKey: ["products", page, size],
         queryFn: async () => {
-            const data = await getAllProducts();
-            return data;
+            const data = await getAllProducts(page, size);
+            setCount(data.data.totalProduct);
+            return data.data.products;
         },
     });
 
-    console.log(data);
-
+    const handleEditProduct =  (productId) => {
+        
+    }
+    const handleDeleteProduct = (productId) => {
+        deleteProductByProductId(productId).then(data => {
+            console.log(data)
+            toast.success("Product Delete Successfully")
+            refetch();
+        })
+    }
     const pages = Math.ceil(count / size);
+    console.log(count,pages,data);
+
+    
     return (
-        <div className="container mt-10">
+        <div className="container my-10">
             <SectionTitle title="All Products of Seller" />
            
                 {isLoading ? (
@@ -39,6 +53,8 @@ const SellerProducts = () => {
                                     <SellerProduct
                                         key={product._id}
                                         product={product}
+                                        handleEditProduct={handleEditProduct}
+                                        handleDeleteProduct={handleDeleteProduct}
                                     />
                                 ))}
                             </>

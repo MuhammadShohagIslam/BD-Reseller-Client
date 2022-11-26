@@ -1,9 +1,29 @@
-import axios from 'axios';
+import axios from "axios";
 
+// create new products
 export const createNewProduct = async (productData) => {
-    return await axios.post(`${process.env.REACT_APP_server_api}/products`, productData);
-}
-export const getAllProducts = async () => {
-    return await axios.get(`${process.env.REACT_APP_server_api}/products`);
-}
+    return await axios.post(
+        `${process.env.REACT_APP_server_api}/products`,
+        productData
+    );
+};
 
+// get all products
+export const getAllProducts = async (page, size) => {
+    return await axios.get(`${process.env.REACT_APP_server_api}/products?page=${page}&${size}`);
+};
+
+// update product by productId
+export const updateProductByProductId = async (productId, updatedData) => {
+    return await axios.patch(
+        `${process.env.REACT_APP_server_api}/products/${productId}`,
+        updatedData
+    );
+};
+
+// delete product by productId
+export const deleteProductByProductId = async (productId) => {
+    return await axios.delete(
+        `${process.env.REACT_APP_server_api}/products/${productId}`
+    );
+};
