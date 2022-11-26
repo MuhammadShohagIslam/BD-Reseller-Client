@@ -38,6 +38,8 @@ const AddProduct = () => {
                         );
                         reset();
                     }
+                }).catch(error=>{
+                    console.log(error);
                 });
             })
             .catch((err) => {

@@ -1,15 +1,28 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { createNewCategory } from './../../../../../api/category';
+import { toast } from 'react-hot-toast';
 
 const AddCategory = () => {
     const {
         handleSubmit,
         register,
+        reset,
         formState: { errors },
     } = useForm();
 
-    const handleAddCategory = (data) => {
-        console.log(data);
+    const handleAddCategory = (formValues) => {
+        console.log(formValues);
+        createNewCategory(formValues).then((data) => {
+            if (data.data.acknowledged) {
+                toast.success(
+                    `${formValues.categoryName} Category is Created!`
+                );
+                reset();
+            }
+        }).catch(error=>{
+            console.log(error);
+        });
     };
     return (
         <div className="container py-10">
@@ -22,22 +35,22 @@ const AddCategory = () => {
                     className="mt-5"
                 >
                     <label
-                        htmlFor="productName"
+                        htmlFor="categoryName"
                         className="block mb-2 text-sm font-medium text-primary"
                     >
                         Category Name
                     </label>
                     <input
-                        {...register("category", {
+                        {...register("categoryName", {
                             required: "Category Name Is Required!",
                         })}
                         type="text"
                         placeholder="Enter Your Category Name"
                         className="input input-bordered input-success w-full text-primary"
                     />
-                    {errors.category && (
+                    {errors.categoryName && (
                         <p className="text-red-600">
-                            {errors.category?.message}
+                            {errors.categoryName?.message}
                         </p>
                     )}
 
