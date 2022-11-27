@@ -25,9 +25,6 @@ const SellerProducts = () => {
         },
     });
 
-    const handleEditProduct =  (productId) => {
-        
-    }
     const handleDeleteProduct = (productId) => {
         deleteProductByProductId(productId).then(data => {
             console.log(data)
@@ -36,7 +33,6 @@ const SellerProducts = () => {
         })
     }
     const pages = Math.ceil(count / size);
-    console.log(count,pages,data);
 
     
     return (
@@ -53,7 +49,6 @@ const SellerProducts = () => {
                                     <SellerProduct
                                         key={product._id}
                                         product={product}
-                                        handleEditProduct={handleEditProduct}
                                         handleDeleteProduct={handleDeleteProduct}
                                     />
                                 ))}

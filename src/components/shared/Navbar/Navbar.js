@@ -24,22 +24,6 @@ const Navbar = () => {
                 <li>
                     <Link
                         className="hover:bg-transparent text-primary hover:text-success text-lg"
-                        to="/booked"
-                    >
-                        Booked
-                    </Link>
-                </li>
-                <li>
-                    <Link
-                        className="hover:bg-transparent text-primary hover:text-success text-lg"
-                        to="/contact"
-                    >
-                        Contact Us
-                    </Link>
-                </li>
-                <li>
-                    <Link
-                        className="hover:bg-transparent text-primary hover:text-success text-lg"
                         to="/login"
                     >
                         Login
@@ -87,7 +71,7 @@ const Navbar = () => {
                             {menuListItem()}
                         </ul>
                     </div>
-                    <Link className="text-3xl sm:text-2xl md:text-2xl italic text-success font-bold">
+                    <Link to="/" className="text-3xl sm:text-2xl md:text-2xl italic text-success font-bold">
                         BdSeller
                     </Link>
                     <label

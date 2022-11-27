@@ -38,7 +38,6 @@ const Register = () => {
             .post(url, formData)
             .then((imgData) => {
                 const productImgUrl = imgData.data.data.url;
-                console.log(productImgUrl);
                 createUser(email, password)
                     .then((result) => {
                         handleProfileUpdate(name, productImgUrl, role);
@@ -53,6 +52,7 @@ const Register = () => {
                             .then((tokenData) => {
                                 const userData = {
                                     ...currentUser,
+                                    profileImage:productImgUrl,
                                     role: role,
                                 };
                                 const data = tokenData.data;
@@ -120,6 +120,7 @@ const Register = () => {
                     .then((tokenData) => {
                         const userData = {
                             ...currentUser,
+                            profileImage:userCredential?.photoURL,
                             role: "user",
                         };
                         const data = tokenData.data;
