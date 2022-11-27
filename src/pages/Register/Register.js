@@ -3,13 +3,18 @@ import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { GoogleAuthProvider } from "firebase/auth";
-import { useAuth } from './../../context/AuthProvider/AuthProvider';
-import {useNavigate} from 'react-router-dom'
+import { useAuth } from "./../../context/AuthProvider/AuthProvider";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { createJwtToken, createNewUser } from "../../api/user";
+import axios from "axios";
 
 const Register = () => {
+    const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
     const {
         handleSubmit,
         register,
+        reset,
         formState: { errors },
     } = useForm();
 
@@ -23,21 +28,55 @@ const Register = () => {
     const googleProvider = new GoogleAuthProvider();
     const navigate = useNavigate();
 
-
-
     const handleRegister = (data) => {
-        const profileURL = data.profileImg[0].name
-        const {name, password, email } = data;
-    
-        createUser(email, password)
-            .then((result) => {
-                handleProfileUpdate(name, profileURL);
+        const profileURL = data.profileImg[0];
+        const { name, password, email, role } = data;
+
+        const formData = new FormData();
+        formData.append("image", profileURL);
+        axios
+            .post(url, formData)
+            .then((imgData) => {
+                const productImgUrl = imgData.data.data.url;
+                console.log(productImgUrl);
+                createUser(email, password)
+                    .then((result) => {
+                        handleProfileUpdate(name, productImgUrl, role);
+                        console.log(result, "result");
+                        const userCredential = result?.user;
+                        const currentUser = {
+                            name: userCredential?.displayName || name,
+                            email: userCredential?.email || email,
+                        };
+                        console.log(currentUser, "currentUser");
+                        createJwtToken(currentUser)
+                            .then((tokenData) => {
+                                const userData = {
+                                    ...currentUser,
+                                    role: role,
+                                };
+                                const data = tokenData.data;
+                                localStorage.setItem(
+                                    "bdSeller-token",
+                                    data.token
+                                );
+                                saveNewUser(userData);
+                                reset();
+                                navigate("/");
+                            })
+                            .catch((error) => {
+                                console.log(error.message);
+                            });
+                    })
+                    .catch((error) => {
+                        toast.error(error.message.split("Firebase: ").join(""));
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    });
             })
             .catch((error) => {
-                toast.error(error.message.split("Firebase: ").join(""));
-            })
-            .finally(() => {
-                setLoading(false);
+                console.log(error.message);
             });
     };
 
@@ -47,9 +86,17 @@ const Register = () => {
             photoURL,
         };
         userProfileUpdate(profile)
-            .then(() => {})
+            .then((result) => {})
             .catch((error) => {
                 toast.error(error.message);
+            });
+    };
+
+    const saveNewUser = (userData) => {
+        createNewUser(userData)
+            .then((data) => {})
+            .catch((error) => {
+                console.log(error.message);
             });
     };
 
@@ -63,7 +110,26 @@ const Register = () => {
     const popupForSignInProvider = (provider) => {
         registerAndLoginWithProvider(provider)
             .then((result) => {
-                navigate("/");
+                const userCredential = result.user;
+                const currentUser = {
+                    name: userCredential?.displayName,
+                    email: userCredential?.email,
+                };
+
+                createJwtToken(currentUser)
+                    .then((tokenData) => {
+                        const userData = {
+                            ...currentUser,
+                            role: "user",
+                        };
+                        const data = tokenData.data;
+                        localStorage.setItem("bdSeller-token", data.token);
+                        saveNewUser(userData);
+                        navigate("/");
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    });
             })
             .catch((error) => {
                 toast.error(error?.message);
@@ -72,8 +138,6 @@ const Register = () => {
                 setLoading(false);
             });
     };
-
-
 
     return (
         <div className="container my-14 sm:my-8">
@@ -149,7 +213,7 @@ const Register = () => {
                                 required: "Profile Picture Is Required!",
                             })}
                             accept="image/*"
-                            className="file-input text-primary file-input-bordered file-input-success w-[7.4rem]"
+                            className="file-input text-primary file-input-bordered file-input-success"
                         />
                         {errors.profileImg && (
                             <p className="text-red-600">
@@ -172,7 +236,6 @@ const Register = () => {
                                 Pick Your Role
                             </option>
                             <option
-                                defaultValue={"user"}
                                 className="text-primary text-base"
                                 value="user"
                             >
@@ -211,11 +274,6 @@ const Register = () => {
                                 {errors.password?.message}
                             </p>
                         )}
-                        <label className="label cursor-pointer">
-                            <span className="text-primary font-medium text-base sm:text-sm">
-                                Forget Password?
-                            </span>
-                        </label>
                     </div>
                     <input
                         type="submit"
@@ -223,6 +281,13 @@ const Register = () => {
                         value="Register"
                     />
                 </form>
+                <hr className="my-4"></hr>
+                <p className="text-primary">
+                    Already Do You Have a Account?{" "}
+                    <Link className="text-success" to="/login">
+                        Login Now
+                    </Link>
+                </p>
             </div>
         </div>
     );

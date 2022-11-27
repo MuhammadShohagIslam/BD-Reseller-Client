@@ -1,18 +1,101 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { createJwtToken } from "./../../api/user";
+import { toast } from "react-hot-toast";
+import { useAuth } from "./../../context/AuthProvider/AuthProvider";
+import { GoogleAuthProvider } from "firebase/auth";
+import { useNavigate, useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Login = () => {
     const {
+        loginWithEmailAndPassword,
+        registerAndLoginWithProvider,
+        setLoading,
+    } = useAuth();
+
+    const {
         handleSubmit,
         register,
+        reset,
         formState: { errors },
     } = useForm();
+
+    const googleProvider = new GoogleAuthProvider();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+
     const handleLogin = (data) => {
-        console.log(data);
+        const { email, password } = data;
+        loginWithEmailAndPassword(email, password)
+            .then((result) => {
+                const user = result?.user;
+                const currentUser = {
+                    name: user?.displayName,
+                    email: user?.email,
+                };
+                createJwtToken(currentUser)
+                    .then((tokenData) => {
+                        const data = tokenData.data;
+                        localStorage.setItem("bdSeller-token", data.token);
+                        reset();
+                        Swal.fire({
+                            position: "top",
+                            icon: "success",
+                            title: "Login Successfully",
+                            showConfirmButton: false,
+                            timer: 2500,
+                        });
+                        navigate(from, { replace: true });
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    });
+            })
+            .catch((error) => {
+                toast.error(error.message.split("Firebase: ").join(""));
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
-    const handleSignUpWithProvider = () => {};
+    const handleSignUpWithProvider = (event, providerName) => {
+        event.preventDefault();
+        if (providerName === "google") {
+            popupForSignInProvider(googleProvider);
+        }
+    };
+
+    const popupForSignInProvider = (provider) => {
+        registerAndLoginWithProvider(provider)
+            .then((result) => {
+                const userCredential = result?.user;
+                const currentUser = {
+                    name: userCredential?.displayName,
+                    email: userCredential?.email,
+                };
+
+                createJwtToken(currentUser)
+                    .then((tokenData) => {
+                        const data = tokenData.data;
+                        localStorage.setItem("bdSeller-token", data.token);
+                        navigate(from, { replace: true });
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    });
+            })
+            .catch((error) => {
+                toast.error(error?.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
     return (
         <div className="container my-14 sm:my-8">
             <div className="w-[560px] sm:w-[280px] m-auto p-8 sm:p-4 bg-secondary rounded-lg">
@@ -75,7 +158,7 @@ const Login = () => {
                         />
 
                         <label className="label cursor-pointer">
-                            <span className="text-primary font-medium text-lg sm:text-sm">
+                            <span className="text-primary font-medium text-sm sm:text-sm">
                                 Forget Password?
                             </span>
                         </label>
@@ -91,6 +174,13 @@ const Login = () => {
                         value="Login"
                     />
                 </form>
+                <hr className="my-4"></hr>
+                <p className="text-primary">
+                    If You Do Not Have Account?{" "}
+                    <Link className="text-success" to="/register">
+                        Register Now
+                    </Link>
+                </p>
             </div>
         </div>
     );
