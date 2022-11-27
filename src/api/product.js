@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// create new products
+// create new product
 export const createNewProduct = async (productData) => {
     return await axios.post(
         `${process.env.REACT_APP_server_api}/products`,
