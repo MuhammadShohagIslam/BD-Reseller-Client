@@ -9,7 +9,7 @@ import {
 } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-const SellerProduct = ({ product, handleDeleteProduct, handleEditProduct }) => {
+const SellerProduct = ({ product, handleDeleteProduct }) => {
     const {
         _id,
         date,
@@ -48,13 +48,14 @@ const SellerProduct = ({ product, handleDeleteProduct, handleEditProduct }) => {
                     </li>
 
                     <label htmlFor="my-modal-3">
-                        <li
-                            className="py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary"
-                            data-tip="Edit Product"
-                            onClick={() => handleEditProduct(_id)}
-                        >
-                            <AiFillEdit />
-                        </li>
+                        <Link to={`/dashboard/seller/updateProduct/${_id}`}>
+                            <li
+                                className="py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary"
+                                data-tip="Edit Product"
+                            >
+                                <AiFillEdit />
+                            </li>
+                        </Link>
                     </label>
                 </ul>
                 <img
@@ -67,7 +68,11 @@ const SellerProduct = ({ product, handleDeleteProduct, handleEditProduct }) => {
                 <div className="flex flex-wrap">
                     <div className="flex items-center mr-3 text-primary">
                         <BsCalendarDate className="text-success" />
-                        <span className="ml-1">{new Date(productCreated).toDateString().substr(4, 11)}</span>
+                        <span className="ml-1">
+                            {new Date(productCreated)
+                                .toDateString()
+                                .substr(4, 11)}
+                        </span>
                     </div>
                     <div className="flex items-center mr-3 sm:mr-2 text-primary">
                         <BiUserPlus className="text-success" />

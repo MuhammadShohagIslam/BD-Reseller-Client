@@ -13,6 +13,7 @@ import AllCategories from "../pages/Dashboard/Seller/Categories/AllCategories/Al
 import AddCategory from "../pages/Dashboard/Seller/Categories/AddCategory/AddCategory";
 import AllBuyers from './../pages/Dashboard/Admin/AllBuyers/AllBuyers';
 import AllSellers from "../pages/Dashboard/Admin/AllSellers/AllSellers";
+import UpdateProduct from "../pages/Dashboard/Seller/Products/UpdateProduct/UpdateProduct";
 
 const router = createBrowserRouter([
     {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
                 element: <Blogs />,
             },
             {
-                path: "/productsByCategory/:categoryId",
+                path: "/productsByCategory/:categoryName",
                 element: <ProductsByCategory />,
             },
             {
@@ -60,6 +61,11 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/seller/addProduct",
                 element: <AddProduct />,
+            },
+            {
+                path: "/dashboard/seller/updateProduct/:productId",
+                element: <UpdateProduct />,
+                loader: ({params}) => fetch(`${process.env.REACT_APP_server_api}/products/${params.productId}`)
             },
             {
                 path: "/dashboard/seller/allCategories",

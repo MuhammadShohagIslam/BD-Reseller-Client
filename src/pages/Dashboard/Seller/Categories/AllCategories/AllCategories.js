@@ -7,10 +7,15 @@ import {
     getAllCategories,
 } from "../../../../../api/category";
 import { toast } from "react-hot-toast";
-import ConfirmationModal from "../../../../../components/shared/ConfirmationModal/ConfirmationModal";
+import ConfirmationModal from "../../../../../components/shared/Modal/ConfirmationModal/ConfirmationModal";
+import EditModal from "../../../../../components/shared/Modal/ConfirmationModal/EditModal/EditModal";
+import { updateCategoryByCategoryId } from "./../../../../../api/category";
+import Loader from './../../../../../components/shared/Loader/Loader';
 
 const AllCategories = () => {
     const [deleteCategory, setDeleteCategory] = useState(null);
+    const [updateCategoryModalData, setUpdateCategoryModalData] =
+        useState(null);
 
     const { isLoading, error, refetch, data } = useQuery({
         queryKey: ["categories"],
@@ -24,6 +29,32 @@ const AllCategories = () => {
     const closeModal = () => {
         setDeleteCategory(null);
     };
+    const closeEditModal = () => {
+        setUpdateCategoryModalData(null);
+    };
+
+    const handleCategoryUpdateSubmit = (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const categoryName = form.updateCategory.value;
+        console.log(categoryName, updateCategoryModalData._id);
+        updateCategoryByCategoryId(updateCategoryModalData._id, {
+            categoryName,
+        })
+            .then((data) => {
+                if (data.data.modifiedCount > 0) {
+                    toast.success("Product Updated Successfully");
+                    setUpdateCategoryModalData(null);
+                    refetch();
+                } else {
+                    toast.success("Product Not Modified!");
+                }
+            })
+            .catch((error) => {
+                console.log(error.message);
+                toast.error(error.message);
+            });
+    };
 
     const handleDeleteCategory = (modalData) => {
         const { _id } = modalData;
@@ -33,7 +64,7 @@ const AllCategories = () => {
             setDeleteCategory(null);
         });
     };
-    
+
     return (
         <section className="container my-6">
             <SectionTitle title="All Categories" />
@@ -53,76 +84,60 @@ const AllCategories = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {data?.map((category) => (
-                            <tr
-                                key={category._id}
-                                className="bg-white border-b dark:bg-primary dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                            >
-                                <th
-                                    scope="row"
-                                    className="py-4 px-6 text-lg text-gray-900 whitespace-nowrap dark:text-white"
-                                >
-                                    {category.categoryName}
-                                </th>
-                                <td className="py-4 px-6">
-                                    <label
-                                        htmlFor="my-modal-3"
-                                        className="flex w-10 h-10 justify-center items-center rounded-lg border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer"
+                        {isLoading ? (
+                            <Loader />
+                        ) : (
+                            <>
+                                {data?.map((category) => (
+                                    <tr
+                                        key={category._id}
+                                        className="bg-white border-b dark:bg-primary dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                                     >
-                                        <AiFillEdit className="h-5 w-5" />
-                                    </label>
-                                </td>
-                                <td className="py-4 px-6">
-                                    <label
-                                        onClick={() =>
-                                            setDeleteCategory(category)
-                                        }
-                                        htmlFor="my-modal-4"
-                                        className="py-3 flex w-10 h-10 justify-center items-center rounded-lg border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer"
-                                    >
-                                        <AiFillDelete className="h-5 w-5" />
-                                    </label>
-                                </td>
-                            </tr>
-                        ))}
+                                        <th
+                                            scope="row"
+                                            className="py-4 px-6 text-lg text-gray-900 whitespace-nowrap dark:text-white"
+                                        >
+                                            {category.categoryName}
+                                        </th>
+                                        <td className="py-4 px-6">
+                                            <label
+                                                onClick={() =>
+                                                    setUpdateCategoryModalData(
+                                                        category
+                                                    )
+                                                }
+                                                htmlFor="my-modal-3"
+                                                className="flex w-10 h-10 justify-center items-center rounded-lg border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer"
+                                            >
+                                                <AiFillEdit className="h-5 w-5" />
+                                            </label>
+                                        </td>
+                                        <td className="py-4 px-6">
+                                            <label
+                                                onClick={() =>
+                                                    setDeleteCategory(category)
+                                                }
+                                                htmlFor="my-modal-4"
+                                                className="py-3 flex w-10 h-10 justify-center items-center rounded-lg border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer"
+                                            >
+                                                <AiFillDelete className="h-5 w-5" />
+                                            </label>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </>
+                        )}
                     </tbody>
                 </table>
-                <input
-                    type="checkbox"
-                    id="my-modal-3"
-                    className="modal-toggle"
-                />
-                <div className="modal">
-                    <div className="modal-box relative">
-                        <label
-                            htmlFor="my-modal-3"
-                            className="btn btn-sm btn-success hover:btn-primary text-white btn-circle absolute right-2 top-2"
-                        >
-                            ✕
-                        </label>
-                        <h3 className="text-lg font-bold text-success text-center">
-                            Update The Category
-                        </h3>
-                        <form>
-                            <label
-                                htmlFor="updateCategory"
-                                className="text-primary"
-                            >
-                                Category Name
-                            </label>
-                            <input
-                                type="text"
-                                name="updateCategory"
-                                className="input input-bordered input-success w-full text-primary mt-1"
-                            />
-                            <input
-                                type="submit"
-                                value="Update"
-                                className="btn btn-sm capitalize hover:bg-transparent hover:text-primary text-white btn-primary mt-2"
-                            />
-                        </form>
-                    </div>
-                </div>
+                {updateCategoryModalData && (
+                    <EditModal
+                        handleUpdateSubmit={handleCategoryUpdateSubmit}
+                        title="Category"
+                        nameField="Category Name"
+                        modalData={updateCategoryModalData.categoryName}
+                        closeModal={closeEditModal}
+                    />
+                )}
                 {deleteCategory && (
                     <ConfirmationModal
                         title={`Are You Sure You Want To Delete ${deleteCategory?.categoryName} Category`}

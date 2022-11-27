@@ -9,8 +9,8 @@ export const createNewProduct = async (productData) => {
 };
 
 // get all products
-export const getAllProducts = async (page, size) => {
-    return await axios.get(`${process.env.REACT_APP_server_api}/products?page=${page}&${size}`);
+export const getAllProducts = async (page, size,categoryName) => {
+    return await axios.get(`${process.env.REACT_APP_server_api}/products?categoryName=${categoryName}&page=${page}&size=${size}`);
 };
 
 // update product by productId

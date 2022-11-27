@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { createNewCategory } from './../../../../../api/category';
 import { toast } from 'react-hot-toast';
+import axios  from 'axios';
 
 const AddCategory = () => {
     const {
@@ -12,17 +13,30 @@ const AddCategory = () => {
     } = useForm();
 
     const handleAddCategory = (formValues) => {
-        console.log(formValues);
-        createNewCategory(formValues).then((data) => {
-            if (data.data.acknowledged) {
-                toast.success(
-                    `${formValues.categoryName} Category is Created!`
-                );
-                reset();
-            }
-        }).catch(error=>{
-            console.log(error);
-        });
+        const categoryImage = formValues.categoryImg[0];
+        const formData = new FormData();
+        formData.append("image", categoryImage);
+
+        const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
+        axios
+            .post(url, formData)
+            .then((imgData) => {
+                const categoryImgUrl = imgData.data.data.url;
+                const category = {
+                    image: categoryImgUrl,
+                    categoryName:formValues.categoryName
+                };
+                createNewCategory(category).then((data) => {
+                    if (data.data.acknowledged) {
+                        toast.success(
+                            `${formValues.categoryName} Category is Created!`
+                        );
+                        reset();
+                    }
+                }).catch(error=>{
+                    console.log(error);
+                });
+            })
     };
     return (
         <div className="container py-10">
@@ -48,16 +62,23 @@ const AddCategory = () => {
                         placeholder="Enter Your Category Name"
                         className="input input-bordered input-success w-full text-primary"
                     />
-                    {errors.categoryName && (
+                    <input
+                        {...register("categoryImg", {
+                            required: "Category Img Is Required!",
+                        })}
+                        type="file"
+                        className="file-input mt-4 file-input-bordered file-input-success w-full max-w-xs"
+                    />
+                    {errors.categoryImg && (
                         <p className="text-red-600">
-                            {errors.categoryName?.message}
+                            {errors.categoryImg?.message}
                         </p>
                     )}
 
                     <input
                         type="submit"
                         value="Add Category"
-                        className="btn hover:bg-transparent capitalize hover:text-primary text-white btn-success  mt-3"
+                        className="btn hover:bg-transparent capitalize hover:text-primary text-white btn-success block  mt-3"
                     />
                 </form>
             </div>
