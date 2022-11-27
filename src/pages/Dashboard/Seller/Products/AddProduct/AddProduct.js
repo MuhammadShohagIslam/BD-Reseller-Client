@@ -4,11 +4,21 @@ import { createNewProduct } from "./../../../../../api/product";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useAuth } from "../../../../../context/AuthProvider/AuthProvider";
+import { useQuery } from "@tanstack/react-query";
+import { getAllCategories } from "../../../../../api/category";
 
 const AddProduct = () => {
     const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
     const { user } = useAuth();
     console.log(user);
+
+    const { data: allCategory = [] } = useQuery({
+        queryKey: ["categories"],
+        queryFn: async () => {
+            const data = await getAllCategories();
+            return data.data;
+        },
+    });
     const {
         handleSubmit,
         register,
@@ -31,22 +41,24 @@ const AddProduct = () => {
                     sellerEmail: user?.email,
                     productImg: productImgUrl,
                 };
-                createNewProduct(product).then((data) => {
-                    if (data.data.acknowledged) {
-                        toast.success(
-                            `${formValues.productName} Product is Created!`
-                        );
-                        reset();
-                    }
-                }).catch(error=>{
-                    console.log(error);
-                });
+                createNewProduct(product)
+                    .then((data) => {
+                        if (data.data.acknowledged) {
+                            toast.success(
+                                `${formValues.productName} Product is Created!`
+                            );
+                            reset();
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
             })
             .catch((err) => {
                 console.log(err);
             });
     };
-
+    console.log(allCategory, "Good");
     return (
         <div className="container py-10">
             <div className="bg-secondary p-6 rounded-lg">
@@ -259,12 +271,15 @@ const AddProduct = () => {
                             <option disabled className="text-sm">
                                 Pick Your Product Category
                             </option>
-                            <option className="text-sm" value="laptop">
-                                Laptop
-                            </option>
-                            <option value="desktop" className="text-sm">
-                                Desktop
-                            </option>
+                            {allCategory.map((category) => (
+                                <option
+                                    key={category._id}
+                                    value={category.categoryName}
+                                    className="text-sm"
+                                >
+                                    {category.categoryName}
+                                </option>
+                            ))}
                         </select>
                         {errors.productCategory && (
                             <p className="text-red-600">
