@@ -9,7 +9,13 @@ import {
     MdOutlineWifiProtectedSetup,
 } from "react-icons/md";
 
-const Product = ({ product, addToWishList, addToBookNow }) => {
+const Product = ({
+    product,
+    addToWishList,
+    addToBookNow,
+    isAddedWishList,
+    wishLists,
+}) => {
     const {
         _id,
         date,
@@ -28,6 +34,10 @@ const Product = ({ product, addToWishList, addToBookNow }) => {
     const offProduct = Math.round(
         ((originalPrice - price) / originalPrice) * 100
     );
+    const productIdFromWishLists = wishLists?.map(
+        (wishList) => wishList.productId
+    );
+    const isProductIdFromWishList = productIdFromWishLists.includes(_id);
     return (
         <div className="max-w-sm rounded-lg shadow-md group cursor-pointer">
             <div className="h-72 relative">
@@ -39,9 +49,17 @@ const Product = ({ product, addToWishList, addToBookNow }) => {
                 </div>
                 <ul className="transition duration-300 ease-in-out invisible flex absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 group-hover:visible">
                     <li
-                        className="py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary"
-                        data-tip="Add To WishList "
-                        onClick={() => addToWishList(_id)}
+                        className={`py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white ${
+                            isProductIdFromWishList
+                                ? "bg-primary"
+                                : "bg-success"
+                        } bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary`}
+                        data-tip={
+                            isProductIdFromWishList
+                                ? "Already To WishList"
+                                : "Add To WishList"
+                        }
+                        onClick={() => addToWishList(product, isProductIdFromWishList)}
                     >
                         <FaHeart />
                     </li>
@@ -50,7 +68,7 @@ const Product = ({ product, addToWishList, addToBookNow }) => {
                         <li
                             className="py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary"
                             data-tip="Book Now"
-                            onClick={() => addToBookNow(_id)}
+                            onClick={() => addToBookNow(product)}
                         >
                             <BsFillBookmarkFill />
                         </li>

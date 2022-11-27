@@ -20,7 +20,7 @@ const Categories = () => {
             return data.data;
         },
     });
-
+    console.log(data)
     return (
         <section className="container py-14 sm:py-8">
             <SectionTitle title="Popular Computer Category " />

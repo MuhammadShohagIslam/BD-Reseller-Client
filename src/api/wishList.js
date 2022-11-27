@@ -1,16 +1,16 @@
 import axios from "axios";
 
 // create new wish-list product
-export const createNewWishListProduct = async (productData) => {
+export const createNewWishListProduct = async (wishListData) => {
     return await axios.post(
         `${process.env.REACT_APP_server_api}/products/wishLists`,
-        productData
+        wishListData
     );
 };
 
 // get all wish-list products
 export const getAllWishListProducts = async () => {
-    return await axios.get(`${process.env.REACT_APP_server_api}/products/wishLists`);
+    return await axios.get(`${process.env.REACT_APP_server_api}/wishLists`);
 };
 
 

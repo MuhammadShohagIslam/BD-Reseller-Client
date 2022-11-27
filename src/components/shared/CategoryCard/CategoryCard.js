@@ -2,8 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const CategoryCard = ({ category }) => {
-    console.log(category)
     const { image, categoryName } = category;
+    
     return (
         <Link to={`/productsByCategory/${categoryName}`}>
             <div
