@@ -9,6 +9,7 @@ import Loader from "./../../components/shared/Loader/Loader";
 import {
     createNewWishListProduct,
     getAllWishListProducts,
+    removeWishListProductByProductId
 } from "./../../api/wishList";
 import { toast } from "react-hot-toast";
 
@@ -16,7 +17,6 @@ const ProductsByCategory = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
-    const [isAddedWishList, setIsAddedWishList] = useState(false);
 
     const params = useParams();
     const { categoryName } = params;
@@ -37,13 +37,13 @@ const ProductsByCategory = () => {
     } = useQuery({
         queryKey: ["wishLists"],
         queryFn: async () => {
-            const data = await getAllWishListProducts();
+            const data = await getAllWishListProducts("abc", "abc@gmail.com");
             return data.data;
         },
     });
 
-    console.log(wishLists);
     const addToWishList = (product, isProductIdFromWishList) => {
+        console.log(!isProductIdFromWishList);
         if (!isProductIdFromWishList) {
             const wishListData = {
                 ...product,
@@ -55,10 +55,23 @@ const ProductsByCategory = () => {
 
             createNewWishListProduct(wishListData)
                 .then((data) => {
-                    setIsAddedWishList(false);
                     if (data.data.acknowledged) {
                         toast.success(
                             `${product.productName} Product Added To Wish-List!`
+                        );
+                        wishListRefetch();
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }else{
+            removeWishListProductByProductId(product._id)
+                .then((data) => {
+                    console.log(data)
+                    if (data.data.acknowledged) {
+                        toast.success(
+                            `${product.productName} Product Removed To Wish-List!`
                         );
                         wishListRefetch();
                     }
@@ -91,7 +104,6 @@ const ProductsByCategory = () => {
                                     product={product}
                                     addToBookNow={addToBookNow}
                                     addToWishList={addToWishList}
-                                    isAddedWishList={isAddedWishList}
                                     wishLists={wishLists}
                                 />
                             ))}

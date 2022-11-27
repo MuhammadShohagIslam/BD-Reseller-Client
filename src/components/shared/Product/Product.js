@@ -13,7 +13,6 @@ const Product = ({
     product,
     addToWishList,
     addToBookNow,
-    isAddedWishList,
     wishLists,
 }) => {
     const {
@@ -38,6 +37,7 @@ const Product = ({
         (wishList) => wishList.productId
     );
     const isProductIdFromWishList = productIdFromWishLists.includes(_id);
+    console.log(wishLists,productIdFromWishLists, isProductIdFromWishList)
     return (
         <div className="max-w-sm rounded-lg shadow-md group cursor-pointer">
             <div className="h-72 relative">

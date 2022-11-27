@@ -9,14 +9,15 @@ export const createNewWishListProduct = async (wishListData) => {
 };
 
 // get all wish-list products
-export const getAllWishListProducts = async () => {
-    return await axios.get(`${process.env.REACT_APP_server_api}/wishLists`);
+export const getAllWishListProducts = async (userName, userEmail) => {
+    return await axios.get(
+        `${process.env.REACT_APP_server_api}/wishLists?userName=${userName}&userEmail=${userEmail}`
+    );
 };
 
-
 // delete wish-list product by productId
-export const deleteWishListProductByProductId = async (productId) => {
+export const removeWishListProductByProductId = async (productId) => {
     return await axios.delete(
-        `${process.env.REACT_APP_server_api}/products/wishLists/${productId}`
+        `${process.env.REACT_APP_server_api}/wishLists/${productId}`
     );
 };

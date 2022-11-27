@@ -1,32 +1,73 @@
 import React, { useState } from "react";
 import SectionTitle from "../../../../components/shared/SectionTitle/SectionTitle";
 import WishList from "../../../../components/shared/WishList/WishList";
+import { useQuery } from "@tanstack/react-query";
+import {
+    getAllWishListProducts,
+    removeWishListProductByProductId,
+} from "../../../../api/wishList";
+import Loader from "./../../../../components/shared/Loader/Loader";
+import { toast } from "react-hot-toast";
 
 const BuyerWishLists = () => {
-    const [count, setCount] = useState(50);
-    const [page, setPage] = useState(0);
-    const [size, setSize] = useState(10);
-    const pages = Math.ceil(count / size);
+    const {
+        isLoading,
+        refetch,
+        data: wishLists = [],
+    } = useQuery({
+        queryKey: ["wishListsFromDashboard"],
+        queryFn: async () => {
+            const data = await getAllWishListProducts("abc", "abc@gmail.com");
+            return data.data;
+        },
+    });
+
+
+    const addToWishList = (wishList, isProductIdFromWishList, productId) => {
+        console.log(wishList._id);
+        if (isProductIdFromWishList) {
+            removeWishListProductByProductId(productId)
+                .then((data) => {
+                    console.log(data);
+                    if (data.data.acknowledged) {
+                        toast.success(
+                            `${wishList.productName} Product Removed To Wish-List!`
+                        );
+                        refetch();
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    };
 
     return (
         <section className="container py-10">
-            <SectionTitle title="Your Desire Product"/>
-            <div className="grid grid-cols-3 mt-8 gap-5">
-                <WishList />
-            </div>
-            <div className="text-center mt-5">
-                {[...Array(pages).keys()].map((number) => (
-                    <button
-                        key={number}
-                        className={`btn btn-sm text-primary hover:text-white ${
-                            page === number ? "btn-active text-white" : ""
-                        }`}
-                        onClick={() => setPage(number)}
-                    >
-                        {number + 1}
-                    </button>
-                ))}
-            </div>
+            <SectionTitle title="Your Desire Product" />
+            {isLoading ? (
+                <Loader />
+            ) : (
+                <div className="grid grid-cols-3 mt-8 gap-5">
+                    {wishLists?.length > 0 ? (
+                        <>
+                            {wishLists?.map((wishList) => (
+                                <WishList
+                                    wishList={wishList}
+                                    key={wishList._id}
+                                    addToWishList={addToWishList}
+                                    wishLists={wishLists}
+                                />
+                            ))}
+                        </>
+                    ) : (
+                        <h3 className="text-center text-xl text-primary">
+                            There is no wish-list
+                        </h3>
+                    )}
+                </div>
+            )}
+
         </section>
     );
 };
