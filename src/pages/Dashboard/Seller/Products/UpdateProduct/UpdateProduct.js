@@ -1,15 +1,21 @@
-import React from 'react';
+import React from "react";
 import { useForm } from "react-hook-form";
-import { createNewProduct } from "./../../../../../api/product";
+import { updateProductByProductId } from "./../../../../../api/product";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useAuth } from "../../../../../context/AuthProvider/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCategories } from "../../../../../api/category";
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 const UpdateProduct = () => {
     const product = useLoaderData();
+    const navigate = useNavigate();
+    const {
+        handleSubmit,
+        register,
+        formState: { errors },
+    } = useForm();
+
     const {
         _id,
         date,
@@ -32,21 +38,62 @@ const UpdateProduct = () => {
         },
     });
 
-    const {
-        handleSubmit,
-        register,
-        formState: { errors },
-    } = useForm();
-    console.log(product)
-    const handleUpdateProduct = () => {
+    const handleUpdateProduct = (formValues) => {
+        const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
+        const productImage = formValues.productImg[0];
+        const formData = new FormData();
+        formData.append("image", productImage);
+        if (formValues.productImg.length > 0 && productImage) {
+            axios
+                .post(url, formData)
+                .then((imgData) => {
+                    const productImgUrl = imgData.data.data.url;
 
-    }
+                    const product = {
+                        ...formValues,
+                        productImg: productImgUrl,
+                    };
+                    updateProductByProductId(_id, product)
+                        .then((data) => {
+                            if (data.data.modifiedCount > 0) {
+                                toast.success(
+                                    `${formValues.productName} Product is Updated!`
+                                );
+                                navigate("/dashboard/seller/allProducts");
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
+            const modifiedProduct = {
+                ...formValues,
+                productImg,
+            };
+            updateProductByProductId(_id, modifiedProduct)
+                .then((data) => {
+                    if (data.data.modifiedCount > 0) {
+                        toast.success(
+                            `${formValues.productName} Product is Updated!`
+                        );
+                        navigate("/dashboard/seller/allProducts");
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    };
 
     return (
         <div className="container py-10">
             <div className="bg-secondary p-6 rounded-lg">
                 <h2 className="text-center font-semibold text-primary text-2xl">
-                    Add New Product
+                    Update Product
                 </h2>
                 <form
                     onSubmit={handleSubmit(handleUpdateProduct)}
@@ -57,13 +104,17 @@ const UpdateProduct = () => {
                             <input
                                 type="file"
                                 {...register("productImg", {
-                                    required: "product Img Is Required!",
+                                    required: false,
                                 })}
                                 className="file-input file-input-bordered file-input-success w-full max-w-xs"
                             />
                         </div>
                         <div className="my-5">
-                            <img className='w-40 h-32' src={productImg} alt={productName}/>
+                            <img
+                                className="w-40 h-32"
+                                src={productImg}
+                                alt={productName}
+                            />
                         </div>
                     </div>
                     <div className="grid gap-6 mb-6 grid-cols-2">
@@ -262,18 +313,30 @@ const UpdateProduct = () => {
                             })}
                             defaultValue={productCategory}
                         >
-                            <option disabled className="text-sm">
-                                Pick Your Product Category
-                            </option>
-                            {allCategory.map((category) => (
+                            {productCategory && (
                                 <option
-                                    key={category._id}
-                                    value={category.categoryName}
+                                    value={productCategory}
                                     className="text-sm"
                                 >
-                                    {category.categoryName}
+                                    {productCategory}
                                 </option>
-                            ))}
+                            )}
+
+                            {allCategory
+                                .filter(
+                                    (category) =>
+                                        category.categoryName !==
+                                        productCategory
+                                )
+                                .map((category) => (
+                                    <option
+                                        key={category._id}
+                                        value={category.categoryName}
+                                        className="text-sm"
+                                    >
+                                        {category.categoryName}
+                                    </option>
+                                ))}
                         </select>
                         {errors.productCategory && (
                             <p className="text-red-600">
@@ -306,7 +369,7 @@ const UpdateProduct = () => {
 
                     <input
                         type="submit"
-                        value="Add Product"
+                        value="Update Product"
                         className="btn hover:bg-transparent hover:text-primary text-white btn-primary  mt-2"
                     />
                 </form>
