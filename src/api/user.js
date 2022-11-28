@@ -14,10 +14,18 @@ export const getAdminUserByEmail = async (email) => {
         `${process.env.REACT_APP_server_api}/users/admin/${email}`
     );
 };
-//   // get seller user by email
+
+// get seller user by email
 export const getSellerUserByEmail = async (email) => {
     return await axios.get(
         `${process.env.REACT_APP_server_api}/users/seller/${email}`
+    );
+};
+
+// get seller user by email
+export const getBuyerUserByEmail = async (email) => {
+    return await axios.get(
+        `${process.env.REACT_APP_server_api}/users/buyers/${email}`
     );
 };
 

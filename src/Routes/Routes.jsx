@@ -21,6 +21,7 @@ import MyBuyers from "../pages/Dashboard/Seller/MyBuyers/MyBuyers";
 import AdminRoute from "./AdminRoute";
 import PrivateRouter from "./PrivateRoute";
 import SellerRoute from "./SellerRoute";
+import BuyerRoute from "./BuyerRoute";
 
 const router = createBrowserRouter([
     {
@@ -122,7 +123,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard/seller/allCategories",
-                element: <SellerRoute><AllCategories /></SellerRoute>,
+                element: (
+                    <SellerRoute>
+                        <AllCategories />
+                    </SellerRoute>
+                ),
             },
             {
                 path: "/dashboard/seller/addCategories",
@@ -135,17 +140,17 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/buyer/wishlist",
                 element: (
-                    <PrivateRouter>
+                    <BuyerRoute>
                         <BuyerWishLists />
-                    </PrivateRouter>
+                    </BuyerRoute>
                 ),
             },
             {
                 path: "/dashboard/buyer/orders",
                 element: (
-                    <PrivateRouter>
+                    <BuyerRoute>
                         <MyOrder />
-                    </PrivateRouter>
+                    </BuyerRoute>
                 ),
             },
         ],

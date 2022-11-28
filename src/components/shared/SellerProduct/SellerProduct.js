@@ -1,5 +1,6 @@
 import React from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { RiAdvertisementLine } from "react-icons/ri";
 import { BsCalendarDate, BsHouseDoorFill } from "react-icons/bs";
 import { BiUserPlus, BiCategoryAlt } from "react-icons/bi";
 import {
@@ -9,7 +10,11 @@ import {
 } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-const SellerProduct = ({ product, handleDeleteProduct }) => {
+const SellerProduct = ({
+    product,
+    handleDeleteProduct,
+    handleAdvertisingProduct,
+}) => {
     const {
         _id,
         date,
@@ -23,6 +28,7 @@ const SellerProduct = ({ product, handleDeleteProduct }) => {
         originalPrice,
         price,
         productCreated,
+        isAdvertised,
     } = product;
 
     const offProduct = Math.round(
@@ -39,6 +45,21 @@ const SellerProduct = ({ product, handleDeleteProduct }) => {
                     </span>
                 </div>
                 <ul className="transition duration-300 ease-in-out invisible flex absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 group-hover:visible">
+                    <li
+                        className={`py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white ${
+                            product?.isAdvertised ? "bg-primary" : "bg-success"
+                        } bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary`}
+                        data-tip={
+                            product?.isAdvertised
+                                ? "Already Advertised"
+                                : "Add To Advertised"
+                        }
+                        onClick={() =>
+                            handleAdvertisingProduct(product, isAdvertised)
+                        }
+                    >
+                        <RiAdvertisementLine />
+                    </li>
                     <li
                         className="py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary"
                         data-tip="Delete Product"
