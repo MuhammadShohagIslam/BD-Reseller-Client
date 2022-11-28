@@ -14,6 +14,7 @@ import AddCategory from "../pages/Dashboard/Seller/Categories/AddCategory/AddCat
 import AllBuyers from './../pages/Dashboard/Admin/AllBuyers/AllBuyers';
 import AllSellers from "../pages/Dashboard/Admin/AllSellers/AllSellers";
 import UpdateProduct from "../pages/Dashboard/Seller/Products/UpdateProduct/UpdateProduct";
+import MyOrder from "../pages/Dashboard/Buyer/MyOrder/MyOrder";
 
 const router = createBrowserRouter([
     {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/buyer/wishlist",
                 element: <BuyerWishLists/>,
+            },
+            {
+                path: "/dashboard/buyer/orders",
+                element: <MyOrder/>,
             },
            
         ],

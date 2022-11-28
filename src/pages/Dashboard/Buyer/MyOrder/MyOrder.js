@@ -1,6 +1,5 @@
 import React from "react";
 import { AiFillDelete } from "react-icons/ai";
-import { MdOutlineVerifiedUser } from "react-icons/md";
 import SectionTitle from "./../../../../components/shared/SectionTitle/SectionTitle";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
@@ -29,10 +28,23 @@ const MyOrder = () => {
         },
     });
 
-    const handleBookingOrderDelete = (productId) => {
-        deleteBookingProductByProductId(productId)
+    const handleBookingOrderDelete = (buyerOrder) => {
+        deleteBookingProductByProductId(buyerOrder.productId)
             .then((data) => {
-                toast.success(`${user.name}  Delete Successfully!`);
+                toast.success(`${buyerOrder.productName}  Delete Successfully!`);
+                refetch();
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
+
+    const handleBookingOrderPayment = (buyerOrder) => {
+        deleteBookingProductByProductId(buyerOrder.productId)
+            .then((data) => {
+                toast.success(
+                    `${buyerOrder.productName}  Delete Successfully!`
+                );
                 refetch();
             })
             .catch((error) => {
@@ -49,50 +61,59 @@ const MyOrder = () => {
                     <table className="w-full">
                         <thead className="bg-green-300 text-primary text-left">
                             <tr>
-                                <th className="text-center">Name</th>
-                                <th>Phone</th>
-                                <th>Email</th>
+                                <th className="text-center">Product</th>
+                                <th>Price</th>
+                                <th>Pay</th>
                                 <th>Delete</th>
-                                <th>Verified</th>
                             </tr>
                         </thead>
                         <tbody className="text-primary text-left">
                             <>
                                 {allBuyerOrders?.map((buyerOrder) => (
-                                    <tr key={user._id}>
+                                    <tr key={buyerOrder._id}>
                                         <td className="text-left">
                                             <div className="flex items-center justify-center space-x-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle w-12 h-12">
                                                         <img
                                                             src={
-                                                                user.profileImage
+                                                                buyerOrder.productImg
                                                             }
-                                                            alt={user.name}
+                                                            alt={
+                                                                buyerOrder.productName
+                                                            }
                                                         />
                                                     </div>
                                                 </div>
                                                 <div>
                                                     <div className="font-bold">
-                                                        {user.name}
+                                                        {buyerOrder.productName}
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>Carroll</td>
-                                        <td>{user.email}</td>
+                                        <td> {buyerOrder.price}</td>
+                                        <td>
+                                            <span
+                                                className="text-primary rounded-lg cursor-pointer text-lg py-1 px-4 bg-success"
+                                                onClick={() =>
+                                                    handleBookingOrderPayment(
+                                                        buyerOrder
+                                                    )
+                                                }
+                                            >
+                                                Pay
+                                            </span>
+                                        </td>
                                         <td>
                                             <label
                                                 onClick={() =>
-                                                    handleBookingOrderDelete(user)
+                                                    handleBookingOrderDelete(
+                                                        buyerOrder
+                                                    )
                                                 }
                                             >
                                                 <AiFillDelete className="h-5 w-5 cursor-pointer text-red-600" />
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <label>
-                                                <MdOutlineVerifiedUser className="h-5 w-5 text-green-600" />
                                             </label>
                                         </td>
                                     </tr>

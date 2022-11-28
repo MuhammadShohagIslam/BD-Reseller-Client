@@ -8,7 +8,8 @@ const BookingForm = ({
     user,
     bookingProductRefetch,
 }) => {
-    const { productName, price } = bookingProduct;
+    const { productName, price,productImg
+    } = bookingProduct;
 
     const handleBookingProduct = (event) => {
         event.preventDefault();
@@ -30,9 +31,10 @@ const BookingForm = ({
         }
 
         const bookingProductData = {
-            userName: user?.displayName,
+            userName: user?.displayName || name,
             userEmail: email,
-            productName: name,
+            productImg,
+            productName,
             price,
             phone,
             meetingLocation,

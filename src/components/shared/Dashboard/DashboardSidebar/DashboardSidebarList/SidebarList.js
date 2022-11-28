@@ -74,7 +74,7 @@ const SidebarList = ({ toggleAdminSidebar }) => {
                 )}
             </SideBarListItem>
             <SideBarListItem
-                navigationLink="/dashboard/myOrders"
+                navigationLink="/dashboard/buyer/orders"
                 tooltipName="My Orders"
                 toggleAdminSidebar={toggleAdminSidebar}
             >
