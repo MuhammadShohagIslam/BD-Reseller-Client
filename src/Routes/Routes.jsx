@@ -15,11 +15,14 @@ import AllBuyers from './../pages/Dashboard/Admin/AllBuyers/AllBuyers';
 import AllSellers from "../pages/Dashboard/Admin/AllSellers/AllSellers";
 import UpdateProduct from "../pages/Dashboard/Seller/Products/UpdateProduct/UpdateProduct";
 import MyOrder from "../pages/Dashboard/Buyer/MyOrder/MyOrder";
+import BlogDetails from "../pages/Blogs/BlogDetails/BlogDetails";
+import DisplayError from "../pages/DisplayError/DisplayError";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
+        errorElement:<DisplayError/>,
         children: [
             {
                 path: "/",
@@ -28,6 +31,11 @@ const router = createBrowserRouter([
             {
                 path: "/blogs",
                 element: <Blogs />,
+            },
+            {
+                path: "/blogs/:blogId",
+                element: <BlogDetails />,
+                loader: ({params}) => fetch(`${process.env.REACT_APP_server_api}/blogs/${params.blogId}`)
             },
             {
                 path: "/productsByCategory/:categoryName",
@@ -46,6 +54,7 @@ const router = createBrowserRouter([
     {
         path: "/dashboard",
         element: <DashboardLayout></DashboardLayout>,
+        errorElement:<DisplayError/>,
         children: [
             {
                 path: "/dashboard/admin/allBuyers",
