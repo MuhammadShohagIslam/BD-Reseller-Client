@@ -41,8 +41,7 @@ const AllSellers = () => {
                     <table className="w-full">
                         <thead className="bg-green-300 text-primary text-left">
                             <tr>
-                                <th className="text-center">Name</th>
-                                <th>Phone</th>
+                                <th className="text-center">Profile</th>
                                 <th>Email</th>
                                 <th>Delete</th>
                                 <th>Verified</th>
@@ -71,7 +70,7 @@ const AllSellers = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>Carroll</td>
+                                
                                         <td>{user.email}</td>
                                         <td>
                                             <label

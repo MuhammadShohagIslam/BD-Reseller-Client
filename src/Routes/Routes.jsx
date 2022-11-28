@@ -11,18 +11,22 @@ import AddProduct from "../pages/Dashboard/Seller/Products/AddProduct/AddProduct
 import BuyerWishLists from "../pages/Dashboard/Buyer/BuyerWishLists/BuyerWishLists";
 import AllCategories from "../pages/Dashboard/Seller/Categories/AllCategories/AllCategories";
 import AddCategory from "../pages/Dashboard/Seller/Categories/AddCategory/AddCategory";
-import AllBuyers from './../pages/Dashboard/Admin/AllBuyers/AllBuyers';
+import AllBuyers from "./../pages/Dashboard/Admin/AllBuyers/AllBuyers";
 import AllSellers from "../pages/Dashboard/Admin/AllSellers/AllSellers";
 import UpdateProduct from "../pages/Dashboard/Seller/Products/UpdateProduct/UpdateProduct";
 import MyOrder from "../pages/Dashboard/Buyer/MyOrder/MyOrder";
 import BlogDetails from "../pages/Blogs/BlogDetails/BlogDetails";
 import DisplayError from "../pages/DisplayError/DisplayError";
+import MyBuyers from "../pages/Dashboard/Seller/MyBuyers/MyBuyers";
+import AdminRoute from "./AdminRoute";
+import PrivateRouter from "./PrivateRoute";
+import SellerRoute from "./SellerRoute";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
-        errorElement:<DisplayError/>,
+        errorElement: <DisplayError />,
         children: [
             {
                 path: "/",
@@ -35,7 +39,10 @@ const router = createBrowserRouter([
             {
                 path: "/blogs/:blogId",
                 element: <BlogDetails />,
-                loader: ({params}) => fetch(`${process.env.REACT_APP_server_api}/blogs/${params.blogId}`)
+                loader: ({ params }) =>
+                    fetch(
+                        `${process.env.REACT_APP_server_api}/blogs/${params.blogId}`
+                    ),
             },
             {
                 path: "/productsByCategory/:categoryName",
@@ -53,47 +60,94 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashboard",
-        element: <DashboardLayout></DashboardLayout>,
-        errorElement:<DisplayError/>,
+        element: (
+            <PrivateRouter>
+                <DashboardLayout></DashboardLayout>
+            </PrivateRouter>
+        ),
+        errorElement: <DisplayError />,
         children: [
             {
                 path: "/dashboard/admin/allBuyers",
-                element: <AllBuyers />,
+                element: (
+                    <AdminRoute>
+                        <AllBuyers />
+                    </AdminRoute>
+                ),
             },
             {
                 path: "/dashboard/admin/allSellers",
-                element: <AllSellers />,
+                element: (
+                    <AdminRoute>
+                        <AllSellers />
+                    </AdminRoute>
+                ),
+            },
+            {
+                path: "/dashboard/seller/myBuyers",
+                element: (
+                    <SellerRoute>
+                        {" "}
+                        <MyBuyers />
+                    </SellerRoute>
+                ),
             },
             {
                 path: "/dashboard/seller/allProducts",
-                element: <SellerProducts />,
+                element: (
+                    <SellerRoute>
+                        <SellerProducts />
+                    </SellerRoute>
+                ),
             },
             {
                 path: "/dashboard/seller/addProduct",
-                element: <AddProduct />,
+                element: (
+                    <SellerRoute>
+                        <AddProduct />
+                    </SellerRoute>
+                ),
             },
             {
                 path: "/dashboard/seller/updateProduct/:productId",
-                element: <UpdateProduct />,
-                loader: ({params}) => fetch(`${process.env.REACT_APP_server_api}/products/${params.productId}`)
+                element: (
+                    <SellerRoute>
+                        <UpdateProduct />
+                    </SellerRoute>
+                ),
+                loader: ({ params }) =>
+                    fetch(
+                        `${process.env.REACT_APP_server_api}/products/${params.productId}`
+                    ),
             },
             {
                 path: "/dashboard/seller/allCategories",
-                element: <AllCategories/>,
+                element: <SellerRoute><AllCategories /></SellerRoute>,
             },
             {
                 path: "/dashboard/seller/addCategories",
-                element: <AddCategory/>,
+                element: (
+                    <SellerRoute>
+                        <AddCategory />
+                    </SellerRoute>
+                ),
             },
             {
                 path: "/dashboard/buyer/wishlist",
-                element: <BuyerWishLists/>,
+                element: (
+                    <PrivateRouter>
+                        <BuyerWishLists />
+                    </PrivateRouter>
+                ),
             },
             {
                 path: "/dashboard/buyer/orders",
-                element: <MyOrder/>,
+                element: (
+                    <PrivateRouter>
+                        <MyOrder />
+                    </PrivateRouter>
+                ),
             },
-           
         ],
     },
 ]);

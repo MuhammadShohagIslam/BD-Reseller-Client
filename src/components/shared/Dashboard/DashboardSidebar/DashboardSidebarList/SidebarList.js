@@ -10,6 +10,7 @@ import SideBarDropdownListItem from "./SideBarDropdownListItem/SideBarDropdownLi
 const SidebarList = ({ toggleAdminSidebar }) => {
     const [openProduct, setOpenProduct] = useState(false);
     const [openCategories, setOpenCategories] = useState(false);
+    const [openAllUsers, setOpenAllUsers] = useState(false);
 
     return (
         <ul className="space-y-2 px-3 ">
@@ -86,7 +87,7 @@ const SidebarList = ({ toggleAdminSidebar }) => {
                 )}
             </SideBarListItem>
             <SideBarListItem
-                navigationLink="/dashboard/admin/allBuyers"
+                navigationLink="/dashboard/seller/myBuyers"
                 tooltipName="My Buyers"
                 toggleAdminSidebar={toggleAdminSidebar}
             >
@@ -98,17 +99,24 @@ const SidebarList = ({ toggleAdminSidebar }) => {
                 )}
             </SideBarListItem>
             <SideBarListItem
-                navigationLink="/dashboard/admin/allSellers"
-                tooltipName="All Sellers"
+                open={openAllUsers}
+                setOpen={setOpenAllUsers}
+                icon={ <FaUsers className="h-[19px] w-[19px]" />}
                 toggleAdminSidebar={toggleAdminSidebar}
+                dropdownMainMenuName="All Users"
+                tooltipName="All Users"
+                isDropdownList
             >
-                <ImUserTie className="h-[19px] w-[19px]" />
-                {!toggleAdminSidebar && (
-                    <span className="flex-1 ml-3 whitespace-nowrap">
-                        All Sellers
-                    </span>
-                )}
+                <SideBarDropdownListItem
+                    dropdownNavigationLink="/dashboard/admin/allSellers"
+                    name="All Sellers"
+                />
+                <SideBarDropdownListItem
+                    dropdownNavigationLink="/dashboard/admin/allBuyers"
+                    name="All Buyers"
+                />
             </SideBarListItem>
+            
             <SideBarListItem
                 navigationLink="/dashboard/profile"
                 tooltipName="Profile"

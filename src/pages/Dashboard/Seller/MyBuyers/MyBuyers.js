@@ -1,18 +1,18 @@
 import React from "react";
 import { AiFillDelete } from "react-icons/ai";
-import SectionTitle from "./../../../../components/shared/SectionTitle/SectionTitle";
+import SectionTitle from "../../../../components/shared/SectionTitle/SectionTitle";
 import { useQuery } from "@tanstack/react-query";
-import { getAllUsersByRole, removedUsersByEmail } from "./../../../../api/user";
-import Loader from "./../../../../components/shared/Loader/Loader";
+import { getAllUsersByRole, removedUsersByEmail } from "../../../../api/user";
+import Loader from "../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
 
-const AllBuyers = () => {
+const MyBuyers = () => {
     const {
         isLoading,
         refetch,
         data: allUsers = [],
     } = useQuery({
-        queryKey: ["buyers"],
+        queryKey: ["myBuyers"],
         queryFn: async () => {
             const data = await getAllUsersByRole("user");
             return data.data;
@@ -21,12 +21,14 @@ const AllBuyers = () => {
 
     const handleUserDelete = (user) => {
         const { email } = user;
-        removedUsersByEmail(email).then((data) => {
-            toast.success(`${user.name}  Delete Successfully!`);
-            refetch();
-        }).catch(error=>{
-            console.log(error.message)
-        });
+        removedUsersByEmail(email)
+            .then((data) => {
+                toast.success(`${user.name}  Delete Successfully!`);
+                refetch();
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
     };
 
     return (
@@ -89,4 +91,4 @@ const AllBuyers = () => {
     );
 };
 
-export default AllBuyers;
+export default MyBuyers;
