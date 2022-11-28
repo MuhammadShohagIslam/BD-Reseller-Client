@@ -22,6 +22,7 @@ import AdminRoute from "./AdminRoute";
 import PrivateRouter from "./PrivateRoute";
 import SellerRoute from "./SellerRoute";
 import BuyerRoute from "./BuyerRoute";
+import Payment from "../pages/Dashboard/Payment/Payment";
 
 const router = createBrowserRouter([
     {
@@ -152,6 +153,11 @@ const router = createBrowserRouter([
                         <MyOrder />
                     </BuyerRoute>
                 ),
+            },
+            {
+                path: "/dashboard/payment/:orderId",
+                element: <Payment />,
+                loader: ({params})=> fetch(`${process.env.REACT_APP_server_api}/bookings/${params.orderId}`)
             },
         ],
     },

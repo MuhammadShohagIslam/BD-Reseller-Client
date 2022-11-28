@@ -9,6 +9,7 @@ import {
 } from "../../../../api/bookingProduct";
 import { useAuth } from "../../../../context/AuthProvider/AuthProvider";
 import Loader from "./../../../../components/shared/Loader/Loader";
+import { Link } from 'react-router-dom';
 
 const MyOrder = () => {
     const { user } = useAuth();
@@ -31,17 +32,6 @@ const MyOrder = () => {
     const handleBookingOrderDelete = (buyerOrder) => {
         deleteBookingProductByProductId(buyerOrder.productId)
             .then((data) => {
-                toast.success(`${buyerOrder.productName}  Delete Successfully!`);
-                refetch();
-            })
-            .catch((error) => {
-                console.log(error.message);
-            });
-    };
-
-    const handleBookingOrderPayment = (buyerOrder) => {
-        deleteBookingProductByProductId(buyerOrder.productId)
-            .then((data) => {
                 toast.success(
                     `${buyerOrder.productName}  Delete Successfully!`
                 );
@@ -51,6 +41,7 @@ const MyOrder = () => {
                 console.log(error.message);
             });
     };
+
     return (
         <section className="container mt-8">
             <SectionTitle title="All Seller Users" />
@@ -94,16 +85,11 @@ const MyOrder = () => {
                                         </td>
                                         <td> {buyerOrder.price}</td>
                                         <td>
-                                            <span
+                                            <Link to={`/dashboard/payment/${buyerOrder._id}`}
                                                 className="text-primary rounded-lg cursor-pointer text-lg py-1 px-4 bg-success"
-                                                onClick={() =>
-                                                    handleBookingOrderPayment(
-                                                        buyerOrder
-                                                    )
-                                                }
                                             >
                                                 Pay
-                                            </span>
+                                            </Link>
                                         </td>
                                         <td>
                                             <label
