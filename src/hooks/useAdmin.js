@@ -9,7 +9,6 @@ const useAdmin = (email) => {
             getAdminUserByEmail(email)
                 .then((data) => {
                     setIsAdmin(data.data.isAdmin);
-                    console.log(data.data.isAdmin)
                     setIsAdminLoading(false);
                 })
                 .catch((error) => {

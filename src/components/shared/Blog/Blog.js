@@ -44,7 +44,7 @@ const Blog = ({ isSliderBlog, blog, blogs, isSlideBlogLoading }) => {
                                         spaceBetween: 15,
                                     },
                                     1024: {
-                                        slidesPerView: 3,
+                                        slidesPerView: 2,
                                         spaceBetween: 20,
                                     },
                                     1200: {
@@ -56,20 +56,21 @@ const Blog = ({ isSliderBlog, blog, blogs, isSlideBlogLoading }) => {
                                 {blogs?.map((blogData, index) => (
                                     <SwiperSlide key={blogData._id}>
                                         <div
-                                            className="card bg-base-100 shadow-lg mt-7 sm:mt-3 mx-2"
+                                            className="card min-h-[513px] sm:min-h-[420px] bg-base-100 shadow-lg mt-7 sm:mt-3 mx-2"
                                             key={index}
                                         >
-                                            <figure>
+                                            <figure className="h-[250px] sm:h-[150px] md:h-[190px]">
                                                 <img
+                                                className="h-full"
                                                     src={blogData.image}
                                                     alt={blogData.title}
                                                 />
                                             </figure>
-                                            <div className="card-body">
+                                            <div className="card-body sm:p-4 md:p-5">
                                                 <h2 className="card-title text-primary">
                                                     {blogData.title}
                                                 </h2>
-                                                <div className="flex">
+                                                <div className="flex md:flex-col sm:flex-col">
                                                     <div className="flex items-center text-success">
                                                         <BsCalendarDate />
                                                         <span className="ml-1">
@@ -80,7 +81,7 @@ const Blog = ({ isSliderBlog, blog, blogs, isSlideBlogLoading }) => {
                                                                 .substr(4, 11)}
                                                         </span>
                                                     </div>
-                                                    <div className="flex items-center ml-3 text-success">
+                                                    <div className="flex items-center ml-3 md:ml-0 sm:ml-0 text-success">
                                                         <BiUserPlus />
                                                         <span className="ml-1">
                                                             {
@@ -132,7 +133,7 @@ const Blog = ({ isSliderBlog, blog, blogs, isSlideBlogLoading }) => {
                             {" "}
                             {blog?.title}
                         </h2>
-                        <div className="flex">
+                        <div className="flex md:flex-col sm:flex-col">
                             <div className="flex items-center text-success">
                                 <BsCalendarDate />
                                 <span className="ml-1">
@@ -142,9 +143,9 @@ const Blog = ({ isSliderBlog, blog, blogs, isSlideBlogLoading }) => {
                                         .substr(4, 11)}
                                 </span>
                             </div>
-                            <div className="flex items-center ml-3 text-success">
+                            <div className="flex md:ml-0 sm:ml-0 items-center ml-3 text-success">
                                 <BiUserPlus />
-                                <span className="ml-1">
+                                <span className="ml-1 ">
                                     {" "}
                                     {blog?.publisherName}
                                 </span>

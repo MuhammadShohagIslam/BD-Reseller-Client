@@ -9,7 +9,6 @@ const useSeller = (email) => {
             getSellerUserByEmail(email)
                 .then((data) => {
                     setIsSeller(data.data.isSeller);
-                    console.log(data.data.isSeller);
                     setIsSellerLoading(false);
                 })
                 .catch((error) => {
