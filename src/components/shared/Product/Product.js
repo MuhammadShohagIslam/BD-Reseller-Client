@@ -14,6 +14,7 @@ const Product = ({
     addToWishList,
     addToBookNow,
     wishLists,
+    bookingProducts
 }) => {
     const {
         _id,
@@ -37,7 +38,12 @@ const Product = ({
         (wishList) => wishList.productId
     );
     const isProductIdFromWishList = productIdFromWishLists.includes(_id);
-    console.log(wishLists,productIdFromWishLists, isProductIdFromWishList)
+
+    const productIdFromBookingProduct = bookingProducts?.map(
+        (bookingProduct) => bookingProduct.productId
+    );
+    const isProductIdFromBookingProduct = productIdFromBookingProduct.includes(_id);
+
     return (
         <div className="max-w-sm rounded-lg shadow-md group cursor-pointer">
             <div className="h-72 relative">
@@ -66,9 +72,17 @@ const Product = ({
 
                     <label htmlFor="my-modal-3">
                         <li
-                            className="py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary"
-                            data-tip="Book Now"
-                            onClick={() => addToBookNow(product)}
+                            className={`py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white ${
+                                isProductIdFromBookingProduct
+                                    ? "bg-primary"
+                                    : "bg-success"
+                            } bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary`}
+                            data-tip={
+                                isProductIdFromBookingProduct
+                                    ? "Already To Booked"
+                                    : "Booking Now"
+                            }
+                            onClick={() => addToBookNow(product,isProductIdFromBookingProduct)}
                         >
                             <BsFillBookmarkFill />
                         </li>

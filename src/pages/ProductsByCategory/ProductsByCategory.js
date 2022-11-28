@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import BookingForm from "../../components/shared/BookingForm/BookingForm";
 import Product from "../../components/shared/Product/Product";
 import SectionTitle from "../../components/shared/SectionTitle/SectionTitle";
@@ -9,14 +9,18 @@ import Loader from "./../../components/shared/Loader/Loader";
 import {
     createNewWishListProduct,
     getAllWishListProducts,
-    removeWishListProductByProductId
+    removeWishListProductByProductId,
 } from "./../../api/wishList";
 import { toast } from "react-hot-toast";
+import { useAuth } from "./../../context/AuthProvider/AuthProvider";
+import { getAllBookingProducts } from "../../api/bookingProduct";
 
 const ProductsByCategory = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
+    const [bookingProduct, setBookingProduct] = useState(null);
+    const { user } = useAuth();
 
     const params = useParams();
     const { categoryName } = params;
@@ -35,21 +39,36 @@ const ProductsByCategory = () => {
         refetch: wishListRefetch,
         data: wishLists = [],
     } = useQuery({
-        queryKey: ["wishLists"],
+        queryKey: ["wishLists", user?.displayName, user?.email],
         queryFn: async () => {
-            const data = await getAllWishListProducts("abc", "abc@gmail.com");
+            const data = await getAllWishListProducts(user?.displayName, user?.email);
             return data.data;
         },
     });
 
+    const {
+        isLoading: loadingBookingProduct,
+        refetch: bookingProductRefetch,
+        data: bookingProducts = [],
+    } = useQuery({
+        queryKey: ["bookingProducts", user?.displayName, user?.email],
+        queryFn: async () => {
+            const data = await getAllBookingProducts(user?.displayName, user?.email);
+            return data.data;
+        },
+    });
+
+    const closeModal = () => {
+        setBookingProduct(null);
+    };
+
     const addToWishList = (product, isProductIdFromWishList) => {
-        console.log(!isProductIdFromWishList);
         if (!isProductIdFromWishList) {
             const wishListData = {
                 ...product,
                 productId: product._id,
-                userName: "abc",
-                userEmail: "abc@gmail.com",
+                userName: user?.displayName,
+                userEmail: user?.email,
             };
             delete wishListData._id;
 
@@ -65,10 +84,9 @@ const ProductsByCategory = () => {
                 .catch((error) => {
                     console.log(error);
                 });
-        }else{
+        } else {
             removeWishListProductByProductId(product._id)
                 .then((data) => {
-                    console.log(data)
                     if (data.data.acknowledged) {
                         toast.success(
                             `${product.productName} Product Removed To Wish-List!`
@@ -82,8 +100,12 @@ const ProductsByCategory = () => {
         }
     };
 
-    const addToBookNow = (productId) => {
-        console.log(productId);
+    const addToBookNow = (product,isProductIdFromBookingProduct) => {
+        if(!isProductIdFromBookingProduct){
+            setBookingProduct(product);
+        }else{
+            toast.error("Products Is Already Booked!")
+        }
     };
 
     const pages = Math.ceil(count / size);
@@ -92,7 +114,7 @@ const ProductsByCategory = () => {
             <SectionTitle
                 title={`All Products Of  '''${categoryName}''' Category`}
             />
-            {isLoading && loadingWishList ? (
+            {isLoading && loadingWishList && loadingBookingProduct ? (
                 <Loader />
             ) : (
                 <div className="grid grid-cols-3 gap-5 md:grid-cols-2 sm:grid-cols-1 mt-6">
@@ -105,6 +127,7 @@ const ProductsByCategory = () => {
                                     addToBookNow={addToBookNow}
                                     addToWishList={addToWishList}
                                     wishLists={wishLists}
+                                    bookingProducts={bookingProducts}
                                 />
                             ))}
                         </>
@@ -129,7 +152,15 @@ const ProductsByCategory = () => {
                     </button>
                 ))}
             </div>
-            <BookingForm />
+            {bookingProduct && (
+                <BookingForm
+                    bookingProduct={bookingProduct}
+                    user={user}
+                    closeModal={closeModal}
+                    bookingProductRefetch={bookingProductRefetch}
+
+                />
+            )}
         </section>
     );
 };

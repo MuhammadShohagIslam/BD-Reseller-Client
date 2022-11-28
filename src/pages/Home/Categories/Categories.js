@@ -62,9 +62,8 @@ const Categories = () => {
                         {data.length > 0 ? (
                             <>
                                 {data?.map((category) => (
-                                    <SwiperSlide style={{ height: "366px" }}>
+                                    <SwiperSlide  key={category._id} style={{ height: "366px" }}>
                                         <CategoryCard
-                                            key={category._id}
                                             category={category}
                                         />
                                     </SwiperSlide>

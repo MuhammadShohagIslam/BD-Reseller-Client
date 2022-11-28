@@ -1,6 +1,15 @@
 import React from "react";
+import { toast } from "react-hot-toast";
+import { createNewBookingProduct } from "./../../../api/bookingProduct";
 
-const BookingForm = () => {
+const BookingForm = ({
+    bookingProduct,
+    closeModal,
+    user,
+    bookingProductRefetch,
+}) => {
+    const { productName, price } = bookingProduct;
+
     const handleBookingProduct = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -8,10 +17,40 @@ const BookingForm = () => {
         const email = form.email?.value;
         const productName = form.productName?.value;
         const price = form.price?.value;
-        const location = form.location?.value;
-        const meeting = form.meeting?.value;
-        console.log(name, email, productName, price, location, meeting, form)
-    }
+        const phone = form.phone?.value;
+        const meetingLocation = form.meetingLocation?.value;
+
+        if (!phone) {
+            toast.error("Enter Your Phone Number");
+            return;
+        }
+        if (!meetingLocation) {
+            toast.error("Enter Your Meeting Location");
+            return;
+        }
+
+        const bookingProductData = {
+            userName: user?.displayName,
+            userEmail: email,
+            productName: name,
+            price,
+            phone,
+            meetingLocation,
+            productId: bookingProduct._id,
+        };
+
+        createNewBookingProduct(bookingProductData)
+            .then((data) => {
+                if (data.data.acknowledged) {
+                    toast.success(`${productName} Product is Booked!`);
+                    bookingProductRefetch();
+                    closeModal();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
     return (
         <>
             <input type="checkbox" id="my-modal-3" className="modal-toggle" />
@@ -20,6 +59,7 @@ const BookingForm = () => {
                     <label
                         htmlFor="my-modal-3"
                         className="btn btn-sm btn-circle absolute right-2 top-2"
+                        onClick={closeModal}
                     >
                         ✕
                     </label>
@@ -37,7 +77,7 @@ const BookingForm = () => {
                             </label>
                             <input
                                 name="name"
-                                defaultValue={"name"}
+                                defaultValue={user?.displayName}
                                 type="text"
                                 placeholder="Your Name"
                                 className="input input-bordered input-success w-full text-primary"
@@ -51,8 +91,9 @@ const BookingForm = () => {
                                 Email
                             </label>
                             <input
+                                readOnly
                                 name="email"
-                                defaultValue={"email"}
+                                defaultValue={user?.email}
                                 type="email"
                                 placeholder="Your Email"
                                 className="input input-bordered input-success w-full text-primary"
@@ -67,7 +108,8 @@ const BookingForm = () => {
                             </label>
                             <input
                                 name="productName"
-                                defaultValue={"hhhh"}
+                                readOnly
+                                defaultValue={productName}
                                 type="text"
                                 placeholder="Your Product Name"
                                 className="input input-bordered input-success w-full text-primary"
@@ -82,7 +124,8 @@ const BookingForm = () => {
                             </label>
                             <input
                                 name="price"
-                                defaultValue={"email"}
+                                readOnly
+                                defaultValue={price}
                                 type="text"
                                 placeholder="Your Product Price"
                                 className="input input-bordered input-success w-full text-primary"
@@ -97,7 +140,6 @@ const BookingForm = () => {
                             </label>
                             <input
                                 name="phone"
-                                defaultValue={"email"}
                                 type="text"
                                 placeholder="Your Phone"
                                 className="input input-bordered input-success w-full text-primary"
@@ -105,20 +147,23 @@ const BookingForm = () => {
                         </div>
                         <div className="mb-3">
                             <label
-                                htmlFor="meeting"
+                                htmlFor="meetingLocation"
                                 className="block mb-2 text-sm font-medium text-primary"
                             >
                                 Meeting Location
                             </label>
                             <input
-                                name="meeting"
-                                defaultValue={"email"}
+                                name="meetingLocation"
                                 type="text"
                                 placeholder="Your Meeting Location"
                                 className="input input-bordered input-success w-full text-primary"
                             />
                         </div>
-                        <input type="submit" className="btn btn-primary hover:bg-transparent hover:text-primary border-2" value="Submit"/>
+                        <input
+                            type="submit"
+                            className="btn btn-primary hover:bg-transparent hover:text-primary border-2"
+                            value="Submit"
+                        />
                     </form>
                 </div>
             </div>

@@ -3,26 +3,34 @@ import { AiFillDelete } from "react-icons/ai";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import SectionTitle from "./../../../../components/shared/SectionTitle/SectionTitle";
 import { useQuery } from "@tanstack/react-query";
-import { getAllUsersByRole, removedUsersByEmail } from "./../../../../api/user";
-import Loader from "./../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
+import {
+    deleteBookingProductByProductId,
+    getAllBookingProducts,
+} from "../../../../api/bookingProduct";
+import { useAuth } from "../../../../context/AuthProvider/AuthProvider";
+import Loader from "./../../../../components/shared/Loader/Loader";
 
-const AllSellers = () => {
+const MyOrder = () => {
+    const { user } = useAuth();
+
     const {
         isLoading,
         refetch,
-        data: allUsers = [],
+        data: allBuyerOrders = [],
     } = useQuery({
-        queryKey: ["sellers"],
+        queryKey: ["allBuyerOrders", user?.displayName, user?.email],
         queryFn: async () => {
-            const data = await getAllUsersByRole("seller");
+            const data = await getAllBookingProducts(
+                user?.displayName,
+                user?.email
+            );
             return data.data;
         },
     });
 
-    const handleSellerDelete = (user) => {
-        const { email } = user;
-        removedUsersByEmail(email)
+    const handleBookingOrderDelete = (productId) => {
+        deleteBookingProductByProductId(productId)
             .then((data) => {
                 toast.success(`${user.name}  Delete Successfully!`);
                 refetch();
@@ -50,7 +58,7 @@ const AllSellers = () => {
                         </thead>
                         <tbody className="text-primary text-left">
                             <>
-                                {allUsers?.map((user) => (
+                                {allBuyerOrders?.map((buyerOrder) => (
                                     <tr key={user._id}>
                                         <td className="text-left">
                                             <div className="flex items-center justify-center space-x-3">
@@ -76,7 +84,7 @@ const AllSellers = () => {
                                         <td>
                                             <label
                                                 onClick={() =>
-                                                    handleSellerDelete(user)
+                                                    handleBookingOrderDelete(user)
                                                 }
                                             >
                                                 <AiFillDelete className="h-5 w-5 cursor-pointer text-red-600" />
@@ -98,4 +106,4 @@ const AllSellers = () => {
     );
 };
 
-export default AllSellers;
+export default MyOrder;
