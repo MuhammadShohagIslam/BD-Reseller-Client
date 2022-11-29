@@ -9,18 +9,22 @@ import NavigationSliderButton from "../../../components/shared/NavigationSliderB
 import { getAllCategories } from "../../../api/category";
 import { useQuery } from "@tanstack/react-query";
 import Loader from "../../../components/shared/Loader/Loader";
+import DisplayError from "./../../DisplayError/DisplayError";
 
 const Categories = () => {
     const swiperRef = useRef();
 
-    const { isLoading, error, refetch, data } = useQuery({
+    const { isLoading, error, data } = useQuery({
         queryKey: ["allCategories"],
         queryFn: async () => {
             const data = await getAllCategories();
             return data.data;
         },
     });
-    console.log(data)
+
+    if (error) {
+        return <DisplayError />;
+    }
     return (
         <section className="container py-14 sm:py-8">
             <SectionTitle title="Popular Computer Category " />
@@ -62,10 +66,11 @@ const Categories = () => {
                         {data?.length > 0 ? (
                             <>
                                 {data?.map((category) => (
-                                    <SwiperSlide  key={category._id} style={{ height: "366px" }}>
-                                        <CategoryCard
-                                            category={category}
-                                        />
+                                    <SwiperSlide
+                                        key={category._id}
+                                        style={{ height: "366px" }}
+                                    >
+                                        <CategoryCard category={category} />
                                     </SwiperSlide>
                                 ))}
                             </>

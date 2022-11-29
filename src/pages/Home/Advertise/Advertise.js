@@ -2,10 +2,10 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProductsByAdvertise } from "../../../api/product";
 import Loader from "../../../components/shared/Loader/Loader";
-
+import DisplayError from "./../../DisplayError/DisplayError";
 
 const Advertise = () => {
-    const { isLoading, data } = useQuery({
+    const { isLoading, error, data } = useQuery({
         queryKey: ["allAdvertiseProduct", true],
         queryFn: async () => {
             const data = await getAllProductsByAdvertise(true);
@@ -23,17 +23,23 @@ const Advertise = () => {
     }, {});
 
     const isEmptyAdvertise = Object.keys(advertiseMapToObject).length === 0;
-    if(isEmptyAdvertise){
-        return <h2 className="text-success text-3xl text-center">No Advertise Product</h2>
+    if (isEmptyAdvertise) {
+        return (
+            <h2 className="text-success text-3xl text-center">
+                No Advertise Product
+            </h2>
+        );
     }
-   
+
     const offProduct = Math.round(
         ((advertiseMapToObject?.originalPrice - advertiseMapToObject?.price) /
             advertiseMapToObject?.originalPrice) *
             100
     );
 
-   
+    if (error) {
+        return <DisplayError />;
+    }
 
     return (
         <>

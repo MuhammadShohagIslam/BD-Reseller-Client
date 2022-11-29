@@ -10,11 +10,13 @@ import {
 } from "./../../../../api/user";
 import Loader from "./../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
+import DisplayError from "../../../DisplayError/DisplayError";
 
 const AllSellers = () => {
     const {
         isLoading,
         refetch,
+        error,
         data: allSellers = [],
     } = useQuery({
         queryKey: ["sellers"],
@@ -33,7 +35,6 @@ const AllSellers = () => {
         verifiedSellerByAdmin(seller.email)
             .then((data) => {
                 toast.success(`${seller.name}  is Verified Successfully!`);
-                console.log(data.data);
                 refetch();
             })
             .catch((error) => {
@@ -52,6 +53,9 @@ const AllSellers = () => {
                 console.log(error.message);
             });
     };
+    if (error) {
+        return <DisplayError />;
+    }
     return (
         <section className="container mt-8">
             <SectionTitle title="All Seller Users" />

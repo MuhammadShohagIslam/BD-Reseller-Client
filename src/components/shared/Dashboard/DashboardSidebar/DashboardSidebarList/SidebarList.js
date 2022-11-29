@@ -15,11 +15,20 @@ const SidebarList = ({ toggleAdminSidebar }) => {
     const [openCategories, setOpenCategories] = useState(false);
     const [openAllUsers, setOpenAllUsers] = useState(false);
 
-    const { user } = useAuth();
+    const { user,logOut } = useAuth();
 
     const [isAdmin] = useAdmin(user?.email);
     const [isSeller] = useSeller(user?.email);
     const [isBuyer] = useBuyer(user?.email);
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
 
     return (
         <ul className="space-y-2 px-3 ">
@@ -170,7 +179,7 @@ const SidebarList = ({ toggleAdminSidebar }) => {
             >
                 <MdLogout className="h-[19px] w-[19px]" />
                 {!toggleAdminSidebar && (
-                    <span className="flex-1 ml-3 whitespace-nowrap">
+                    <span onClick={handleLogOut} className="flex-1 ml-3 cursor-pointer whitespace-nowrap">
                         LogOut
                     </span>
                 )}

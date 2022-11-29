@@ -5,11 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllUsersByRole, removedUsersByEmail } from "./../../../../api/user";
 import Loader from "./../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
+import DisplayError from "../../../DisplayError/DisplayError";
 
 const AllBuyers = () => {
     const {
         isLoading,
         refetch,
+        error,
         data: allUsers = [],
     } = useQuery({
         queryKey: ["buyers"],
@@ -21,13 +23,19 @@ const AllBuyers = () => {
 
     const handleUserDelete = (user) => {
         const { email } = user;
-        removedUsersByEmail(email).then((data) => {
-            toast.success(`${user.name}  Delete Successfully!`);
-            refetch();
-        }).catch(error=>{
-            console.log(error.message)
-        });
+        removedUsersByEmail(email)
+            .then((data) => {
+                toast.success(`${user.name}  Delete Successfully!`);
+                refetch();
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
     };
+
+    if (error) {
+        return <DisplayError />;
+    }
 
     return (
         <section className="container mt-8">

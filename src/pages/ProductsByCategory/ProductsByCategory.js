@@ -14,21 +14,22 @@ import {
 import { toast } from "react-hot-toast";
 import { useAuth } from "./../../context/AuthProvider/AuthProvider";
 import { getAllBookingProducts } from "../../api/bookingProduct";
+import Pagination from "../../components/shared/Pagination/Pagination";
+import DisplayError from './../DisplayError/DisplayError';
 
 const ProductsByCategory = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(10);
     const [bookingProduct, setBookingProduct] = useState(null);
     const { user } = useAuth();
 
     const params = useParams();
     const { categoryName } = params;
 
-    const { isLoading, error, refetch, data } = useQuery({
-        queryKey: ["productsByCategories", page, size, categoryName],
+    const { isLoading, error, data } = useQuery({
+        queryKey: ["productsByCategories", page, "3", categoryName],
         queryFn: async () => {
-            const data = await getAllProducts(page, size, categoryName);
+            const data = await getAllProducts(page, "3", categoryName);
             setCount(data.data.totalProduct);
             return data.data.products;
         },
@@ -37,11 +38,15 @@ const ProductsByCategory = () => {
     const {
         isLoading: loadingWishList,
         refetch: wishListRefetch,
+        error:wishListError,
         data: wishLists = [],
     } = useQuery({
         queryKey: ["wishLists", user?.displayName, user?.email],
         queryFn: async () => {
-            const data = await getAllWishListProducts(user?.displayName, user?.email);
+            const data = await getAllWishListProducts(
+                user?.displayName,
+                user?.email
+            );
             return data.data;
         },
     });
@@ -49,11 +54,15 @@ const ProductsByCategory = () => {
     const {
         isLoading: loadingBookingProduct,
         refetch: bookingProductRefetch,
+        error:bookingError,
         data: bookingProducts = [],
     } = useQuery({
         queryKey: ["bookingProducts", user?.displayName, user?.email],
         queryFn: async () => {
-            const data = await getAllBookingProducts(user?.displayName, user?.email);
+            const data = await getAllBookingProducts(
+                user?.displayName,
+                user?.email
+            );
             return data.data;
         },
     });
@@ -100,15 +109,19 @@ const ProductsByCategory = () => {
         }
     };
 
-    const addToBookNow = (product,isProductIdFromBookingProduct) => {
-        if(!isProductIdFromBookingProduct){
+    const addToBookNow = (product, isProductIdFromBookingProduct) => {
+        if (!isProductIdFromBookingProduct) {
             setBookingProduct(product);
-        }else{
-            toast.error("Products Is Already Booked!")
+        } else {
+            toast.error("Products Is Already Booked!");
         }
     };
+    
+    if(error && wishListError && bookingError ){
+        return <DisplayError/>
+    }
 
-    const pages = Math.ceil(count / size);
+    const pages = Math.ceil(count / 3);
     return (
         <section className="container mt-12">
             <SectionTitle
@@ -139,26 +152,14 @@ const ProductsByCategory = () => {
                 </div>
             )}
 
-            <div className="text-center mt-5">
-                {[...Array(pages).keys()].map((number) => (
-                    <button
-                        key={number}
-                        className={`btn btn-sm text-primary hover:text-white ${
-                            page === number ? "btn-active text-white" : ""
-                        }`}
-                        onClick={() => setPage(number)}
-                    >
-                        {number + 1}
-                    </button>
-                ))}
-            </div>
+            <Pagination pages={pages} page={page} setPage={setPage} />
+
             {bookingProduct && (
                 <BookingForm
                     bookingProduct={bookingProduct}
                     user={user}
                     closeModal={closeModal}
                     bookingProductRefetch={bookingProductRefetch}
-
                 />
             )}
         </section>

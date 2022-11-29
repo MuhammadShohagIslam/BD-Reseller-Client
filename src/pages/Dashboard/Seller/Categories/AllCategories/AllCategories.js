@@ -11,6 +11,7 @@ import ConfirmationModal from "../../../../../components/shared/Modal/Confirmati
 import EditModal from "../../../../../components/shared/Modal/ConfirmationModal/EditModal/EditModal";
 import { updateCategoryByCategoryId } from "./../../../../../api/category";
 import Loader from './../../../../../components/shared/Loader/Loader';
+import DisplayError from './../../../../DisplayError/DisplayError';
 
 const AllCategories = () => {
     const [deleteCategory, setDeleteCategory] = useState(null);
@@ -21,7 +22,6 @@ const AllCategories = () => {
         queryKey: ["categories"],
         queryFn: async () => {
             const data = await getAllCategories();
-            console.log(data.data);
             return data.data;
         },
     });
@@ -37,7 +37,6 @@ const AllCategories = () => {
         event.preventDefault();
         const form = event.target;
         const categoryName = form.updateCategory.value;
-        console.log(categoryName, updateCategoryModalData._id);
         updateCategoryByCategoryId(updateCategoryModalData._id, {
             categoryName,
         })
@@ -65,6 +64,10 @@ const AllCategories = () => {
         });
     };
 
+    if (error) {
+        return <DisplayError />;
+    }
+
     return (
         <section className="container my-6">
             <SectionTitle title="All Categories" />
@@ -91,11 +94,11 @@ const AllCategories = () => {
                                 {data?.map((category) => (
                                     <tr
                                         key={category._id}
-                                        className="bg-white border-b dark:bg-primary dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                                        className="bg-secondary border-b text-primary"
                                     >
                                         <th
                                             scope="row"
-                                            className="py-4 px-6 text-lg text-gray-900 whitespace-nowrap dark:text-white"
+                                            className="py-4 px-6 text-lg text-primary whitespace-nowrap "
                                         >
                                             {category.categoryName}
                                         </th>

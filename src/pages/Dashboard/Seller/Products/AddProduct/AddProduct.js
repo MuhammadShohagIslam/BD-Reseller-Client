@@ -8,14 +8,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllCategories } from "../../../../../api/category";
 import { useNavigate } from "react-router-dom";
 import { getSellerUserByEmail } from "./../../../../../api/user";
+import DisplayError from "./../../../../DisplayError/DisplayError";
 
 const AddProduct = () => {
     const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
     const { user } = useAuth();
-    console.log(user.uid);
     const navigate = useNavigate();
 
-    const { data: allCategory = [] } = useQuery({
+    const { error: categoriesError, data: allCategory = [] } = useQuery({
         queryKey: ["categories"],
         queryFn: async () => {
             const data = await getAllCategories();
@@ -23,7 +23,7 @@ const AddProduct = () => {
         },
     });
 
-    const { data: seller } = useQuery({
+    const { error: sellerError, data: seller } = useQuery({
         queryKey: ["seller"],
         queryFn: async () => {
             const data = await getSellerUserByEmail(user?.email);
@@ -53,7 +53,7 @@ const AddProduct = () => {
                 );
                 const product = {
                     ...formValues,
-                    saveAmount:offerProductPercentage,
+                    saveAmount: offerProductPercentage,
                     sellerId: seller && seller,
                     sellerName: user?.displayName,
                     sellerEmail: user?.email,
@@ -77,7 +77,11 @@ const AddProduct = () => {
                 console.log(err);
             });
     };
-    console.log(allCategory, "Good");
+
+    if (categoriesError && sellerError) {
+        return <DisplayError />;
+    }
+
     return (
         <div className="container py-10">
             <div className="bg-secondary p-6 rounded-lg">

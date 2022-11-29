@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCategories } from "../../../../../api/category";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import DisplayError from './../../../../DisplayError/DisplayError';
 
 const UpdateProduct = () => {
     const product = useLoaderData();
@@ -30,7 +31,7 @@ const UpdateProduct = () => {
         phone,
     } = product;
 
-    const { data: allCategory = [] } = useQuery({
+    const {error, data: allCategory = [] } = useQuery({
         queryKey: ["categories"],
         queryFn: async () => {
             const data = await getAllCategories();
@@ -96,6 +97,10 @@ const UpdateProduct = () => {
                 });
         }
     };
+
+    if (error) {
+        return <DisplayError />;
+    }
 
     return (
         <div className="container py-10">

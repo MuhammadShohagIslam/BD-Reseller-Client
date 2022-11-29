@@ -9,12 +9,14 @@ import {
 } from "../../../../../api/product";
 import Loader from "./../../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
+import Pagination from "../../../../../components/shared/Pagination/Pagination";
+import DisplayError from './../../../../DisplayError/DisplayError';
 
 const SellerProducts = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
 
-    const { isLoading, refetch, data } = useQuery({
+    const { isLoading, error, refetch, data } = useQuery({
         queryKey: ["products", page, "3"],
         queryFn: async () => {
             const data = await getAllProducts(page, "3");
@@ -55,7 +57,7 @@ const SellerProducts = () => {
             const updatedData = {
                 ...product,
                 isAdvertised: true,
-                createdAdvertised:Date.now()
+                createdAdvertised: Date.now(),
             };
             delete updatedData._id;
             updateProductByProductId(product._id, updatedData)
@@ -68,6 +70,10 @@ const SellerProducts = () => {
                 });
         }
     };
+
+    if (error) {
+        return <DisplayError />;
+    }
     const pages = Math.ceil(count / 3);
 
     return (
@@ -99,19 +105,7 @@ const SellerProducts = () => {
                 </div>
             )}
 
-            <div className="text-center mt-5">
-                {[...Array(pages).keys()].map((number) => (
-                    <button
-                        key={number}
-                        className={`btn btn-sm text-primary hover:text-white ${
-                            page === number ? "btn-active text-white" : ""
-                        }`}
-                        onClick={() => setPage(number)}
-                    >
-                        {number + 1}
-                    </button>
-                ))}
-            </div>
+            <Pagination pages={pages} page={page} setPage={setPage} />
         </div>
     );
 };

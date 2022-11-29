@@ -8,11 +8,13 @@ import {
 } from "../../../../api/wishList";
 import Loader from "./../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
+import DisplayError from "./../../../DisplayError/DisplayError";
 
 const BuyerWishLists = () => {
     const {
         isLoading,
         refetch,
+        error,
         data: wishLists = [],
     } = useQuery({
         queryKey: ["wishListsFromDashboard"],
@@ -21,7 +23,6 @@ const BuyerWishLists = () => {
             return data.data;
         },
     });
-
 
     const addToWishList = (wishList, isProductIdFromWishList, productId) => {
         console.log(wishList._id);
@@ -41,7 +42,9 @@ const BuyerWishLists = () => {
                 });
         }
     };
-
+    if (error) {
+        return <DisplayError />;
+    }
     return (
         <section className="container py-10">
             <SectionTitle title="Your Desire Product" />
@@ -67,7 +70,6 @@ const BuyerWishLists = () => {
                     )}
                 </div>
             )}
-
         </section>
     );
 };

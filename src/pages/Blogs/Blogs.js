@@ -3,13 +3,19 @@ import Blog from "../../components/shared/Blog/Blog";
 import { useQuery } from "@tanstack/react-query";
 import { getAllBlogs } from "./../../api/blog";
 import Loader from "./../../components/shared/Loader/Loader";
+import Pagination from "./../../components/shared/Pagination/Pagination";
+import DisplayError from "./../DisplayError/DisplayError";
 
 const Blogs = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const pages = Math.ceil(count / 3);
 
-    const { isLoading, data: blogs = [] } = useQuery({
+    const {
+        isLoading,
+        error,
+        data: blogs = [],
+    } = useQuery({
         queryKey: ["blogs", page, "3"],
         queryFn: async () => {
             const data = await getAllBlogs(page, "3");
@@ -17,7 +23,10 @@ const Blogs = () => {
             return data.data.blogs;
         },
     });
-
+    
+    if (error) {
+        return <DisplayError />;
+    }
 
     return (
         <div className="container mt-14">
@@ -42,34 +51,7 @@ const Blogs = () => {
                     )}
                 </div>
             )}
-            <div className="text-center mt-5">
-                <button
-                    disabled={pages === page + 1}
-                    onClick={() => setPage((p) => p + 1)}
-                    className="text-primary font-medium mr-3 cursor-pointer py-0 px-2 border-2 border-dashed border-success hover:bg-success  hover:text-white transition-all"
-                >
-                    Next
-                </button>
-
-                {[...Array(pages).keys()].map((number) => (
-                    <button
-                        key={number}
-                        className={`btn btn-sm text-primary hover:text-white ${
-                            page === number ? "btn-active text-white" : ""
-                        }`}
-                        onClick={() => setPage(number)}
-                    >
-                        {number + 1}
-                    </button>
-                ))}
-                <button
-                    disabled={page === 0}
-                    onClick={() => setPage((p) => p - 1)}
-                    className="text-primary ml-3 cursor-pointer py-0 font-medium px-2 border-2 border-dashed border-success  hover:bg-success  hover:text-white transition-all"
-                >
-                    Prev
-                </button>
-            </div>
+            <Pagination pages={pages} page={page} setPage={setPage} />
         </div>
     );
 };
