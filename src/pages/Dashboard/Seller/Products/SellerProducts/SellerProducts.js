@@ -13,12 +13,11 @@ import { toast } from "react-hot-toast";
 const SellerProducts = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(3);
 
     const { isLoading, refetch, data } = useQuery({
-        queryKey: ["products", page, size],
+        queryKey: ["products", page, "3"],
         queryFn: async () => {
-            const data = await getAllProducts(page, size);
+            const data = await getAllProducts(page, "3");
             setCount(data.data.totalProduct);
             return data.data.products;
         },
@@ -69,7 +68,7 @@ const SellerProducts = () => {
                 });
         }
     };
-    const pages = Math.ceil(count / size);
+    const pages = Math.ceil(count / 3);
 
     return (
         <div className="container my-10">

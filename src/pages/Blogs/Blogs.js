@@ -7,19 +7,17 @@ import Loader from "./../../components/shared/Loader/Loader";
 const Blogs = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(3);
-    const pages = Math.ceil(count / size);
+    const pages = Math.ceil(count / 3);
 
     const { isLoading, data: blogs = [] } = useQuery({
-        queryKey: ["blogs", page, size],
+        queryKey: ["blogs", page, "3"],
         queryFn: async () => {
-            const data = await getAllBlogs(page, size);
+            const data = await getAllBlogs(page, "3");
             setCount(data.data.totalBlogs);
             return data.data.blogs;
         },
     });
 
-    console.log(page, size, pages);
 
     return (
         <div className="container mt-14">

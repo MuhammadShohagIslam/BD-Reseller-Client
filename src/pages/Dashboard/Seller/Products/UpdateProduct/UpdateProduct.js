@@ -43,14 +43,19 @@ const UpdateProduct = () => {
         const productImage = formValues.productImg[0];
         const formData = new FormData();
         formData.append("image", productImage);
+        const offerProductPercentage = Math.round(
+            ((formValues.originalPrice - formValues.price) /
+                formValues.originalPrice) *
+                100
+        );
         if (formValues.productImg.length > 0 && productImage) {
             axios
                 .post(url, formData)
                 .then((imgData) => {
                     const productImgUrl = imgData.data.data.url;
-
                     const product = {
                         ...formValues,
+                        saveAmount:offerProductPercentage,
                         productImg: productImgUrl,
                     };
                     updateProductByProductId(_id, product)
@@ -70,17 +75,20 @@ const UpdateProduct = () => {
                     console.log(err);
                 });
         } else {
+            console.log(offerProductPercentage)
             const modifiedProduct = {
                 ...formValues,
+                saveAmount:offerProductPercentage,
                 productImg,
             };
+            console.log(modifiedProduct)
             updateProductByProductId(_id, modifiedProduct)
                 .then((data) => {
                     if (data.data.modifiedCount > 0) {
                         toast.success(
                             `${formValues.productName} Product is Updated!`
                         );
-                        navigate("/dashboard/seller/allProducts");
+                      
                     }
                 })
                 .catch((error) => {

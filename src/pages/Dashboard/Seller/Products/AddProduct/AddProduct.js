@@ -6,14 +6,14 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "../../../../../context/AuthProvider/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCategories } from "../../../../../api/category";
-import { useNavigate } from 'react-router-dom';
-import { getSellerUserByEmail } from './../../../../../api/user';
+import { useNavigate } from "react-router-dom";
+import { getSellerUserByEmail } from "./../../../../../api/user";
 
 const AddProduct = () => {
     const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
     const { user } = useAuth();
     console.log(user.uid);
-    const navigate= useNavigate();
+    const navigate = useNavigate();
 
     const { data: allCategory = [] } = useQuery({
         queryKey: ["categories"],
@@ -31,7 +31,6 @@ const AddProduct = () => {
         },
     });
 
-
     const {
         handleSubmit,
         register,
@@ -47,10 +46,15 @@ const AddProduct = () => {
             .post(url, formData)
             .then((imgData) => {
                 const productImgUrl = imgData.data.data.url;
-
+                const offerProductPercentage = Math.round(
+                    ((formValues.originalPrice - formValues.price) /
+                        formValues.originalPrice) *
+                        100
+                );
                 const product = {
                     ...formValues,
-                    sellerId:seller && seller,
+                    saveAmount:offerProductPercentage,
+                    sellerId: seller && seller,
                     sellerName: user?.displayName,
                     sellerEmail: user?.email,
                     productImg: productImgUrl,
@@ -62,7 +66,7 @@ const AddProduct = () => {
                                 `${formValues.productName} Product is Created!`
                             );
                             reset();
-                            navigate("/dashboard/seller/allProducts")
+                            navigate("/dashboard/seller/allProducts");
                         }
                     })
                     .catch((error) => {
