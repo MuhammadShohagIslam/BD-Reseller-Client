@@ -23,9 +23,8 @@ const AllSellers = () => {
         queryFn: async () => {
             const data = await getAllUsersByRole("seller");
             return data.data;
-        },
+        }
     });
-
     const handleSellerVerified = (seller) => {
         const updatedData = {
             ...seller,

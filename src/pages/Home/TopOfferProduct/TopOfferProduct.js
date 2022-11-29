@@ -22,7 +22,7 @@ const TopOfferProduct = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const [bookingProduct, setBookingProduct] = useState(null);
-    const { user } = useAuth();
+    const { user, logOut } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -53,20 +53,32 @@ const TopOfferProduct = () => {
 
     const userName = user?.displayName;
     const userEmail = user?.email;
-
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
     const {
         isLoading: loadingBookingProduct,
         refetch: bookingProductRefetch,
         error: bookingError,
         data: bookingProducts = [],
     } = useQuery({
-        queryKey: user && ["bookingProducts", userName, userEmail],
+        queryKey: ["bookingProducts", userName, userEmail],
         queryFn: async () => {
             const data = await getAllBookingProducts(
                 user?.displayName,
                 user?.email
             );
             return data.data;
+        },
+        onError: (error) => {
+            if (error.response.status === 403) {
+                handleLogOut();
+            }
         },
         enabled: !!userName && !!userEmail,
     });
