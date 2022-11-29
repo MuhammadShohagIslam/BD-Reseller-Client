@@ -3,7 +3,11 @@ import { AiFillDelete } from "react-icons/ai";
 import { MdOutlineVerifiedUser } from "react-icons/md";
 import SectionTitle from "./../../../../components/shared/SectionTitle/SectionTitle";
 import { useQuery } from "@tanstack/react-query";
-import { getAllUsersByRole, removedUsersByEmail } from "./../../../../api/user";
+import {
+    getAllUsersByRole,
+    removedUsersByEmail,
+    verifiedSellerByAdmin,
+} from "./../../../../api/user";
 import Loader from "./../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
 
@@ -11,7 +15,7 @@ const AllSellers = () => {
     const {
         isLoading,
         refetch,
-        data: allUsers = [],
+        data: allSellers = [],
     } = useQuery({
         queryKey: ["sellers"],
         queryFn: async () => {
@@ -20,11 +24,28 @@ const AllSellers = () => {
         },
     });
 
-    const handleSellerDelete = (user) => {
-        const { email } = user;
+    const handleSellerVerified = (seller) => {
+        const updatedData = {
+            ...seller,
+            isVerified: true,
+        };
+        delete updatedData._id;
+        verifiedSellerByAdmin(seller.email)
+            .then((data) => {
+                toast.success(`${seller.name}  is Verified Successfully!`);
+                console.log(data.data);
+                refetch();
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
+
+    const handleSellerDelete = (seller) => {
+        const { email } = seller;
         removedUsersByEmail(email)
             .then((data) => {
-                toast.success(`${user.name}  Delete Successfully!`);
+                toast.success(`${seller.name}  Delete Successfully!`);
                 refetch();
             })
             .catch((error) => {
@@ -49,40 +70,45 @@ const AllSellers = () => {
                         </thead>
                         <tbody className="text-primary text-left">
                             <>
-                                {allUsers?.map((user) => (
-                                    <tr key={user._id}>
+                                {allSellers?.map((seller) => (
+                                    <tr key={seller._id}>
                                         <td className="text-left">
                                             <div className="flex items-center justify-center space-x-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle w-12 h-12">
                                                         <img
                                                             src={
-                                                                user.profileImage
+                                                                seller.profileImage
                                                             }
-                                                            alt={user.name}
+                                                            alt={seller.name}
                                                         />
                                                     </div>
                                                 </div>
                                                 <div>
                                                     <div className="font-bold">
-                                                        {user.name}
+                                                        {seller.name}
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                
-                                        <td>{user.email}</td>
+
+                                        <td>{seller.email}</td>
                                         <td>
                                             <label
                                                 onClick={() =>
-                                                    handleSellerDelete(user)
+                                                    handleSellerDelete(seller)
                                                 }
                                             >
                                                 <AiFillDelete className="h-5 w-5 cursor-pointer text-red-600" />
                                             </label>
                                         </td>
                                         <td>
-                                            <label>
+                                            <label
+                                                className="cursor-pointer"
+                                                onClick={() =>
+                                                    handleSellerVerified(seller)
+                                                }
+                                            >
                                                 <MdOutlineVerifiedUser className="h-5 w-5 text-green-600" />
                                             </label>
                                         </td>

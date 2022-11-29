@@ -14,7 +14,7 @@ const Categories = () => {
     const swiperRef = useRef();
 
     const { isLoading, error, refetch, data } = useQuery({
-        queryKey: ["categories"],
+        queryKey: ["allCategories"],
         queryFn: async () => {
             const data = await getAllCategories();
             return data.data;
@@ -59,7 +59,7 @@ const Categories = () => {
                             },
                         }}
                     >
-                        {data.length > 0 ? (
+                        {data?.length > 0 ? (
                             <>
                                 {data?.map((category) => (
                                     <SwiperSlide  key={category._id} style={{ height: "366px" }}>

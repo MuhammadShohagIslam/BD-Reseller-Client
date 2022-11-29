@@ -28,7 +28,7 @@ const DisplayError = () => {
             </div>
             <div className="text-center">
                 <h2 className="text-red-400 text-5xl mb-3">
-                    {error.statusText || error.message}
+                    {error.statusText}
                 </h2>
 
                 <p className="text-success">

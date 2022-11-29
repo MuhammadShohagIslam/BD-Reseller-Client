@@ -3,6 +3,9 @@ import { BsFillBookmarkFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 import { BsCalendarDate, BsHouseDoorFill } from "react-icons/bs";
 import { BiUserPlus, BiCategoryAlt } from "react-icons/bi";
+import { useQuery } from "@tanstack/react-query";
+import { getSellerUserBySellerId } from "./../../../api/user";
+
 import {
     MdLocationOn,
     MdOutlineVerifiedUser,
@@ -14,7 +17,7 @@ const Product = ({
     addToWishList,
     addToBookNow,
     wishLists,
-    bookingProducts
+    bookingProducts,
 }) => {
     const {
         _id,
@@ -29,7 +32,16 @@ const Product = ({
         originalPrice,
         price,
         productCreated,
+        sellerId,
     } = product;
+
+    const { data: isSellerVerified } = useQuery({
+        queryKey: ["sellerById"],
+        queryFn: async () => {
+            const data = await getSellerUserBySellerId(sellerId);
+            return data.data.isVerified;
+        },
+    });
 
     const offProduct = Math.round(
         ((originalPrice - price) / originalPrice) * 100
@@ -42,7 +54,8 @@ const Product = ({
     const productIdFromBookingProduct = bookingProducts?.map(
         (bookingProduct) => bookingProduct.productId
     );
-    const isProductIdFromBookingProduct = productIdFromBookingProduct.includes(_id);
+    const isProductIdFromBookingProduct =
+        productIdFromBookingProduct.includes(_id);
 
     return (
         <div className="max-w-sm rounded-lg shadow-md group cursor-pointer">
@@ -65,7 +78,9 @@ const Product = ({
                                 ? "Already To WishList"
                                 : "Add To WishList"
                         }
-                        onClick={() => addToWishList(product, isProductIdFromWishList)}
+                        onClick={() =>
+                            addToWishList(product, isProductIdFromWishList)
+                        }
                     >
                         <FaHeart />
                     </li>
@@ -82,7 +97,12 @@ const Product = ({
                                     ? "Already To Booked"
                                     : "Booking Now"
                             }
-                            onClick={() => addToBookNow(product,isProductIdFromBookingProduct)}
+                            onClick={() =>
+                                addToBookNow(
+                                    product,
+                                    isProductIdFromBookingProduct
+                                )
+                            }
                         >
                             <BsFillBookmarkFill />
                         </li>
@@ -107,7 +127,13 @@ const Product = ({
                     <div className="flex items-center mr-3 sm:mr-2 text-primary">
                         <BiUserPlus className="text-success" />
                         <span className="ml-1">{sellerName}</span>
-                        <MdOutlineVerifiedUser />
+                        <MdOutlineVerifiedUser
+                            className={`${
+                                isSellerVerified
+                                    ? "text-success"
+                                    : "text-primary"
+                            }`}
+                        />
                     </div>
                     <div className="flex items-center mr-3 sm:ml-0 text-primary">
                         <MdLocationOn className="text-success" />

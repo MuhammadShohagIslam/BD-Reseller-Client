@@ -6,7 +6,7 @@ import Loader from "../../../components/shared/Loader/Loader";
 
 const Advertise = () => {
     const { isLoading, data } = useQuery({
-        queryKey: ["allAdvertiseProduct"],
+        queryKey: ["allAdvertiseProduct", true],
         queryFn: async () => {
             const data = await getAllProductsByAdvertise(true);
             return data.data;

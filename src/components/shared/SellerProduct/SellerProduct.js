@@ -9,6 +9,8 @@ import {
     MdOutlineWifiProtectedSetup,
 } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { getSellerUserBySellerId } from "./../../../api/user";
+import { useQuery } from "@tanstack/react-query";
 
 const SellerProduct = ({
     product,
@@ -29,8 +31,16 @@ const SellerProduct = ({
         price,
         productCreated,
         isAdvertised,
+        sellerId,
     } = product;
 
+    const { data: isSellerVerified } = useQuery({
+        queryKey: ["sellerById"],
+        queryFn: async () => {
+            const data = await getSellerUserBySellerId(sellerId);
+            return data.data.isVerified;
+        },
+    });
     const offProduct = Math.round(
         ((originalPrice - price) / originalPrice) * 100
     );
@@ -98,7 +108,13 @@ const SellerProduct = ({
                     <div className="flex items-center mr-3 sm:mr-2 text-primary">
                         <BiUserPlus className="text-success" />
                         <span className="ml-1">{sellerName}</span>
-                        <MdOutlineVerifiedUser />
+                        <MdOutlineVerifiedUser
+                            className={`${
+                                isSellerVerified
+                                    ? "text-success"
+                                    : "text-primary"
+                            }`}
+                        />
                     </div>
                     <div className="flex items-center mr-3 sm:ml-0 text-primary">
                         <MdLocationOn className="text-success" />

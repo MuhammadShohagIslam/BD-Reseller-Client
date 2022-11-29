@@ -21,6 +21,12 @@ export const getSellerUserByEmail = async (email) => {
         `${process.env.REACT_APP_server_api}/users/seller/${email}`
     );
 };
+// get seller user by sellerId
+export const getSellerUserBySellerId = async (sellerId) => {
+    return await axios.get(
+        `${process.env.REACT_APP_server_api}/users/seller?sellerId=${sellerId}`
+    );
+};
 
 // get seller user by email
 export const getBuyerUserByEmail = async (email) => {
@@ -41,6 +47,14 @@ export const createNewUser = async (userData) => {
 export const getAllUsersByRole = async (role) => {
     return await axios.get(
         `${process.env.REACT_APP_server_api}/users?role=${role}`
+    );
+};
+
+// verified seller by admin
+export const verifiedSellerByAdmin = async (sellerId, updatedData) => {
+    return await axios.patch(
+        `${process.env.REACT_APP_server_api}/users/seller/${sellerId}`,
+        updatedData
     );
 };
 
