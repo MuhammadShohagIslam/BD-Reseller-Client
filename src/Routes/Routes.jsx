@@ -157,7 +157,17 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard/payment/:orderId",
                 element: <Payment />,
-                loader: ({params})=> fetch(`${process.env.REACT_APP_server_api}/bookings/${params.orderId}`)
+                loader: ({ params }) =>
+                    fetch(
+                        `${process.env.REACT_APP_server_api}/bookings/${params.orderId}`,
+                        {
+                            headers: {
+                                authorization: `${localStorage.getItem(
+                                    "bdSeller-token"
+                                )}`,
+                            },
+                        }
+                    ),
             },
         ],
     },

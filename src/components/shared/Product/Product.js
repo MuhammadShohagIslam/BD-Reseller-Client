@@ -18,6 +18,7 @@ const Product = ({
     addToBookNow,
     wishLists,
     bookingProducts,
+    user,
 }) => {
     const {
         _id,
@@ -56,7 +57,7 @@ const Product = ({
     );
     const isProductIdFromBookingProduct =
         productIdFromBookingProduct.includes(_id);
-
+    console.log(user, "false");
     return (
         <div className="max-w-sm rounded-lg shadow-md group cursor-pointer">
             <div className="h-72 relative">
@@ -74,7 +75,9 @@ const Product = ({
                                 : "bg-success"
                         } bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary`}
                         data-tip={
-                            isProductIdFromWishList
+                            !user && !user?.uid
+                                ? "Login To Add WishList"
+                                : isProductIdFromWishList
                                 ? "Already To WishList"
                                 : "Add To WishList"
                         }
@@ -93,7 +96,9 @@ const Product = ({
                                     : "bg-success"
                             } bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary`}
                             data-tip={
-                                isProductIdFromBookingProduct
+                                !user && !user?.uid
+                                    ? "Login To Booking Now"
+                                    : isProductIdFromBookingProduct
                                     ? "Already To Booked"
                                     : "Booking Now"
                             }

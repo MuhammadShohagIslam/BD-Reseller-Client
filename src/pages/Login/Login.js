@@ -40,7 +40,7 @@ const Login = () => {
                 createJwtToken(currentUser)
                     .then((tokenData) => {
                         const data = tokenData.data;
-                        localStorage.setItem("bdSeller-token", data.token);
+                        localStorage.setItem("bdSeller-token", `Bearer ${data.token}`);
                         reset();
                         Swal.fire({
                             position: "top",
@@ -82,7 +82,7 @@ const Login = () => {
                 createJwtToken(currentUser)
                     .then((tokenData) => {
                         const data = tokenData.data;
-                        localStorage.setItem("bdSeller-token", data.token);
+                        localStorage.setItem("bdSeller-token", `Bearer ${data.token}`);
                         navigate(from, { replace: true });
                     })
                     .catch((error) => {

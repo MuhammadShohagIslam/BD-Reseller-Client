@@ -3,8 +3,18 @@ import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { AiFillSetting } from "react-icons/ai";
 import { MdLogout } from "react-icons/md";
+import { useAuth } from "./../../../../context/AuthProvider/AuthProvider";
 
 const DashboardNavbar = () => {
+    const { user, logOut } = useAuth();
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {})
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
     return (
         <div className="navbar bg-gray-800">
             <div className="container flex justify-between ">
@@ -73,17 +83,20 @@ const DashboardNavbar = () => {
                             className="btn btn-ghost btn-circle avatar"
                         >
                             <div className="w-10 rounded-full">
-                                <img src="https://placeimg.com/80/80/" />
+                                <img
+                                    src={user && user?.photoURL}
+                                    alt={user?.displayName}
+                                />
                             </div>
                         </label>
                         <ul
                             tabIndex={0}
-                            className="mt-3 pb-2 shadow menu menu-compact dropdown-content bg-gray-800 rounded w-52 divide-y divide-gray-100"
+                            className="mt-3 pb-2 shadow menu menu-compact dropdown-content bg-gray-800 rounded divide-y divide-gray-100"
                         >
                             <div className="py-3 px-4 text-sm text-gray-900 dark:text-white">
-                                <div>Bonnie Green</div>
+                                <div>{user?.displayName}</div>
                                 <div className="font-medium truncate">
-                                    name@flowbite.com
+                                    {user && user?.email}
                                 </div>
                             </div>
                             <ul className="text-sm text-gray-700 dark:text-gray-200">
@@ -101,14 +114,17 @@ const DashboardNavbar = () => {
                                         to="/dashboard/accountSetting"
                                         className="flex py-2 px-4 hover:bg-gray-600 text-white"
                                     >
-                                        <AiFillSetting/>
+                                        <AiFillSetting />
                                         Setting
                                     </Link>
                                 </li>
                             </ul>
                             <div>
-                                <label className="flex items-center justify-center py-2 px-4 hover:bg-gray-600 text-white">
-                                    <MdLogout className="mr-1"/>
+                                <label
+                                    onClick={handleLogOut}
+                                    className="flex items-center justify-center py-2 px-4 hover:bg-gray-600 cursor-pointer text-white"
+                                >
+                                    <MdLogout className="mr-1" />
                                     Sign out
                                 </label>
                             </div>

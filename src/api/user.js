@@ -11,14 +11,24 @@ export const createJwtToken = async (userData) => {
 //  get admin user by email
 export const getAdminUserByEmail = async (email) => {
     return await axios.get(
-        `${process.env.REACT_APP_server_api}/users/admin/${email}`
+        `${process.env.REACT_APP_server_api}/users/admin/${email}`,
+        {
+            headers: {
+                authorization: `${localStorage.getItem("bdSeller-token")}`,
+            },
+        }
     );
 };
 
 // get seller user by email
 export const getSellerUserByEmail = async (email) => {
     return await axios.get(
-        `${process.env.REACT_APP_server_api}/users/seller/${email}`
+        `${process.env.REACT_APP_server_api}/users/seller/${email}`,
+        {
+            headers: {
+                authorization: `${localStorage.getItem("bdSeller-token")}`,
+            },
+        }
     );
 };
 // get seller user by sellerId
@@ -31,7 +41,12 @@ export const getSellerUserBySellerId = async (sellerId) => {
 // get seller user by email
 export const getBuyerUserByEmail = async (email) => {
     return await axios.get(
-        `${process.env.REACT_APP_server_api}/users/buyers/${email}`
+        `${process.env.REACT_APP_server_api}/users/buyers/${email}`,
+        {
+            headers: {
+                authorization: `${localStorage.getItem("bdSeller-token")}`,
+            },
+        }
     );
 };
 
@@ -39,14 +54,24 @@ export const getBuyerUserByEmail = async (email) => {
 export const createNewUser = async (userData) => {
     return await axios.post(
         `${process.env.REACT_APP_server_api}/users`,
-        userData
+        userData,
+        {
+            headers: {
+                authorization: `${localStorage.getItem("bdSeller-token")}`,
+            },
+        }
     );
 };
 
 //  get all users by role
 export const getAllUsersByRole = async (role) => {
     return await axios.get(
-        `${process.env.REACT_APP_server_api}/users?role=${role}`
+        `${process.env.REACT_APP_server_api}/users?role=${role}`,
+        {
+            headers: {
+                authorization: `${localStorage.getItem("bdSeller-token")}`,
+            },
+        }
     );
 };
 
@@ -54,13 +79,23 @@ export const getAllUsersByRole = async (role) => {
 export const verifiedSellerByAdmin = async (sellerId, updatedData) => {
     return await axios.patch(
         `${process.env.REACT_APP_server_api}/users/seller/${sellerId}`,
-        updatedData
+        updatedData,
+        {
+            headers: {
+                authorization: `${localStorage.getItem("bdSeller-token")}`,
+            },
+        }
     );
 };
 
 // remove users by userEmail
 export const removedUsersByEmail = async (email) => {
     return await axios.delete(
-        `${process.env.REACT_APP_server_api}/users?email=${email}`
+        `${process.env.REACT_APP_server_api}/users?email=${email}`,
+        {
+            headers: {
+                authorization: `${localStorage.getItem("bdSeller-token")}`,
+            },
+        }
     );
 };

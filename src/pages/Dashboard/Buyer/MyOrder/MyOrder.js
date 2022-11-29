@@ -46,6 +46,7 @@ const MyOrder = () => {
     if (error) {
         return <DisplayError />;
     }
+    console.log(error, "error")
     return (
         <section className="container mt-8">
             <SectionTitle title="All Seller Users" />

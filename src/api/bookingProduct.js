@@ -11,7 +11,11 @@ export const createNewBookingProduct = async (productBookingData) => {
 // get all booking product
 export const getAllBookingProducts = async (userName, userEmail) => {
     return await axios.get(
-        `${process.env.REACT_APP_server_api}/bookings?userName=${userName}&userEmail=${userEmail}`
+        `${process.env.REACT_APP_server_api}/bookings?userName=${userName}&userEmail=${userEmail}`,{
+            headers:{
+                authorization: `${localStorage.getItem("bdSeller-token")}`
+            }
+        }
     );
 };
 

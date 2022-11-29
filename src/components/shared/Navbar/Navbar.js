@@ -1,7 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "./../../../context/AuthProvider/AuthProvider";
 
 const Navbar = () => {
+    const { logOut, user } = useAuth();
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {})
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
     const menuListItem = () => {
         return (
             <>
@@ -21,22 +31,46 @@ const Navbar = () => {
                         Blogs
                     </Link>
                 </li>
-                <li>
-                    <Link
-                        className="hover:bg-transparent text-primary hover:text-success text-lg"
-                        to="/login"
-                    >
-                        Login
-                    </Link>
-                </li>
-                <li>
-                    <Link
-                        className="hover:bg-transparent text-primary hover:text-success text-lg"
-                        to="/register"
-                    >
-                        Register
-                    </Link>
-                </li>
+                {user && user?.uid && (
+                    <>
+                        <li>
+                            <Link
+                                className="hover:bg-transparent text-primary hover:text-success text-lg"
+                                to="/dashboard"
+                            >
+                                Dashboard
+                            </Link>
+                        </li>
+                        <li>
+                            <label
+                                className="hover:bg-transparent text-primary hover:text-success text-lg"
+                                onClick={handleLogOut}
+                            >
+                                LogOut
+                            </label>
+                        </li>
+                    </>
+                )}
+                {!user && !user?.uid && (
+                    <>
+                        <li>
+                            <Link
+                                className="hover:bg-transparent text-primary hover:text-success text-lg"
+                                to="/login"
+                            >
+                                Login
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                className="hover:bg-transparent text-primary hover:text-success text-lg"
+                                to="/register"
+                            >
+                                Register
+                            </Link>
+                        </li>
+                    </>
+                )}
             </>
         );
     };
@@ -71,7 +105,10 @@ const Navbar = () => {
                             {menuListItem()}
                         </ul>
                     </div>
-                    <Link to="/" className="text-3xl sm:text-2xl md:text-2xl italic text-success font-bold">
+                    <Link
+                        to="/"
+                        className="text-3xl sm:text-2xl md:text-2xl italic text-success font-bold"
+                    >
                         BdSeller
                     </Link>
                     <label
@@ -94,7 +131,7 @@ const Navbar = () => {
                         </svg>
                     </label>
                 </div>
-                <div className="navbar-center lg:flex md:hidden sm:hidden flex">
+                <div className="navbar-end lg:flex md:hidden sm:hidden flex">
                     <ul className="menu menu-horizontal p-0">
                         {menuListItem()}
                     </ul>

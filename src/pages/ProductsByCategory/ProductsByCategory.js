@@ -16,14 +16,17 @@ import { useAuth } from "./../../context/AuthProvider/AuthProvider";
 import { getAllBookingProducts } from "../../api/bookingProduct";
 import Pagination from "../../components/shared/Pagination/Pagination";
 import DisplayError from './../DisplayError/DisplayError';
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ProductsByCategory = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const [bookingProduct, setBookingProduct] = useState(null);
     const { user } = useAuth();
-
+    const location = useLocation();
+    const navigate = useNavigate();
     const params = useParams();
+
     const { categoryName } = params;
 
     const { isLoading, error, data } = useQuery({
@@ -38,7 +41,7 @@ const ProductsByCategory = () => {
     const {
         isLoading: loadingWishList,
         refetch: wishListRefetch,
-        error:wishListError,
+        error: wishListError,
         data: wishLists = [],
     } = useQuery({
         queryKey: ["wishLists", user?.displayName, user?.email],
@@ -51,13 +54,16 @@ const ProductsByCategory = () => {
         },
     });
 
+    const userName = user?.displayName;
+    const userEmail = user?.email;
+
     const {
         isLoading: loadingBookingProduct,
         refetch: bookingProductRefetch,
-        error:bookingError,
+        error: bookingError,
         data: bookingProducts = [],
     } = useQuery({
-        queryKey: ["bookingProducts", user?.displayName, user?.email],
+        queryKey: user && ["bookingProducts", userName, userEmail],
         queryFn: async () => {
             const data = await getAllBookingProducts(
                 user?.displayName,
@@ -65,6 +71,7 @@ const ProductsByCategory = () => {
             );
             return data.data;
         },
+        enabled: !!userName && !!userEmail,
     });
 
     const closeModal = () => {
@@ -72,53 +79,67 @@ const ProductsByCategory = () => {
     };
 
     const addToWishList = (product, isProductIdFromWishList) => {
-        if (!isProductIdFromWishList) {
-            const wishListData = {
-                ...product,
-                productId: product._id,
-                userName: user?.displayName,
-                userEmail: user?.email,
-            };
-            delete wishListData._id;
+        if (user && user?.uid) {
+            if (!isProductIdFromWishList) {
+                const wishListData = {
+                    ...product,
+                    productId: product._id,
+                    userName: user?.displayName,
+                    userEmail: user?.email,
+                };
+                delete wishListData._id;
 
-            createNewWishListProduct(wishListData)
-                .then((data) => {
-                    if (data.data.acknowledged) {
-                        toast.success(
-                            `${product.productName} Product Added To Wish-List!`
-                        );
-                        wishListRefetch();
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+                createNewWishListProduct(wishListData)
+                    .then((data) => {
+                        if (data.data.acknowledged) {
+                            toast.success(
+                                `${product.productName} Product Added To Wish-List!`
+                            );
+                            wishListRefetch();
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                removeWishListProductByProductId(product._id)
+                    .then((data) => {
+                        if (data.data.acknowledged) {
+                            toast.success(
+                                `${product.productName} Product Removed To Wish-List!`
+                            );
+                            wishListRefetch();
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
         } else {
-            removeWishListProductByProductId(product._id)
-                .then((data) => {
-                    if (data.data.acknowledged) {
-                        toast.success(
-                            `${product.productName} Product Removed To Wish-List!`
-                        );
-                        wishListRefetch();
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            return navigate("/login", {
+                state: { from: location },
+                replace: true,
+            });
         }
     };
 
     const addToBookNow = (product, isProductIdFromBookingProduct) => {
-        if (!isProductIdFromBookingProduct) {
-            setBookingProduct(product);
+        if (user && user?.uid) {
+            if (!isProductIdFromBookingProduct) {
+                setBookingProduct(product);
+            } else {
+                toast.error("Products Is Already Booked!");
+            }
         } else {
-            toast.error("Products Is Already Booked!");
+            return navigate("/login", {
+                state: { from: location },
+                replace: true,
+            });
         }
     };
-    
-    if(error && wishListError && bookingError ){
-        return <DisplayError/>
+
+    if (error && wishListError && bookingError) {
+        return <DisplayError />;
     }
 
     const pages = Math.ceil(count / 3);
