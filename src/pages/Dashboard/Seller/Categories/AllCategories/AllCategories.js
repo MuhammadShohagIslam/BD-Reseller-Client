@@ -10,8 +10,8 @@ import { toast } from "react-hot-toast";
 import ConfirmationModal from "../../../../../components/shared/Modal/ConfirmationModal/ConfirmationModal";
 import EditModal from "../../../../../components/shared/Modal/ConfirmationModal/EditModal/EditModal";
 import { updateCategoryByCategoryId } from "./../../../../../api/category";
-import Loader from './../../../../../components/shared/Loader/Loader';
-import DisplayError from './../../../../DisplayError/DisplayError';
+import Loader from "./../../../../../components/shared/Loader/Loader";
+import DisplayError from "./../../../../DisplayError/DisplayError";
 
 const AllCategories = () => {
     const [deleteCategory, setDeleteCategory] = useState(null);
@@ -71,25 +71,26 @@ const AllCategories = () => {
     return (
         <section className="container my-6">
             <SectionTitle title="All Categories" />
+
             <div className="overflow-x-auto relative shadow-md sm:rounded-lg w-3/4 mt-7">
-                <table className="w-full text-sm text-left text-white">
-                    <thead className="text-xs text-primary uppercase bg-green-300 dark:bg-green-300 dark:text-primary">
-                        <tr>
-                            <th scope="col" className="py-3 px-6">
-                                Category name
-                            </th>
-                            <th scope="col" className="py-3 px-6">
-                                Edit
-                            </th>
-                            <th scope="col" className="py-3 px-6">
-                                Delete
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {isLoading ? (
-                            <Loader />
-                        ) : (
+                {isLoading ? (
+                    <Loader />
+                ) : (
+                    <table className="w-full text-sm text-left text-white">
+                        <thead className="text-xs text-primary uppercase bg-green-300 dark:bg-green-300 dark:text-primary">
+                            <tr>
+                                <th scope="col" className="py-3 px-6">
+                                    Category name
+                                </th>
+                                <th scope="col" className="py-3 px-6">
+                                    Edit
+                                </th>
+                                <th scope="col" className="py-3 px-6">
+                                    Delete
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
                             <>
                                 {data?.map((category) => (
                                     <tr
@@ -129,9 +130,10 @@ const AllCategories = () => {
                                     </tr>
                                 ))}
                             </>
-                        )}
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                )}
+
                 {updateCategoryModalData && (
                     <EditModal
                         handleUpdateSubmit={handleCategoryUpdateSubmit}

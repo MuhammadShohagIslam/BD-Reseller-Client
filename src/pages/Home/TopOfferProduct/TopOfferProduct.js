@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import BookingForm from "./../../../components/shared/BookingForm/BookingForm";
 import Product from "./../../../components/shared/Product/Product";
 import SectionTitle from "./../../../components/shared/SectionTitle/SectionTitle";

@@ -15,6 +15,13 @@ export const getAllProducts = async (page, size, categoryName) => {
     );
 };
 
+// get all seller products
+export const getAllSellerProducts = async (page, size) => {
+    return await axios.get(
+        `${process.env.REACT_APP_server_api}/seller/products?page=${page}&size=${size}`
+    );
+};
+
 // get all top most offer products
 export const getAllTopOfferProducts = async (page, size) => {
     return await axios.get(

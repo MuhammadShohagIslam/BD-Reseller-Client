@@ -55,7 +55,7 @@ const SidebarList = ({ toggleAdminSidebar }) => {
                 >
                     <SideBarDropdownListItem
                         dropdownNavigationLink="/dashboard/seller/allProducts"
-                        name="All Products"
+                        name="My Products"
                     />
                     <SideBarDropdownListItem
                         dropdownNavigationLink="/dashboard/seller/addProduct"

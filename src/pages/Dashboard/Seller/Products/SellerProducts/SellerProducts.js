@@ -4,7 +4,7 @@ import SellerProduct from "./../../../../../components/shared/SellerProduct/Sell
 import { useQuery } from "@tanstack/react-query";
 import {
     deleteProductByProductId,
-    getAllProducts,
+    getAllSellerProducts,
     updateProductByProductId,
 } from "../../../../../api/product";
 import Loader from "./../../../../../components/shared/Loader/Loader";
@@ -20,9 +20,9 @@ const SellerProducts = () => {
     const pages = Math.ceil(count / pageSize);
 
     const { isLoading, error, refetch, data } = useQuery({
-        queryKey: ["products", page, pageSize],
+        queryKey: ["sellerAllProducts", page, pageSize],
         queryFn: async () => {
-            const data = await getAllProducts(page, pageSize);
+            const data = await getAllSellerProducts(page, pageSize);
             setCount(data.data.totalProduct);
             return data.data.products;
         },

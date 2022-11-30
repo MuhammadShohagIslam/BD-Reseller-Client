@@ -4,8 +4,7 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "./../../../context/AuthProvider/AuthProvider";
 import { removeWishListProductByProductId } from "./../../../api/wishList";
 import {
-    updateProductByProductId,
-    deleteProductByProductId,
+    updateProductByProductId
 } from "./../../../api/product";
 import { updateBookingProductByProductId } from "./../../../api/bookingProduct";
 
@@ -114,12 +113,6 @@ const CheckoutForm = ({ order }) => {
                                 console.log(error);
                             });
                         removeWishListProductByProductId(_id)
-                            .then((data) => {})
-                            .catch((error) => {
-                                console.log(error);
-                            });
-
-                        deleteProductByProductId(_id)
                             .then((data) => {})
                             .catch((error) => {
                                 console.log(error);

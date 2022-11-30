@@ -58,6 +58,7 @@ const AddProduct = () => {
                     sellerName: user?.displayName,
                     sellerEmail: user?.email,
                     productImg: productImgUrl,
+                    sold:false
                 };
                 createNewProduct(product)
                     .then((data) => {
@@ -291,14 +292,13 @@ const AddProduct = () => {
                                 required: "Product Category Is Required!",
                             })}
                         >
-                            <option disabled className="text-sm">
-                                Pick Your Product Category
-                            </option>
-                            {allCategory.map((category) => (
+                           
+                            {allCategory.map((category, index) => (
                                 <option
                                     key={category._id}
                                     value={category.categoryName}
                                     className="text-sm"
+                                    selected={index === 0}
                                 >
                                     {category.categoryName}
                                 </option>
