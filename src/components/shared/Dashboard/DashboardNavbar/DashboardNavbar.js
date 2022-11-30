@@ -1,16 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
 import { AiFillSetting } from "react-icons/ai";
 import { MdLogout } from "react-icons/md";
 import { useAuth } from "./../../../../context/AuthProvider/AuthProvider";
 
 const DashboardNavbar = () => {
-    const { user, logOut } = useAuth();
+    const { user,setUser, logOut } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogOut = () => {
         logOut()
-            .then(() => {})
+            .then(() => {
+                navigate("/")
+                setUser(null)
+            })
             .catch((error) => {
                 console.log(error.message);
             });
@@ -18,7 +22,7 @@ const DashboardNavbar = () => {
     return (
         <div className="navbar bg-gray-800">
             <div className="container flex justify-between sm:justify-none">
-                <div className="w-1/4">
+                <div className="w-1/4 sm:w-2/3">
                     <Link
                         to="/dashboard"
                         className="text-white font-bold text-3xl sm:text-xl"
@@ -93,7 +97,7 @@ const DashboardNavbar = () => {
                             tabIndex={0}
                             className="mt-3 pb-2 shadow menu menu-compact dropdown-content bg-gray-800 rounded divide-y divide-gray-100"
                         >
-                            <div className="py-3 px-4 text-sm text-gray-900 dark:text-white">
+                            <div className="py-3 px-4 w-60 text-sm text-gray-900 dark:text-white">
                                 <div>{user?.displayName}</div>
                                 <div className="font-medium truncate">
                                     {user && user?.email}

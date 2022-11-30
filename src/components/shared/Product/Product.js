@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 import { BsCalendarDate, BsHouseDoorFill } from "react-icons/bs";
 import { BiUserPlus, BiCategoryAlt } from "react-icons/bi";
-import { useQuery } from "@tanstack/react-query";
 import { getSellerUserBySellerId } from "./../../../api/user";
 
 import {
@@ -20,6 +19,7 @@ const Product = ({
     bookingProducts,
     user,
 }) => {
+    const [isSellerVerified, setIsSellerVerified] = useState(false);
     const {
         _id,
         date,
@@ -36,13 +36,17 @@ const Product = ({
         sellerId,
     } = product;
 
-    const { data: isSellerVerified } = useQuery({
-        queryKey: ["sellerById"],
-        queryFn: async () => {
-            const data = await getSellerUserBySellerId(sellerId);
-            return data.data.isVerified;
-        },
-    });
+    useEffect(() => {
+        if (sellerId) {
+            getSellerUserBySellerId(sellerId)
+                .then((data) => {
+                    setIsSellerVerified(data.data.isVerified);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [sellerId]);
 
     const offerProductPercentage = Math.round(
         ((originalPrice - price) / originalPrice) * 100
@@ -134,7 +138,7 @@ const Product = ({
                         <span className="ml-1">{sellerName}</span>
                         <MdOutlineVerifiedUser
                             className={`${
-                                isSellerVerified
+                                isSellerVerified && isSellerVerified
                                     ? "text-success"
                                     : "text-primary"
                             }`}

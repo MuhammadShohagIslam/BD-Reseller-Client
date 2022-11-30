@@ -5,7 +5,6 @@ const useBuyer = (email) => {
     const [isBuyer, setIsBuyer] = useState(false);
     const [isBuyerLoading, setIsBuyerLoading] = useState(true);
 
-
     useEffect(() => {
         if (email) {
             getBuyerUserByEmail(email)
@@ -19,7 +18,7 @@ const useBuyer = (email) => {
                 });
         }
     }, [email]);
-    
+
     return [isBuyer, isBuyerLoading];
 };
 

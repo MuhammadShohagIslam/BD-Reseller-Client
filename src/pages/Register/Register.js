@@ -4,8 +4,7 @@ import { FaGoogle } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { GoogleAuthProvider } from "firebase/auth";
 import { useAuth } from "./../../context/AuthProvider/AuthProvider";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { createJwtToken, createNewUser } from "../../api/user";
 import axios from "axios";
 
@@ -20,6 +19,7 @@ const Register = () => {
 
     const {
         createUser,
+        setUser,
         userProfileUpdate,
         registerAndLoginWithProvider,
         setLoading,
@@ -41,13 +41,12 @@ const Register = () => {
                 createUser(email, password)
                     .then((result) => {
                         handleProfileUpdate(name, productImgUrl, role);
-                        console.log(result, "result");
                         const userCredential = result?.user;
                         const currentUser = {
                             name: userCredential?.displayName || name,
                             email: userCredential?.email || email,
                         };
-                        console.log(currentUser, "currentUser");
+                      
                         createJwtToken(currentUser)
                             .then((tokenData) => {
                                 const userData = {
@@ -61,23 +60,27 @@ const Register = () => {
                                     data.token
                                 );
                                 saveNewUser(userData);
+                                setUser(result?.user)
                                 reset();
                                 navigate("/");
+                                setLoading(false);
                             })
                             .catch((error) => {
+                                setLoading(false);
                                 console.log(error.message);
                             });
                     })
                     .catch((error) => {
+                        setLoading(false);
                         toast.error(error.message.split("Firebase: ").join(""));
                     })
-                    .finally(() => {
-                        setLoading(false);
-                    });
             })
             .catch((error) => {
+                setLoading(false);
                 console.log(error.message);
-            });
+            }).finally(() => {
+                setLoading(false);
+            });;
     };
 
     const handleProfileUpdate = (name, photoURL) => {

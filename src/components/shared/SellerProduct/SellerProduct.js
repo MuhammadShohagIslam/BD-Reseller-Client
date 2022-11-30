@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { RiAdvertisementLine } from "react-icons/ri";
 import { CgUnavailable } from "react-icons/cg";
@@ -12,13 +12,13 @@ import {
 } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { getSellerUserBySellerId } from "./../../../api/user";
-import { useQuery } from "@tanstack/react-query";
 
 const SellerProduct = ({
     product,
     handleDeleteProduct,
     handleAdvertisingProduct,
 }) => {
+    const [isSellerVerified, setIsSellerVerified] = useState(false);
     const {
         _id,
         date,
@@ -37,13 +37,15 @@ const SellerProduct = ({
         sold,
     } = product;
 
-    const { data: isSellerVerified } = useQuery({
-        queryKey: ["sellerById"],
-        queryFn: async () => {
-            const data = await getSellerUserBySellerId(sellerId);
-            return data.data.isVerified;
-        },
-    });
+    useEffect(() => {
+        getSellerUserBySellerId(sellerId)
+            .then((data) => {
+                setIsSellerVerified(data.data.isVerified);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [sellerId]);
     const offerProductPercentage = Math.round(
         ((originalPrice - price) / originalPrice) * 100
     );

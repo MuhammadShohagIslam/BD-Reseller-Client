@@ -9,13 +9,15 @@ import useAdmin from "./../../../../../hooks/useAdmin";
 import useSeller from "./../../../../../hooks/useSeller";
 import useBuyer from "./../../../../../hooks/useBuyer";
 import { useAuth } from "./../../../../../context/AuthProvider/AuthProvider";
+import { useNavigate } from 'react-router-dom';
 
 const SidebarList = ({ toggleAdminSidebar }) => {
     const [openProduct, setOpenProduct] = useState(false);
     const [openCategories, setOpenCategories] = useState(false);
     const [openAllUsers, setOpenAllUsers] = useState(false);
 
-    const { user,logOut } = useAuth();
+    const { user,setUser, logOut } = useAuth();
+    const navigate = useNavigate();
 
     const [isAdmin] = useAdmin(user?.email);
     const [isSeller] = useSeller(user?.email);
@@ -24,6 +26,8 @@ const SidebarList = ({ toggleAdminSidebar }) => {
     const handleLogOut = () => {
         logOut()
             .then(() => {
+                navigate("/")
+                setUser(null);
             })
             .catch((error) => {
                 console.log(error.message);

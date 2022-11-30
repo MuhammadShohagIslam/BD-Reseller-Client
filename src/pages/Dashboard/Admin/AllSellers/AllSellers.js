@@ -44,7 +44,6 @@ const AllSellers = () => {
         queryFn: async () => {
             try {
                 const data = await getAllUsersByRole("seller");
-                console.log(data, data?.data)
                 return data?.data;
             } catch (error) {
                 if (error.response.status === 403) {
@@ -59,7 +58,7 @@ const AllSellers = () => {
             isVerified: true,
         };
         delete updatedData._id;
-        verifiedSellerByAdmin(seller.email)
+        verifiedSellerByAdmin(seller.email, updatedData)
             .then((data) => {
                 toast.success(`${seller.name}  is Verified Successfully!`);
                 refetch();

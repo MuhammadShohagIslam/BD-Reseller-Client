@@ -23,7 +23,7 @@ const TopOfferProduct = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const [bookingProduct, setBookingProduct] = useState(null);
-    const { user, logOut } = useAuth();
+    const { user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
     const {pageSize} = useDimensions();
@@ -56,15 +56,6 @@ const TopOfferProduct = () => {
 
     const userName = user?.displayName;
     const userEmail = user?.email;
-    const handleLogOut = () => {
-        logOut()
-            .then(() => {
-                console.log("top most");
-            })
-            .catch((error) => {
-                console.log(error.message);
-            });
-    };
     const {
         isLoading: loadingBookingProduct,
         refetch: bookingProductRefetch,
@@ -79,12 +70,7 @@ const TopOfferProduct = () => {
             );
             return data.data;
         },
-        enabled: !!userName && !!userEmail,
-        onError: (error) => {
-            if (error.response.status === 403) {
-                handleLogOut();
-            }
-        },
+        enabled: !!userName && !!userEmail
     });
 
     const closeModal = () => {

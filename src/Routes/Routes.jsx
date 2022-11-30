@@ -23,7 +23,7 @@ import PrivateRouter from "./PrivateRoute";
 import SellerRoute from "./SellerRoute";
 import BuyerRoute from "./BuyerRoute";
 import Payment from "../pages/Dashboard/Payment/Payment";
-import Dashboard from './../pages/Dashboard/Dashboard';
+import Dashboard from "./../pages/Dashboard/Dashboard";
 import Profile from "../pages/Dashboard/Profile/Profile";
 import AccountSetting from "../pages/Dashboard/AccountSetting/AccountSetting";
 
@@ -74,11 +74,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/dashboard",
-                element: (
-                    <PrivateRouter>
-                        <Dashboard />
-                    </PrivateRouter>
-                ),
+                element: <Dashboard />,
             },
             {
                 path: "/dashboard/admin/allBuyers",
@@ -167,7 +163,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard/payment/:orderId",
-                element: <BuyerRoute><Payment /></BuyerRoute>,
+                element: (
+                    <BuyerRoute>
+                        <Payment />
+                    </BuyerRoute>
+                ),
                 loader: ({ params }) =>
                     fetch(
                         `${process.env.REACT_APP_server_api}/bookings/${params.orderId}`,
@@ -182,19 +182,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard/profile",
-                element: (
-                    <PrivateRouter>
-                        <Profile />
-                    </PrivateRouter>
-                ),
+                element: <Profile />,
             },
             {
                 path: "/dashboard/accountSetting",
-                element: (
-                    <PrivateRouter>
-                        <AccountSetting />
-                    </PrivateRouter>
-                ),
+                element: <AccountSetting />,
             },
         ],
     },

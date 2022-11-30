@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { createNewProduct } from "./../../../../../api/product";
 import axios from "axios";
@@ -11,6 +11,7 @@ import { getSellerUserByEmail } from "./../../../../../api/user";
 import DisplayError from "./../../../../DisplayError/DisplayError";
 
 const AddProduct = () => {
+    const [loading, setLoading] = useState(false);
     const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -42,6 +43,7 @@ const AddProduct = () => {
         const productImage = formValues.productImg[0];
         const formData = new FormData();
         formData.append("image", productImage);
+        setLoading(true);
         axios
             .post(url, formData)
             .then((imgData) => {
@@ -58,7 +60,7 @@ const AddProduct = () => {
                     sellerName: user?.displayName,
                     sellerEmail: user?.email,
                     productImg: productImgUrl,
-                    sold:false
+                    sold: false,
                 };
                 createNewProduct(product)
                     .then((data) => {
@@ -67,10 +69,12 @@ const AddProduct = () => {
                                 `${formValues.productName} Product is Created!`
                             );
                             reset();
+                            setLoading(false);
                             navigate("/dashboard/seller/allProducts");
                         }
                     })
                     .catch((error) => {
+                        setLoading(false);
                         console.log(error);
                     });
             })
@@ -292,7 +296,6 @@ const AddProduct = () => {
                                 required: "Product Category Is Required!",
                             })}
                         >
-                           
                             {allCategory.map((category, index) => (
                                 <option
                                     key={category._id}
@@ -333,6 +336,7 @@ const AddProduct = () => {
                     </div>
 
                     <input
+                        disabled={loading}
                         type="submit"
                         value="Add Product"
                         className="btn hover:bg-transparent hover:text-primary text-white btn-primary  mt-2"

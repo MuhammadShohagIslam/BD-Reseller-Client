@@ -1,5 +1,4 @@
 import React from "react";
-import { BsFillBookmarkFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 import { BsCalendarDate, BsHouseDoorFill } from "react-icons/bs";
 import { BiUserPlus, BiCategoryAlt } from "react-icons/bi";
@@ -10,7 +9,7 @@ import {
     MdOutlineWifiProtectedSetup,
 } from "react-icons/md";
 
-const WishList = ({ wishList, wishLists, addToWishList, addToBookNow }) => {
+const WishList = ({ wishList, wishLists, addToWishList }) => {
     const {
         productId,
         date,
@@ -64,16 +63,6 @@ const WishList = ({ wishList, wishLists, addToWishList, addToBookNow }) => {
                     >
                         <FaHeart />
                     </li>
-
-                    <label htmlFor="my-modal-3">
-                        <li
-                            className="py-3 flex items-center px-3 rounded-lg ml-2 border-2 border-success hover:bg-primary hover:border-primary hover:text-white  text-white bg-success transition ease-in-out delay-15 cursor-pointer tooltip tooltip-primary"
-                            data-tip="Book Now"
-                            onClick={() => addToBookNow(wishList)}
-                        >
-                            <BsFillBookmarkFill />
-                        </li>
-                    </label>
                 </ul>
                 <img
                     className="h-full w-full"

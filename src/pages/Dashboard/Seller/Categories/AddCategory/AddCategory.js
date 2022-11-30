@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { createNewCategory } from './../../../../../api/category';
-import { toast } from 'react-hot-toast';
-import axios  from 'axios';
+import { createNewCategory } from "./../../../../../api/category";
+import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const AddCategory = () => {
+    const [loading, setLoading] = useState(false);
     const {
         handleSubmit,
         register,
@@ -18,25 +19,28 @@ const AddCategory = () => {
         formData.append("image", categoryImage);
 
         const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
-        axios
-            .post(url, formData)
-            .then((imgData) => {
-                const categoryImgUrl = imgData.data.data.url;
-                const category = {
-                    image: categoryImgUrl,
-                    categoryName:formValues.categoryName
-                };
-                createNewCategory(category).then((data) => {
+        setLoading(true);
+        axios.post(url, formData).then((imgData) => {
+            const categoryImgUrl = imgData.data.data.url;
+            const category = {
+                image: categoryImgUrl,
+                categoryName: formValues.categoryName,
+            };
+            createNewCategory(category)
+                .then((data) => {
                     if (data.data.acknowledged) {
                         toast.success(
                             `${formValues.categoryName} Category is Created!`
                         );
                         reset();
+                        setLoading(false);
                     }
-                }).catch(error=>{
+                })
+                .catch((error) => {
+                    setLoading(false);
                     console.log(error);
                 });
-            })
+        });
     };
     return (
         <div className="container py-10">
@@ -76,6 +80,7 @@ const AddCategory = () => {
                     )}
 
                     <input
+                        disabled={loading}
                         type="submit"
                         value="Add Category"
                         className="btn hover:bg-transparent capitalize hover:text-primary text-white btn-success block  mt-3"
