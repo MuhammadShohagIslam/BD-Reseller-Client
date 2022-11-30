@@ -11,8 +11,29 @@ import {
 import Loader from "./../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
 import DisplayError from "../../../DisplayError/DisplayError";
+import { useAuth } from "./../../../../context/AuthProvider/AuthProvider";
+import { useLocation, Navigate } from "react-router-dom";
 
 const AllSellers = () => {
+    const { logOut } = useAuth();
+    const location = useLocation();
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {
+                return (
+                    <Navigate
+                        to="/login"
+                        state={{ from: location }}
+                        replace={true}
+                    />
+                );
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
+
     const {
         isLoading,
         refetch,
@@ -21,9 +42,16 @@ const AllSellers = () => {
     } = useQuery({
         queryKey: ["sellers"],
         queryFn: async () => {
-            const data = await getAllUsersByRole("seller");
-            return data.data;
-        }
+            try {
+                const data = await getAllUsersByRole("seller");
+                console.log(data, data?.data)
+                return data?.data;
+            } catch (error) {
+                if (error.response.status === 403) {
+                    handleLogOut();
+                } 
+            }
+        },
     });
     const handleSellerVerified = (seller) => {
         const updatedData = {
@@ -37,7 +65,9 @@ const AllSellers = () => {
                 refetch();
             })
             .catch((error) => {
-                console.log(error.message);
+                if (error.response.status === 403) {
+                    handleLogOut();
+                }
             });
     };
 
@@ -49,7 +79,9 @@ const AllSellers = () => {
                 refetch();
             })
             .catch((error) => {
-                console.log(error.message);
+                if (error.response.status === 403) {
+                    handleLogOut();
+                }
             });
     };
     if (error) {

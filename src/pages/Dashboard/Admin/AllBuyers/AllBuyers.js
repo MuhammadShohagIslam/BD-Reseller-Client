@@ -6,8 +6,26 @@ import { getAllUsersByRole, removedUsersByEmail } from "./../../../../api/user";
 import Loader from "./../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
 import DisplayError from "../../../DisplayError/DisplayError";
+import { useAuth } from './../../../../context/AuthProvider/AuthProvider';
+import { useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+
 
 const AllBuyers = () => {
+    const {logOut} = useAuth();
+    const location = useLocation();
+   
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {
+                return <Navigate to="/login" state={{ from: location }} replace={true} />
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
+
     const {
         isLoading,
         refetch,
@@ -19,6 +37,11 @@ const AllBuyers = () => {
             const data = await getAllUsersByRole("user");
             return data.data;
         },
+        onError: (error) => {
+            if (error.response.status === 403) {
+                handleLogOut();
+            }
+        }
     });
 
     const handleUserDelete = (user) => {
@@ -29,6 +52,10 @@ const AllBuyers = () => {
                 refetch();
             })
             .catch((error) => {
+                console.log(error);
+                if (error.response.status === 403) {
+                    handleLogOut();
+                }
                 console.log(error.message);
             });
     };

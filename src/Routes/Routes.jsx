@@ -23,6 +23,7 @@ import PrivateRouter from "./PrivateRoute";
 import SellerRoute from "./SellerRoute";
 import BuyerRoute from "./BuyerRoute";
 import Payment from "../pages/Dashboard/Payment/Payment";
+import Dashboard from './../pages/Dashboard/Dashboard';
 
 const router = createBrowserRouter([
     {
@@ -69,6 +70,14 @@ const router = createBrowserRouter([
         ),
         errorElement: <DisplayError />,
         children: [
+            {
+                path: "/dashboard",
+                element: (
+                    <PrivateRouter>
+                        <Dashboard />
+                    </PrivateRouter>
+                ),
+            },
             {
                 path: "/dashboard/admin/allBuyers",
                 element: (

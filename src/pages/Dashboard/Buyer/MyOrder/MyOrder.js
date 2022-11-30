@@ -9,12 +9,28 @@ import {
 } from "../../../../api/bookingProduct";
 import { useAuth } from "../../../../context/AuthProvider/AuthProvider";
 import Loader from "./../../../../components/shared/Loader/Loader";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import DisplayError from "./../../../DisplayError/DisplayError";
 
 const MyOrder = () => {
-    const { user } = useAuth();
+    const { user, logOut } = useAuth();
+    const location = useLocation();
 
+    const handleLogOut = () => {
+        logOut()
+            .then(() => {
+                return (
+                    <Navigate
+                        to="/login"
+                        state={{ from: location }}
+                        replace={true}
+                    />
+                );
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
     const {
         isLoading,
         refetch,
@@ -28,6 +44,11 @@ const MyOrder = () => {
                 user?.email
             );
             return data.data;
+        },
+        onError: (error) => {
+            if (error.response.status === 403) {
+                handleLogOut();
+            }
         },
     });
 
@@ -46,7 +67,7 @@ const MyOrder = () => {
     if (error) {
         return <DisplayError />;
     }
-    console.log(error, "error")
+
     return (
         <section className="container mt-8">
             <SectionTitle title="All Seller Users" />

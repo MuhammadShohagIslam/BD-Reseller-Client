@@ -17,17 +17,17 @@ const DashboardNavbar = () => {
     };
     return (
         <div className="navbar bg-gray-800">
-            <div className="container flex justify-between ">
+            <div className="container flex justify-between sm:justify-none">
                 <div className="w-1/4">
                     <Link
                         to="/dashboard"
-                        className="text-white font-bold text-3xl"
+                        className="text-white font-bold text-3xl sm:text-xl"
                     >
                         BD-Seller
                     </Link>
                 </div>
 
-                <form className="w-1/2">
+                <form className="w-1/2 sm:hidden">
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg

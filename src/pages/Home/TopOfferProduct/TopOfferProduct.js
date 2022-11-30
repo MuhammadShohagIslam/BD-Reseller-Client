@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BookingForm from "./../../../components/shared/BookingForm/BookingForm";
 import Product from "./../../../components/shared/Product/Product";
 import SectionTitle from "./../../../components/shared/SectionTitle/SectionTitle";
@@ -17,6 +17,7 @@ import Loader from "./../../../components/shared/Loader/Loader";
 import Pagination from "../../../components/shared/Pagination/Pagination";
 import DisplayError from "./../../DisplayError/DisplayError";
 import { useLocation, useNavigate } from "react-router-dom";
+import useDimensions from './../../../hooks/useDimensions';
 
 const TopOfferProduct = () => {
     const [count, setCount] = useState(0);
@@ -25,11 +26,13 @@ const TopOfferProduct = () => {
     const { user, logOut } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+    const {pageSize} = useDimensions();
+    const pages = Math.ceil(count / pageSize);
 
     const { isLoading, error, data } = useQuery({
-        queryKey: ["allTopOfferProducts", page, "3"],
+        queryKey: ["allTopOfferProducts", page, pageSize],
         queryFn: async () => {
-            const data = await getAllTopOfferProducts(page, "3");
+            const data = await getAllTopOfferProducts(page, pageSize);
             setCount(data.data.totalProduct);
             return data.data.products;
         },
@@ -56,6 +59,7 @@ const TopOfferProduct = () => {
     const handleLogOut = () => {
         logOut()
             .then(() => {
+                console.log("top most");
             })
             .catch((error) => {
                 console.log(error.message);
@@ -75,12 +79,12 @@ const TopOfferProduct = () => {
             );
             return data.data;
         },
+        enabled: !!userName && !!userEmail,
         onError: (error) => {
             if (error.response.status === 403) {
                 handleLogOut();
             }
         },
-        enabled: !!userName && !!userEmail,
     });
 
     const closeModal = () => {
@@ -151,14 +155,13 @@ const TopOfferProduct = () => {
         return <DisplayError />;
     }
 
-    const pages = Math.ceil(count / 3);
     return (
         <section className="container mt-12">
             <SectionTitle title={`Top Most Offer Product`} />
             {isLoading && loadingWishList && loadingBookingProduct ? (
                 <Loader />
             ) : (
-                <div className="grid grid-cols-3 gap-5 md:grid-cols-2 sm:grid-cols-1 mt-6">
+                <div className="grid grid-cols-3 gap-5 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mt-6">
                     {data?.length > 0 ? (
                         <>
                             {data?.map((product) => (

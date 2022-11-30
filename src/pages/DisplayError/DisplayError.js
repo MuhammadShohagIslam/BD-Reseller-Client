@@ -18,7 +18,7 @@ const DisplayError = () => {
             });
     };
     return (
-        <section className="w-10/12 m-auto h-screen flex sm:block sm:pb-11 justify-center items-center">
+        <section className="w-10/12 pt-4 m-auto h-screen flex sm:block sm:pb-11 justify-center items-center">
             <div>
                 <img
                     className="w-96 h-96 rounded-full m-auto"
@@ -28,7 +28,7 @@ const DisplayError = () => {
             </div>
             <div className="text-center">
                 <h2 className="text-red-400 text-5xl mb-3">
-                    {error.statusText}
+                    {error?.statusText}
                 </h2>
 
                 <p className="text-success">

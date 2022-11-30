@@ -17,12 +17,16 @@ import { getAllBookingProducts } from "../../api/bookingProduct";
 import Pagination from "../../components/shared/Pagination/Pagination";
 import DisplayError from './../DisplayError/DisplayError';
 import { useLocation, useNavigate } from "react-router-dom";
+import useDimensions from './../../hooks/useDimensions';
 
 const ProductsByCategory = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const [bookingProduct, setBookingProduct] = useState(null);
     const { user, logOut} = useAuth();
+    const {pageSize} = useDimensions();
+    const pages = Math.ceil(count / pageSize);
+
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
@@ -30,9 +34,9 @@ const ProductsByCategory = () => {
     const { categoryName } = params;
 
     const { isLoading, error, data } = useQuery({
-        queryKey: ["productsByCategories", page, "3", categoryName],
+        queryKey: ["productsByCategories", page, pageSize, categoryName],
         queryFn: async () => {
-            const data = await getAllProducts(page, "3", categoryName);
+            const data = await getAllProducts(page, pageSize, categoryName);
             setCount(data.data.totalProduct);
             return data.data.products;
         },
@@ -154,7 +158,6 @@ const ProductsByCategory = () => {
         return <DisplayError />;
     }
 
-    const pages = Math.ceil(count / 3);
     return (
         <section className="container mt-12">
             <SectionTitle

@@ -11,15 +11,18 @@ import Loader from "./../../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
 import Pagination from "../../../../../components/shared/Pagination/Pagination";
 import DisplayError from './../../../../DisplayError/DisplayError';
+import useDimensions from './../../../../../hooks/useDimensions';
 
 const SellerProducts = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
+    const {pageSize} = useDimensions();
+    const pages = Math.ceil(count / pageSize);
 
     const { isLoading, error, refetch, data } = useQuery({
-        queryKey: ["products", page, "3"],
+        queryKey: ["products", page, pageSize],
         queryFn: async () => {
-            const data = await getAllProducts(page, "3");
+            const data = await getAllProducts(page, pageSize);
             setCount(data.data.totalProduct);
             return data.data.products;
         },
@@ -74,7 +77,7 @@ const SellerProducts = () => {
     if (error) {
         return <DisplayError />;
     }
-    const pages = Math.ceil(count / 3);
+  
 
     return (
         <div className="container my-10">
@@ -83,7 +86,7 @@ const SellerProducts = () => {
             {isLoading ? (
                 <Loader />
             ) : (
-                <div className="grid grid-cols-3 mt-7 gap-5">
+                <div className="grid grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mt-7 gap-5">
                     {data?.length > 0 ? (
                         <>
                             {data?.map((product) => (

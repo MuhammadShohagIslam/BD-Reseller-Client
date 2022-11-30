@@ -57,9 +57,9 @@ const Product = ({
     );
     const isProductIdFromBookingProduct =
         productIdFromBookingProduct.includes(_id);
-    console.log(user, "false");
+
     return (
-        <div className="max-w-sm rounded-lg shadow-md group cursor-pointer">
+        <div className="rounded-lg shadow-md group cursor-pointer">
             <div className="h-72 relative">
                 <div className="absolute top-3 rounded-full left-3 w-14 h-14 bg-success flex justify-center items-center flex-col">
                     <span className="text-white -mb-2">Off</span>
@@ -120,7 +120,7 @@ const Product = ({
                 />
             </div>
             <div className="p-5">
-                <div className="flex flex-wrap">
+                <div className="flex flex-wrap md:flex-col sm:flex-col">
                     <div className="flex items-center mr-3 text-primary">
                         <BsCalendarDate className="text-success" />
                         <span className="ml-1">
@@ -144,17 +144,17 @@ const Product = ({
                         <MdLocationOn className="text-success" />
                         <span className="ml-1">{location}</span>
                     </div>
-                    <div className="flex mt-1 mr-3 sm:ml-3 items-center text-primary">
+                    <div className="flex mt-1 mr-3 sm:ml-0 items-center text-primary">
                         <BsHouseDoorFill className="text-success" />
                         <span className="ml-1">From {date}</span>
                     </div>
-                    <div className="flex mt-1 mr-3 sm:ml-3 items-center text-primary">
+                    <div className="flex mt-1 mr-3 sm:ml-0 items-center text-primary">
                         <MdOutlineWifiProtectedSetup className="text-success" />
                         <span className="ml-1 capitalize">
                             {productCondition}
                         </span>
                     </div>
-                    <div className="flex mt-1 mr-3 sm:ml-3 items-center text-primary">
+                    <div className="flex mt-1 mr-3 sm:ml-0 items-center text-primary">
                         <BiCategoryAlt className="text-success" />
                         <span className="ml-1 capitalize">
                             {productCategory}

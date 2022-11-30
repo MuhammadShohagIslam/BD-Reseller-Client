@@ -11,7 +11,12 @@ export const createNewWishListProduct = async (wishListData) => {
 // get all wish-list products
 export const getAllWishListProducts = async (userName, userEmail) => {
     return await axios.get(
-        `${process.env.REACT_APP_server_api}/wishLists?userName=${userName}&userEmail=${userEmail}`
+        `${process.env.REACT_APP_server_api}/wishLists?userName=${userName}&userEmail=${userEmail}`,
+        {
+            headers: {
+                authorization: `${localStorage.getItem("bdSeller-token")}`,
+            },
+        }
     );
 };
 
