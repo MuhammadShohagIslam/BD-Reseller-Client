@@ -170,14 +170,7 @@ const router = createBrowserRouter([
                 ),
                 loader: ({ params }) =>
                     fetch(
-                        `${process.env.REACT_APP_server_api}/bookings/${params.orderId}`,
-                        {
-                            headers: {
-                                authorization: `${localStorage.getItem(
-                                    "bdSeller-token"
-                                )}`,
-                            },
-                        }
+                        `${process.env.REACT_APP_server_api}/bookings/${params.orderId}`
                     ),
             },
             {

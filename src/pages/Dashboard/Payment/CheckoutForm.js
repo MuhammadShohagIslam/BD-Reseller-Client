@@ -3,9 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useAuth } from "./../../../context/AuthProvider/AuthProvider";
 import { removeWishListProductByProductId } from "./../../../api/wishList";
-import {
-    updateProductByProductId
-} from "./../../../api/product";
+import { updateProductByProductId } from "./../../../api/product";
 import { updateBookingProductByProductId } from "./../../../api/bookingProduct";
 
 const CheckoutForm = ({ order }) => {
@@ -19,6 +17,7 @@ const CheckoutForm = ({ order }) => {
     const { user } = useAuth();
 
     const { _id, price } = order;
+    console.log(price)
 
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
@@ -28,7 +27,10 @@ const CheckoutForm = ({ order }) => {
             body: JSON.stringify({ price }),
         })
             .then((res) => res.json())
-            .then((data) => setClientSecret(data.clientSecret));
+            .then((data) => setClientSecret(data.clientSecret))
+            .catch((error) => {
+                console.log(error.message);
+            });
     }, [price]);
 
     const cartStyle = {
