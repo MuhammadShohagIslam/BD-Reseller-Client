@@ -19,6 +19,19 @@ export const getAllBookingProducts = async (userName, userEmail) => {
     );
 };
 
+// update product by productId
+export const updateBookingProductByProductId = async (productId, updatedData) => {
+    return await axios.patch(
+        `${process.env.REACT_APP_server_api}/bookings/${productId}`,
+        updatedData,
+        {
+            headers: {
+                authorization: `${localStorage.getItem("bdSeller-token")}`,
+            },
+        }
+    );
+};
+
 // delete booking product by productId
 export const deleteBookingProductByProductId = async (productId) => {
     return await axios.delete(

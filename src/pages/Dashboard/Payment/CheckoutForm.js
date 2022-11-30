@@ -1,6 +1,13 @@
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { useAuth } from "./../../../context/AuthProvider/AuthProvider";
+import { removeWishListProductByProductId } from "./../../../api/wishList";
+import {
+    updateProductByProductId,
+    deleteProductByProductId,
+} from "./../../../api/product";
+import { updateBookingProductByProductId } from "./../../../api/bookingProduct";
 
 const CheckoutForm = ({ order }) => {
     const [succeeded, setSucceeded] = useState(false);
@@ -10,8 +17,9 @@ const CheckoutForm = ({ order }) => {
     const [clientSecret, setClientSecret] = useState("");
     const stripe = useStripe();
     const elements = useElements();
+    const { user } = useAuth();
 
-    const { price, userName, userEmail } = order;
+    const { _id, price } = order;
 
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
@@ -67,9 +75,9 @@ const CheckoutForm = ({ order }) => {
             // store the payment info to the database
             const payment = {
                 price: price,
-                transactionId: payload.id,
-                email: userEmail,
-                name:userName,
+                transactionId: payload?.paymentIntent?.id,
+                email: user?.email,
+                name: user?.displayName,
                 orderId: order._id,
             };
             fetch(`${process.env.REACT_APP_server_api}/payment`, {
@@ -80,6 +88,42 @@ const CheckoutForm = ({ order }) => {
                 .then((res) => res.json())
                 .then((data) => {
                     if (data.insertedId) {
+                        const updateProduct = {
+                            ...order,
+                            sold: true,
+                        };
+                        delete updateProduct._id;
+
+                        const updateBookingProduct = {
+                            ...order,
+                            paid: true,
+                        };
+                        delete updateBookingProduct._id;
+
+                        updateBookingProductByProductId(
+                            _id,
+                            updateBookingProduct
+                        )
+                            .then((data) => {})
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                        updateProductByProductId(_id, updateProduct)
+                            .then((data) => {})
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                        removeWishListProductByProductId(_id)
+                            .then((data) => {})
+                            .catch((error) => {
+                                console.log(error);
+                            });
+
+                        deleteProductByProductId(_id)
+                            .then((data) => {})
+                            .catch((error) => {
+                                console.log(error);
+                            });
                         toast.success("Congrats, Your payment is Completed!");
                     }
                 });
@@ -89,8 +133,8 @@ const CheckoutForm = ({ order }) => {
         }
     };
 
-    if(error){
-        toast.error("Something Went Wrong!")
+    if (error) {
+        toast.error("Something Went Wrong!");
     }
 
     return (

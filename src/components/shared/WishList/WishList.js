@@ -3,6 +3,7 @@ import { BsFillBookmarkFill } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 import { BsCalendarDate, BsHouseDoorFill } from "react-icons/bs";
 import { BiUserPlus, BiCategoryAlt } from "react-icons/bi";
+import { Link } from "react-router-dom";
 import {
     MdLocationOn,
     MdOutlineVerifiedUser,
@@ -133,6 +134,15 @@ const WishList = ({ wishList, wishLists, addToWishList, addToBookNow }) => {
                     <span className="mt-2 line-through text-primary font-medium">
                         ${originalPrice}
                     </span>
+                </div>
+                <div>
+                    <Link
+                        to={`/dashboard/payment/${productId}`}
+                    >
+                        <button className="btn btn-outline btn-success w-full py-2">
+                            Pay
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>

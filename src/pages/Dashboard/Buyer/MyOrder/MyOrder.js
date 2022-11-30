@@ -110,14 +110,26 @@ const MyOrder = () => {
                                             </div>
                                         </td>
                                         <td> {buyerOrder.price}</td>
-                                        <td>
-                                            <Link
-                                                to={`/dashboard/payment/${buyerOrder._id}`}
-                                                className="text-primary rounded-lg cursor-pointer text-lg py-1 px-4 bg-success"
-                                            >
-                                                Pay
-                                            </Link>
-                                        </td>
+                                        {buyerOrder.paid ? (
+                                            <td>
+                                                <label className="text-primary rounded-lg cursor-pointer text-lg py-1 px-4 bg-success">
+                                                    {buyerOrder.paid
+                                                        ? "Paid"
+                                                        : "Pay"}
+                                                </label>
+                                            </td>
+                                        ) : (
+                                            <td>
+                                                <Link
+                                                    to={`/dashboard/payment/${buyerOrder.productId}`}
+                                                    className="text-primary rounded-lg cursor-pointer text-lg py-1 px-4 bg-success"
+                                                >
+                                                    {buyerOrder.paid
+                                                        ? "Paid"
+                                                        : "Pay"}
+                                                </Link>
+                                            </td>
+                                        )}
                                         <td>
                                             <label
                                                 onClick={() =>

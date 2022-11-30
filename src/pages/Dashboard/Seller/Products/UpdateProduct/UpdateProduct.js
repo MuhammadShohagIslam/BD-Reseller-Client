@@ -76,13 +76,11 @@ const UpdateProduct = () => {
                     console.log(err);
                 });
         } else {
-            console.log(offerProductPercentage)
             const modifiedProduct = {
                 ...formValues,
                 saveAmount:offerProductPercentage,
                 productImg,
             };
-            console.log(modifiedProduct)
             updateProductByProductId(_id, modifiedProduct)
                 .then((data) => {
                     if (data.data.modifiedCount > 0) {
