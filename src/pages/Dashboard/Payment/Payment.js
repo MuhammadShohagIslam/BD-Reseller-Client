@@ -8,8 +8,7 @@ const stripePromise = loadStripe(process.env.REACT_APP_stripe_key);
 
 const Payment = () => {
     const data = useLoaderData();
-    console.log(data);
-
+    
     return (
         <Elements stripe={stripePromise}>
             <CheckoutForm order = {data}/>

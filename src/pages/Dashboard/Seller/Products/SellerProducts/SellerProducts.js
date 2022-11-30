@@ -12,17 +12,19 @@ import { toast } from "react-hot-toast";
 import Pagination from "../../../../../components/shared/Pagination/Pagination";
 import DisplayError from './../../../../DisplayError/DisplayError';
 import useDimensions from './../../../../../hooks/useDimensions';
+import { useAuth } from "../../../../../context/AuthProvider/AuthProvider";
 
 const SellerProducts = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const {pageSize} = useDimensions();
+    const {user} = useAuth();
     const pages = Math.ceil(count / pageSize);
 
     const { isLoading, error, refetch, data } = useQuery({
-        queryKey: ["sellerAllProducts", page, pageSize],
+        queryKey: ["sellerAllProducts", page, pageSize, user?.email],
         queryFn: async () => {
-            const data = await getAllSellerProducts(page, pageSize);
+            const data = await getAllSellerProducts(page, pageSize,user?.email);
             setCount(data.data.totalProduct);
             return data.data.products;
         },

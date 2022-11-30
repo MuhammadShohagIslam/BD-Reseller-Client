@@ -334,13 +334,14 @@ const AddProduct = () => {
                             </p>
                         )}
                     </div>
-
-                    <input
+                    <button
                         disabled={loading}
                         type="submit"
                         value="Add Product"
-                        className="btn hover:bg-transparent hover:text-primary text-white btn-primary  mt-2"
-                    />
+                        className="btn hover:bg-transparent hover:text-primary text-white btn-primary disabled:opacity-75 disabled:border-2 disabled:border-primary disabled:text-primary mt-2"
+                    >
+                        {loading ? "Loading" : "Add Product"}
+                    </button>
                 </form>
             </div>
         </div>

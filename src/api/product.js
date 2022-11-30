@@ -16,9 +16,9 @@ export const getAllProducts = async (page, size, categoryName) => {
 };
 
 // get all seller products
-export const getAllSellerProducts = async (page, size) => {
+export const getAllSellerProducts = async (page, size, sellerEmail) => {
     return await axios.get(
-        `${process.env.REACT_APP_server_api}/seller/products?page=${page}&size=${size}`
+        `${process.env.REACT_APP_server_api}/seller/products?page=${page}&size=${size}&sellerEmail=${sellerEmail}`
     );
 };
 

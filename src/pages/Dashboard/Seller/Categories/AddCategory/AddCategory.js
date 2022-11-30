@@ -78,13 +78,14 @@ const AddCategory = () => {
                             {errors.categoryImg?.message}
                         </p>
                     )}
-
-                    <input
+                   
+                    <button
                         disabled={loading}
                         type="submit"
-                        value="Add Category"
-                        className="btn hover:bg-transparent capitalize hover:text-primary text-white btn-success block  mt-3"
-                    />
+                        className="btn block hover:bg-transparent hover:text-primary text-white btn-primary disabled:opacity-75 disabled:border-2 disabled:border-primary disabled:text-primary mt-2"
+                    >
+                        {loading ? "Loading" : "Add Category"}
+                    </button>
                 </form>
             </div>
         </div>

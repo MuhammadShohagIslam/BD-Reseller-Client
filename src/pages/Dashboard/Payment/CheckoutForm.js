@@ -15,9 +15,7 @@ const CheckoutForm = ({ order }) => {
     const stripe = useStripe();
     const elements = useElements();
     const { user } = useAuth();
-
     const { _id, price } = order;
-    console.log(price)
 
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
