@@ -6,7 +6,8 @@ import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCategories } from "../../../../../api/category";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import DisplayError from './../../../../DisplayError/DisplayError';
+import DisplayError from "./../../../../DisplayError/DisplayError";
+import { Helmet } from "react-helmet-async";
 
 const UpdateProduct = () => {
     const product = useLoaderData();
@@ -31,7 +32,7 @@ const UpdateProduct = () => {
         phone,
     } = product;
 
-    const {error, data: allCategory = [] } = useQuery({
+    const { error, data: allCategory = [] } = useQuery({
         queryKey: ["categories"],
         queryFn: async () => {
             const data = await getAllCategories();
@@ -56,7 +57,7 @@ const UpdateProduct = () => {
                     const productImgUrl = imgData.data.data.url;
                     const product = {
                         ...formValues,
-                        saveAmount:offerProductPercentage,
+                        saveAmount: offerProductPercentage,
                         productImg: productImgUrl,
                     };
                     updateProductByProductId(_id, product)
@@ -78,7 +79,7 @@ const UpdateProduct = () => {
         } else {
             const modifiedProduct = {
                 ...formValues,
-                saveAmount:offerProductPercentage,
+                saveAmount: offerProductPercentage,
                 productImg,
             };
             updateProductByProductId(_id, modifiedProduct)
@@ -87,7 +88,6 @@ const UpdateProduct = () => {
                         toast.success(
                             `${formValues.productName} Product is Updated!`
                         );
-                      
                     }
                 })
                 .catch((error) => {
@@ -101,291 +101,298 @@ const UpdateProduct = () => {
     }
 
     return (
-        <div className="container py-10">
-            <div className="bg-secondary p-6 rounded-lg">
-                <h2 className="text-center font-semibold text-primary text-2xl">
-                    Update Product
-                </h2>
-                <form
-                    onSubmit={handleSubmit(handleUpdateProduct)}
-                    className="mt-5"
-                >
-                    <div className="grid grid-cols-2">
-                        <div className="my-5 flex items-center">
-                            <input
-                                type="file"
-                                {...register("productImg", {
-                                    required: false,
-                                })}
-                                className="file-input file-input-bordered file-input-success w-full max-w-xs"
-                            />
+        <>
+            <Helmet>
+                <title>Update Product</title>
+            </Helmet>
+            <div className="container py-10">
+                <div className="bg-secondary p-6 rounded-lg">
+                    <h2 className="text-center font-semibold text-primary text-2xl">
+                        Update Product
+                    </h2>
+                    <form
+                        onSubmit={handleSubmit(handleUpdateProduct)}
+                        className="mt-5"
+                    >
+                        <div className="grid grid-cols-2">
+                            <div className="my-5 flex items-center">
+                                <input
+                                    type="file"
+                                    {...register("productImg", {
+                                        required: false,
+                                    })}
+                                    className="file-input file-input-bordered file-input-success w-full max-w-xs"
+                                />
+                            </div>
+                            <div className="my-5">
+                                <img
+                                    className="w-40 h-32"
+                                    src={productImg}
+                                    alt={productName}
+                                />
+                            </div>
                         </div>
-                        <div className="my-5">
-                            <img
-                                className="w-40 h-32"
-                                src={productImg}
-                                alt={productName}
-                            />
-                        </div>
-                    </div>
-                    <div className="grid gap-6 mb-6 grid-cols-2">
-                        <div>
-                            <label
-                                htmlFor="productName"
-                                className="block mb-2 text-sm font-medium text-primary"
-                            >
-                                Product Name
-                            </label>
-                            <input
-                                {...register("productName", {
-                                    required: "Product Title Is Required!",
-                                })}
-                                defaultValue={productName}
-                                type="text"
-                                placeholder="Enter Your Product Name"
-                                className="input input-bordered input-success w-full text-primary"
-                            />
-                            {errors.productName && (
-                                <p className="text-red-600">
-                                    {errors.productName?.message}
-                                </p>
-                            )}
-                        </div>
+                        <div className="grid gap-6 mb-6 grid-cols-2">
+                            <div>
+                                <label
+                                    htmlFor="productName"
+                                    className="block mb-2 text-sm font-medium text-primary"
+                                >
+                                    Product Name
+                                </label>
+                                <input
+                                    {...register("productName", {
+                                        required: "Product Title Is Required!",
+                                    })}
+                                    defaultValue={productName}
+                                    type="text"
+                                    placeholder="Enter Your Product Name"
+                                    className="input input-bordered input-success w-full text-primary"
+                                />
+                                {errors.productName && (
+                                    <p className="text-red-600">
+                                        {errors.productName?.message}
+                                    </p>
+                                )}
+                            </div>
 
-                        <div>
-                            <label
-                                htmlFor="price"
-                                className="block mb-2 text-sm font-medium text-primary"
-                            >
-                                Price
-                            </label>
-                            <input
-                                {...register("price", {
-                                    required: "Product price Is Required!",
-                                })}
-                                defaultValue={price}
-                                type="text"
-                                placeholder="Enter Your Product Price"
-                                className="input input-bordered input-success w-full text-primary"
-                            />
-                            {errors.price && (
-                                <p className="text-red-600">
-                                    {errors.price?.message}
-                                </p>
-                            )}
-                        </div>
-                        <div>
-                            <label
-                                htmlFor="originalPrice"
-                                className="block mb-2 text-sm font-medium text-primary"
-                            >
-                                Original Price
-                            </label>
-                            <input
-                                {...register("originalPrice", {
-                                    required:
-                                        "Product Original Price Is Required!",
-                                })}
-                                defaultValue={originalPrice}
-                                type="text"
-                                placeholder="Enter Your Product Original Price"
-                                className="input input-bordered input-success w-full text-primary"
-                            />
-                            {errors.originalPrice && (
-                                <p className="text-red-600">
-                                    {errors.originalPrice?.message}
-                                </p>
-                            )}
-                        </div>
+                            <div>
+                                <label
+                                    htmlFor="price"
+                                    className="block mb-2 text-sm font-medium text-primary"
+                                >
+                                    Price
+                                </label>
+                                <input
+                                    {...register("price", {
+                                        required: "Product price Is Required!",
+                                    })}
+                                    defaultValue={price}
+                                    type="text"
+                                    placeholder="Enter Your Product Price"
+                                    className="input input-bordered input-success w-full text-primary"
+                                />
+                                {errors.price && (
+                                    <p className="text-red-600">
+                                        {errors.price?.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor="originalPrice"
+                                    className="block mb-2 text-sm font-medium text-primary"
+                                >
+                                    Original Price
+                                </label>
+                                <input
+                                    {...register("originalPrice", {
+                                        required:
+                                            "Product Original Price Is Required!",
+                                    })}
+                                    defaultValue={originalPrice}
+                                    type="text"
+                                    placeholder="Enter Your Product Original Price"
+                                    className="input input-bordered input-success w-full text-primary"
+                                />
+                                {errors.originalPrice && (
+                                    <p className="text-red-600">
+                                        {errors.originalPrice?.message}
+                                    </p>
+                                )}
+                            </div>
 
-                        <div>
-                            <label
-                                htmlFor="phone"
-                                className="block mb-2 text-sm font-medium text-primary"
-                            >
-                                Phone
-                            </label>
-                            <input
-                                {...register("phone", {
-                                    required: "Phone Number Is Required!",
-                                })}
-                                defaultValue={phone}
-                                type="tel"
-                                placeholder="123-45-678"
-                                className="input input-bordered input-success w-full text-primary"
-                            />
-                            {errors.phone && (
-                                <p className="text-red-600">
-                                    {errors.phone?.message}
-                                </p>
-                            )}
+                            <div>
+                                <label
+                                    htmlFor="phone"
+                                    className="block mb-2 text-sm font-medium text-primary"
+                                >
+                                    Phone
+                                </label>
+                                <input
+                                    {...register("phone", {
+                                        required: "Phone Number Is Required!",
+                                    })}
+                                    defaultValue={phone}
+                                    type="tel"
+                                    placeholder="123-45-678"
+                                    className="input input-bordered input-success w-full text-primary"
+                                />
+                                {errors.phone && (
+                                    <p className="text-red-600">
+                                        {errors.phone?.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor="location"
+                                    className="block mb-2 text-sm font-medium text-primary"
+                                >
+                                    Location
+                                </label>
+                                <input
+                                    {...register("location", {
+                                        required: "Location Is Required!",
+                                    })}
+                                    defaultValue={location}
+                                    type="text"
+                                    placeholder="Enter Your Location"
+                                    className="input input-bordered input-success w-full text-primary"
+                                />
+                                {errors.location && (
+                                    <p className="text-red-600">
+                                        {errors.location?.message}
+                                    </p>
+                                )}
+                            </div>
+                            <div className="mb-6">
+                                <label
+                                    htmlFor="date"
+                                    className="block mb-2 text-sm font-medium text-primary"
+                                >
+                                    Year Of Purchase
+                                </label>
+                                <input
+                                    {...register("date", {
+                                        required:
+                                            "Purchase of Year Is Required!",
+                                    })}
+                                    defaultValue={date}
+                                    type="date"
+                                    className="input input-bordered input-success w-full text-primary"
+                                />
+                                {errors.date && (
+                                    <p className="text-red-600">
+                                        {errors.date?.message}
+                                    </p>
+                                )}
+                            </div>
                         </div>
-                        <div>
+                        <div className="mb-6">
                             <label
-                                htmlFor="location"
+                                htmlFor="productCategory"
                                 className="block mb-2 text-sm font-medium text-primary"
                             >
-                                Location
+                                Condition
                             </label>
-                            <input
-                                {...register("location", {
-                                    required: "Location Is Required!",
+                            <select
+                                className="select select-success w-full max-w-xs text-primary text-base"
+                                {...register("productCondition", {
+                                    required: "Product Condition Is Required!",
                                 })}
-                                defaultValue={location}
-                                type="text"
-                                placeholder="Enter Your Location"
-                                className="input input-bordered input-success w-full text-primary"
-                            />
-                            {errors.location && (
+                                defaultValue={productCondition}
+                            >
+                                <option
+                                    disabled
+                                    selected
+                                    className="text-primary text-base"
+                                >
+                                    Pick Your Product Condition
+                                </option>
+                                <option
+                                    className="text-primary text-base"
+                                    value="excellent"
+                                >
+                                    Excellent
+                                </option>
+                                <option
+                                    value="good"
+                                    className="text-primary text-base"
+                                >
+                                    Good
+                                </option>
+                                <option
+                                    value="fair"
+                                    className="text-primary text-base"
+                                >
+                                    Fair
+                                </option>
+                            </select>
+                            {errors.productCondition && (
                                 <p className="text-red-600">
-                                    {errors.location?.message}
+                                    {errors.productCondition?.message}
                                 </p>
                             )}
                         </div>
                         <div className="mb-6">
                             <label
-                                htmlFor="date"
+                                htmlFor="productCategory"
                                 className="block mb-2 text-sm font-medium text-primary"
                             >
-                                Year Of Purchase
+                                Category
                             </label>
-                            <input
-                                {...register("date", {
-                                    required: "Purchase of Year Is Required!",
+                            <select
+                                className="select select-success w-full max-w-xs text-primary text-base"
+                                {...register("productCategory", {
+                                    required: "Product Category Is Required!",
                                 })}
-                                defaultValue={date}
-                                type="date"
-                                className="input input-bordered input-success w-full text-primary"
-                            />
-                            {errors.date && (
+                                defaultValue={productCategory}
+                            >
+                                {productCategory && (
+                                    <option
+                                        value={productCategory}
+                                        className="text-sm"
+                                    >
+                                        {productCategory}
+                                    </option>
+                                )}
+
+                                {allCategory
+                                    .filter(
+                                        (category) =>
+                                            category.categoryName !==
+                                            productCategory
+                                    )
+                                    .map((category) => (
+                                        <option
+                                            key={category._id}
+                                            value={category.categoryName}
+                                            className="text-sm"
+                                        >
+                                            {category.categoryName}
+                                        </option>
+                                    ))}
+                            </select>
+                            {errors.productCategory && (
                                 <p className="text-red-600">
-                                    {errors.date?.message}
+                                    {errors.productCategory?.message}
                                 </p>
                             )}
                         </div>
-                    </div>
-                    <div className="mb-6">
-                        <label
-                            htmlFor="productCategory"
-                            className="block mb-2 text-sm font-medium text-primary"
-                        >
-                            Condition
-                        </label>
-                        <select
-                            className="select select-success w-full max-w-xs text-primary text-base"
-                            {...register("productCondition", {
-                                required: "Product Condition Is Required!",
-                            })}
-                            defaultValue={productCondition}
-                        >
-                            <option
-                                disabled
-                                selected
-                                className="text-primary text-base"
+
+                        <div>
+                            <label
+                                htmlFor="description"
+                                className="block mb-2 text-sm font-medium text-primary"
                             >
-                                Pick Your Product Condition
-                            </option>
-                            <option
-                                className="text-primary text-base"
-                                value="excellent"
-                            >
-                                Excellent
-                            </option>
-                            <option
-                                value="good"
-                                className="text-primary text-base"
-                            >
-                                Good
-                            </option>
-                            <option
-                                value="fair"
-                                className="text-primary text-base"
-                            >
-                                Fair
-                            </option>
-                        </select>
-                        {errors.productCondition && (
-                            <p className="text-red-600">
-                                {errors.productCondition?.message}
-                            </p>
-                        )}
-                    </div>
-                    <div className="mb-6">
-                        <label
-                            htmlFor="productCategory"
-                            className="block mb-2 text-sm font-medium text-primary"
-                        >
-                            Category
-                        </label>
-                        <select
-                            className="select select-success w-full max-w-xs text-primary text-base"
-                            {...register("productCategory", {
-                                required: "Product Category Is Required!",
-                            })}
-                            defaultValue={productCategory}
-                        >
-                            {productCategory && (
-                                <option
-                                    value={productCategory}
-                                    className="text-sm"
-                                >
-                                    {productCategory}
-                                </option>
+                                Product Description
+                            </label>
+                            <textarea
+                                {...register("description", {
+                                    required:
+                                        "Product Description Is Required!",
+                                })}
+                                defaultValue={description}
+                                className="textarea textarea-success w-full text-primary"
+                                placeholder="Leave to product description"
+                            ></textarea>
+                            {errors.description && (
+                                <p className="text-red-600">
+                                    {errors.description?.message}
+                                </p>
                             )}
+                        </div>
 
-                            {allCategory
-                                .filter(
-                                    (category) =>
-                                        category.categoryName !==
-                                        productCategory
-                                )
-                                .map((category) => (
-                                    <option
-                                        key={category._id}
-                                        value={category.categoryName}
-                                        className="text-sm"
-                                    >
-                                        {category.categoryName}
-                                    </option>
-                                ))}
-                        </select>
-                        {errors.productCategory && (
-                            <p className="text-red-600">
-                                {errors.productCategory?.message}
-                            </p>
-                        )}
-                    </div>
-
-                    <div>
-                        <label
-                            htmlFor="description"
-                            className="block mb-2 text-sm font-medium text-primary"
-                        >
-                            Product Description
-                        </label>
-                        <textarea
-                            {...register("description", {
-                                required: "Product Description Is Required!",
-                            })}
-                            defaultValue={description}
-                            className="textarea textarea-success w-full text-primary"
-                            placeholder="Leave to product description"
-                        ></textarea>
-                        {errors.description && (
-                            <p className="text-red-600">
-                                {errors.description?.message}
-                            </p>
-                        )}
-                    </div>
-
-                    <input
-                        type="submit"
-                        value="Update Product"
-                        className="btn hover:bg-transparent hover:text-primary text-white btn-primary  mt-2"
-                    />
-                </form>
+                        <input
+                            type="submit"
+                            value="Update Product"
+                            className="btn hover:bg-transparent hover:text-primary text-white btn-primary  mt-2"
+                        />
+                    </form>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

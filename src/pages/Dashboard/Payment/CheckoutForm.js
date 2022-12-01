@@ -5,6 +5,7 @@ import { useAuth } from "./../../../context/AuthProvider/AuthProvider";
 import { removeWishListProductByProductId } from "./../../../api/wishList";
 import { updateProductByProductId } from "./../../../api/product";
 import { updateBookingProductByProductId } from "./../../../api/bookingProduct";
+import { Helmet } from "react-helmet-async";
 
 const CheckoutForm = ({ order }) => {
     const [succeeded, setSucceeded] = useState(false);
@@ -131,16 +132,24 @@ const CheckoutForm = ({ order }) => {
     }
 
     return (
-        <div className="container  my-11">
-            <div className="w-1/2 m-auto bg-secondary">
-                <form onSubmit={handleSubmit} className="p-5">
-                    <CardElement options={cartStyle} onChange={handleChange} />
-                    <button disabled={processing || disabled || succeeded}>
-                        Submit
-                    </button>
-                </form>
+        <>
+            <Helmet>
+                <title>Checkout Form</title>
+            </Helmet>
+            <div className="container  my-11">
+                <div className="w-1/2 m-auto bg-secondary">
+                    <form onSubmit={handleSubmit} className="p-5">
+                        <CardElement
+                            options={cartStyle}
+                            onChange={handleChange}
+                        />
+                        <button disabled={processing || disabled || succeeded}>
+                            Submit
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

@@ -3,6 +3,7 @@ import Loader from "../../components/shared/Loader/Loader";
 import { useAuth } from "./../../context/AuthProvider/AuthProvider";
 import useAdmin from "./../../hooks/useAdmin";
 import useSeller from "./../../hooks/useSeller";
+import { Helmet } from "react-helmet-async";
 
 const Dashboard = () => {
     const { user } = useAuth();
@@ -11,6 +12,9 @@ const Dashboard = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Dashboard</title>
+            </Helmet>
             {!isAdmin && !isSeller ? (
                 <Loader />
             ) : (

@@ -14,6 +14,7 @@ import DisplayError from "../../../DisplayError/DisplayError";
 import { useAuth } from "./../../../../context/AuthProvider/AuthProvider";
 import { useLocation, Navigate } from "react-router-dom";
 import { deleteProductBySellerEmail } from "./../../../../api/product";
+import { Helmet } from "react-helmet-async";
 
 const AllSellers = () => {
     const { logOut } = useAuth();
@@ -96,79 +97,90 @@ const AllSellers = () => {
         return <DisplayError />;
     }
     return (
-        <section className="container mt-8">
-            <SectionTitle title="All Seller Users" />
-            <div className="overflow-x-auto w-full bg-secondary mt-7 rounded-sm">
-                {isLoading ? (
-                    <Loader />
-                ) : (
-                    <table className="w-full">
-                        <thead className="bg-green-300 text-primary text-left">
-                            <tr>
-                                <th className="text-center">Profile</th>
-                                <th>Email</th>
-                                <th>Delete</th>
-                                <th>Verified</th>
-                            </tr>
-                        </thead>
-                        <tbody className="text-primary text-left">
-                            <>
-                                {allSellers?.map((seller) => (
-                                    <tr key={seller._id}>
-                                        <td className="text-left">
-                                            <div className="flex items-center justify-center space-x-3">
-                                                <div className="avatar">
-                                                    <div className="mask mask-squircle w-12 h-12">
-                                                        <img
-                                                            src={
-                                                                seller.profileImage
-                                                            }
-                                                            alt={seller.name}
-                                                        />
+        <>
+            <Helmet>
+                <title>AllSellers</title>
+            </Helmet>
+            <section className="container mt-8">
+                <SectionTitle title="All Seller Users" />
+                <div className="overflow-x-auto w-full bg-secondary mt-7 rounded-sm">
+                    {isLoading ? (
+                        <Loader />
+                    ) : (
+                        <table className="w-full">
+                            <thead className="bg-green-300 text-primary text-left">
+                                <tr>
+                                    <th className="text-center">Profile</th>
+                                    <th>Email</th>
+                                    <th>Delete</th>
+                                    <th>Verified</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-primary text-left">
+                                <>
+                                    {allSellers?.map((seller) => (
+                                        <tr key={seller._id}>
+                                            <td className="text-left">
+                                                <div className="flex items-center justify-center space-x-3">
+                                                    <div className="avatar">
+                                                        <div className="mask mask-squircle w-12 h-12">
+                                                            <img
+                                                                src={
+                                                                    seller.profileImage
+                                                                }
+                                                                alt={
+                                                                    seller.name
+                                                                }
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-bold">
+                                                            {seller.name}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <div className="font-bold">
-                                                        {seller.name}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
+                                            </td>
 
-                                        <td>{seller.email}</td>
-                                        <td>
-                                            <label
-                                                onClick={() =>
-                                                    handleSellerDelete(seller)
-                                                }
-                                            >
-                                                <AiFillDelete className="h-5 w-5 cursor-pointer text-red-600" />
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <label
-                                                className="cursor-pointer"
-                                                onClick={() =>
-                                                    handleSellerVerified(seller)
-                                                }
-                                            >
-                                                <MdOutlineVerifiedUser
-                                                    className={`h-5 w-5  ${
-                                                        seller?.isVerified
-                                                            ? "text-green-600"
-                                                            : "text-primary"
-                                                    }`}
-                                                />
-                                            </label>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </>
-                        </tbody>
-                    </table>
-                )}
-            </div>
-        </section>
+                                            <td>{seller.email}</td>
+                                            <td>
+                                                <label
+                                                    onClick={() =>
+                                                        handleSellerDelete(
+                                                            seller
+                                                        )
+                                                    }
+                                                >
+                                                    <AiFillDelete className="h-5 w-5 cursor-pointer text-red-600" />
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label
+                                                    className="cursor-pointer"
+                                                    onClick={() =>
+                                                        handleSellerVerified(
+                                                            seller
+                                                        )
+                                                    }
+                                                >
+                                                    <MdOutlineVerifiedUser
+                                                        className={`h-5 w-5  ${
+                                                            seller?.isVerified
+                                                                ? "text-green-600"
+                                                                : "text-primary"
+                                                        }`}
+                                                    />
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </>
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+            </section>
+        </>
     );
 };
 

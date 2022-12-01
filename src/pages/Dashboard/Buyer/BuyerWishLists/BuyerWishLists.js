@@ -11,7 +11,7 @@ import { toast } from "react-hot-toast";
 import DisplayError from "./../../../DisplayError/DisplayError";
 import { useAuth } from "./../../../../context/AuthProvider/AuthProvider";
 import { useLocation, Navigate } from "react-router-dom";
-
+import { Helmet } from "react-helmet-async";
 
 const BuyerWishLists = () => {
     const { user, logOut } = useAuth();
@@ -76,31 +76,36 @@ const BuyerWishLists = () => {
         return <DisplayError />;
     }
     return (
-        <section className="container py-10">
-            <SectionTitle title="Your Desire Product" />
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <div className="grid grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mt-8 gap-5">
-                    {wishLists?.length > 0 ? (
-                        <>
-                            {wishLists?.map((wishList) => (
-                                <WishList
-                                    wishList={wishList}
-                                    key={wishList._id}
-                                    addToWishList={addToWishList}
-                                    wishLists={wishLists}
-                                />
-                            ))}
-                        </>
-                    ) : (
-                        <h3 className="text-center text-xl text-primary">
-                            There is no wish-list
-                        </h3>
-                    )}
-                </div>
-            )}
-        </section>
+        <>
+            <Helmet>
+                <title>Buyer WishList</title>
+            </Helmet>
+            <section className="container py-10">
+                <SectionTitle title="Your Desire Product" />
+                {isLoading ? (
+                    <Loader />
+                ) : (
+                    <div className="grid grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mt-8 gap-5">
+                        {wishLists?.length > 0 ? (
+                            <>
+                                {wishLists?.map((wishList) => (
+                                    <WishList
+                                        wishList={wishList}
+                                        key={wishList._id}
+                                        addToWishList={addToWishList}
+                                        wishLists={wishLists}
+                                    />
+                                ))}
+                            </>
+                        ) : (
+                            <h3 className="text-center text-xl text-primary">
+                                There is no wish-list
+                            </h3>
+                        )}
+                    </div>
+                )}
+            </section>
+        </>
     );
 };
 

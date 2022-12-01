@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import Blog from "../../components/shared/Blog/Blog";
 import { useQuery } from "@tanstack/react-query";
 import { getAllBlogs } from "./../../api/blog";
@@ -31,30 +32,35 @@ const Blogs = () => {
     }
 
     return (
-        <div className="container mt-14">
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <div className="grid grid-cols-3 gap-5 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1">
-                    {blogs?.length > 0 ? (
-                        <>
-                            {blogs?.map((blog) => (
-                                <Blog
-                                    key={blog._id}
-                                    isSliderBlog={false}
-                                    blog={blog}
-                                />
-                            ))}
-                        </>
-                    ) : (
-                        <h3 className="text-center text-xl text-primary">
-                            There is no Blog
-                        </h3>
-                    )}
-                </div>
-            )}
-            <Pagination pages={pages} page={page} setPage={setPage} />
-        </div>
+        <>
+            <Helmet>
+                <title>Blogs</title>
+            </Helmet>
+            <div className="container mt-14">
+                {isLoading ? (
+                    <Loader />
+                ) : (
+                    <div className="grid grid-cols-3 gap-5 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1">
+                        {blogs?.length > 0 ? (
+                            <>
+                                {blogs?.map((blog) => (
+                                    <Blog
+                                        key={blog._id}
+                                        isSliderBlog={false}
+                                        blog={blog}
+                                    />
+                                ))}
+                            </>
+                        ) : (
+                            <h3 className="text-center text-xl text-primary">
+                                There is no Blog
+                            </h3>
+                        )}
+                    </div>
+                )}
+                <Pagination pages={pages} page={page} setPage={setPage} />
+            </div>
+        </>
     );
 };
 

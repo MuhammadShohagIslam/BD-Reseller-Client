@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BookingForm from "../../components/shared/BookingForm/BookingForm";
 import Product from "../../components/shared/Product/Product";
 import SectionTitle from "../../components/shared/SectionTitle/SectionTitle";
@@ -15,23 +15,27 @@ import { toast } from "react-hot-toast";
 import { useAuth } from "./../../context/AuthProvider/AuthProvider";
 import { getAllBookingProducts } from "../../api/bookingProduct";
 import Pagination from "../../components/shared/Pagination/Pagination";
-import DisplayError from './../DisplayError/DisplayError';
+import DisplayError from "./../DisplayError/DisplayError";
 import { useLocation, useNavigate } from "react-router-dom";
-import useDimensions from './../../hooks/useDimensions';
+import useDimensions from "./../../hooks/useDimensions";
+import { Helmet } from "react-helmet-async";
 
 const ProductsByCategory = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
     const [bookingProduct, setBookingProduct] = useState(null);
-    const { user, logOut} = useAuth();
-    const {pageSize} = useDimensions();
+    const { user, logOut } = useAuth();
+    const { pageSize } = useDimensions();
     const pages = Math.ceil(count / pageSize);
 
     const location = useLocation();
     const navigate = useNavigate();
     const params = useParams();
-
     const { categoryName } = params;
+    
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const { isLoading, error, data } = useQuery({
         queryKey: ["productsByCategories", page, pageSize, categoryName],
@@ -62,8 +66,7 @@ const ProductsByCategory = () => {
     const userEmail = user?.email;
     const handleLogOut = () => {
         logOut()
-            .then(() => {
-            })
+            .then(() => {})
             .catch((error) => {
                 console.log(error.message);
             });
@@ -74,7 +77,7 @@ const ProductsByCategory = () => {
         error: bookingError,
         data: bookingProducts = [],
     } = useQuery({
-        queryKey:["bookingProducts", userName, userEmail],
+        queryKey: ["bookingProducts", userName, userEmail],
         queryFn: async () => {
             const data = await getAllBookingProducts(
                 user?.displayName,
@@ -89,7 +92,7 @@ const ProductsByCategory = () => {
         },
         enabled: !!userName && !!userEmail,
     });
-   
+
     const closeModal = () => {
         setBookingProduct(null);
     };
@@ -159,47 +162,52 @@ const ProductsByCategory = () => {
     }
 
     return (
-        <section className="container mt-12">
-            <SectionTitle
-                title={`All Products Of  '''${categoryName}''' Category`}
-            />
-            {isLoading && loadingWishList && loadingBookingProduct ? (
-                <Loader />
-            ) : (
-                <div className="grid grid-cols-3 gap-5 md:grid-cols-2 sm:grid-cols-1 mt-6">
-                    {data?.length > 0 ? (
-                        <>
-                            {data?.map((product) => (
-                                <Product
-                                    key={product._id}
-                                    product={product}
-                                    addToBookNow={addToBookNow}
-                                    addToWishList={addToWishList}
-                                    wishLists={wishLists}
-                                    bookingProducts={bookingProducts}
-                                    user={user}
-                                />
-                            ))}
-                        </>
-                    ) : (
-                        <h3 className="text-center text-xl text-primary">
-                            There is no product
-                        </h3>
-                    )}
-                </div>
-            )}
-
-            <Pagination pages={pages} page={page} setPage={setPage} />
-
-            {bookingProduct && (
-                <BookingForm
-                    bookingProduct={bookingProduct}
-                    user={user}
-                    closeModal={closeModal}
-                    bookingProductRefetch={bookingProductRefetch}
+        <>
+            <Helmet>
+                <title>Product By {categoryName}</title>
+            </Helmet>
+            <section className="container mt-12">
+                <SectionTitle
+                    title={`All Products Of  '''${categoryName}''' Category`}
                 />
-            )}
-        </section>
+                {isLoading && loadingWishList && loadingBookingProduct ? (
+                    <Loader />
+                ) : (
+                    <div className="grid grid-cols-3 gap-5 md:grid-cols-2 sm:grid-cols-1 mt-6">
+                        {data?.length > 0 ? (
+                            <>
+                                {data?.map((product) => (
+                                    <Product
+                                        key={product._id}
+                                        product={product}
+                                        addToBookNow={addToBookNow}
+                                        addToWishList={addToWishList}
+                                        wishLists={wishLists}
+                                        bookingProducts={bookingProducts}
+                                        user={user}
+                                    />
+                                ))}
+                            </>
+                        ) : (
+                            <h3 className="text-center text-xl text-primary">
+                                There is no product
+                            </h3>
+                        )}
+                    </div>
+                )}
+
+                <Pagination pages={pages} page={page} setPage={setPage} />
+
+                {bookingProduct && (
+                    <BookingForm
+                        bookingProduct={bookingProduct}
+                        user={user}
+                        closeModal={closeModal}
+                        bookingProductRefetch={bookingProductRefetch}
+                    />
+                )}
+            </section>
+        </>
     );
 };
 

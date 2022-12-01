@@ -10,21 +10,26 @@ import {
 import Loader from "./../../../../../components/shared/Loader/Loader";
 import { toast } from "react-hot-toast";
 import Pagination from "../../../../../components/shared/Pagination/Pagination";
-import DisplayError from './../../../../DisplayError/DisplayError';
-import useDimensions from './../../../../../hooks/useDimensions';
+import DisplayError from "./../../../../DisplayError/DisplayError";
+import useDimensions from "./../../../../../hooks/useDimensions";
 import { useAuth } from "../../../../../context/AuthProvider/AuthProvider";
+import { Helmet } from "react-helmet-async";
 
 const SellerProducts = () => {
     const [count, setCount] = useState(0);
     const [page, setPage] = useState(0);
-    const {pageSize} = useDimensions();
-    const {user} = useAuth();
+    const { pageSize } = useDimensions();
+    const { user } = useAuth();
     const pages = Math.ceil(count / pageSize);
 
     const { isLoading, error, refetch, data } = useQuery({
         queryKey: ["sellerAllProducts", page, pageSize, user?.email],
         queryFn: async () => {
-            const data = await getAllSellerProducts(page, pageSize,user?.email);
+            const data = await getAllSellerProducts(
+                page,
+                pageSize,
+                user?.email
+            );
             setCount(data.data.totalProduct);
             return data.data.products;
         },
@@ -78,39 +83,45 @@ const SellerProducts = () => {
     if (error) {
         return <DisplayError />;
     }
-  
 
     return (
-        <div className="container my-10">
-            <SectionTitle title="All Products of Seller" />
+        <>
+            <Helmet>
+                <title>Seller Products</title>
+            </Helmet>
+            <div className="container my-10">
+                <SectionTitle title="All Products of Seller" />
 
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <div className="grid grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mt-7 gap-5">
-                    {data?.length > 0 ? (
-                        <>
-                            {data?.map((product) => (
-                                <SellerProduct
-                                    key={product._id}
-                                    product={product}
-                                    handleDeleteProduct={handleDeleteProduct}
-                                    handleAdvertisingProduct={
-                                        handleAdvertisingProduct
-                                    }
-                                />
-                            ))}
-                        </>
-                    ) : (
-                        <h3 className="text-center text-xl text-primary">
-                            There is no product
-                        </h3>
-                    )}
-                </div>
-            )}
+                {isLoading ? (
+                    <Loader />
+                ) : (
+                    <div className="grid grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mt-7 gap-5">
+                        {data?.length > 0 ? (
+                            <>
+                                {data?.map((product) => (
+                                    <SellerProduct
+                                        key={product._id}
+                                        product={product}
+                                        handleDeleteProduct={
+                                            handleDeleteProduct
+                                        }
+                                        handleAdvertisingProduct={
+                                            handleAdvertisingProduct
+                                        }
+                                    />
+                                ))}
+                            </>
+                        ) : (
+                            <h3 className="text-center text-xl text-primary">
+                                There is no product
+                            </h3>
+                        )}
+                    </div>
+                )}
 
-            <Pagination pages={pages} page={page} setPage={setPage} />
-        </div>
+                <Pagination pages={pages} page={page} setPage={setPage} />
+            </div>
+        </>
     );
 };
 
