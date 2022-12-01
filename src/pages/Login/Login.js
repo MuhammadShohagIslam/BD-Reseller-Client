@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -10,6 +10,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const Login = () => {
+    const [loadingLogin, setLoadingLogin] = useState(false);
+
     const {
         loginWithEmailAndPassword,
         registerAndLoginWithProvider,
@@ -27,10 +29,10 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
-    console.log(from);
 
     const handleLogin = (data) => {
         const { email, password } = data;
+        setLoadingLogin(true)
         loginWithEmailAndPassword(email, password)
             .then((result) => {
                 const user = result?.user;
@@ -50,17 +52,21 @@ const Login = () => {
                             showConfirmButton: false,
                             timer: 2500,
                         });
+                        setLoadingLogin(false)
                         navigate(from, { replace: true });
                     })
                     .catch((error) => {
                         console.log(error.message);
+                        setLoadingLogin(false)
                     });
             })
             .catch((error) => {
                 toast.error(error.message.split("Firebase: ").join(""));
+                setLoadingLogin(false)
             })
             .finally(() => {
                 setLoading(false);
+                setLoadingLogin(false)
             });
     };
 
@@ -169,11 +175,13 @@ const Login = () => {
                             </p>
                         )}
                     </div>
-                    <input
+                    <button
+                        disabled={loadingLogin}
                         type="submit"
-                        className="btn btn-primary text-white hover:bg-transparent hover:text-primary border-2"
-                        value="Login"
-                    />
+                        className="btn block hover:bg-transparent hover:text-primary text-white btn-primary disabled:opacity-75 disabled:border-2 disabled:border-primary disabled:text-primary mt-2"
+                    >
+                        {loadingLogin ? "Loading" : "Login"}
+                    </button>
                 </form>
                 <hr className="my-4"></hr>
                 <p className="text-primary">

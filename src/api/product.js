@@ -49,6 +49,13 @@ export const updateProductByProductId = async (productId, updatedData) => {
     );
 };
 
+// delete product by sellerEmail
+export const deleteProductBySellerEmail = async (sellerEmail) => {
+    return await axios.delete(
+        `${process.env.REACT_APP_server_api}/products/sellerProduct/${sellerEmail}`
+    );
+};
+
 // delete product by productId
 export const deleteProductByProductId = async (productId) => {
     return await axios.delete(

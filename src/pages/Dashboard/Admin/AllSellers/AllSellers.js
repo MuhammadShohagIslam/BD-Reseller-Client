@@ -13,6 +13,7 @@ import { toast } from "react-hot-toast";
 import DisplayError from "../../../DisplayError/DisplayError";
 import { useAuth } from "./../../../../context/AuthProvider/AuthProvider";
 import { useLocation, Navigate } from "react-router-dom";
+import { deleteProductBySellerEmail } from "./../../../../api/product";
 
 const AllSellers = () => {
     const { logOut } = useAuth();
@@ -48,7 +49,7 @@ const AllSellers = () => {
             } catch (error) {
                 if (error.response.status === 403) {
                     handleLogOut();
-                } 
+                }
             }
         },
     });
@@ -74,7 +75,15 @@ const AllSellers = () => {
         const { email } = seller;
         removedUsersByEmail(email)
             .then((data) => {
-                toast.success(`${seller.name}  Delete Successfully!`);
+                deleteProductBySellerEmail(email)
+                    .then((data) => {
+                        toast.success(
+                            `${seller.name} Delete Successfully and All Products!`
+                        );
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    });
                 refetch();
             })
             .catch((error) => {
@@ -143,7 +152,13 @@ const AllSellers = () => {
                                                     handleSellerVerified(seller)
                                                 }
                                             >
-                                                <MdOutlineVerifiedUser className="h-5 w-5 text-green-600" />
+                                                <MdOutlineVerifiedUser
+                                                    className={`h-5 w-5  ${
+                                                        seller?.isVerified
+                                                            ? "text-green-600"
+                                                            : "text-primary"
+                                                    }`}
+                                                />
                                             </label>
                                         </td>
                                     </tr>

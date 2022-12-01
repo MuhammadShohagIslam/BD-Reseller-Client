@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { GoogleAuthProvider } from "firebase/auth";
 import { useAuth } from "./../../context/AuthProvider/AuthProvider";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createJwtToken, createNewUser } from "../../api/user";
 import axios from "axios";
 
 const Register = () => {
+    const [loadingRegister, setLoadingRegister] = useState(false);
     const url = `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_imgdb_key}`;
     const {
         handleSubmit,
@@ -34,6 +35,7 @@ const Register = () => {
 
         const formData = new FormData();
         formData.append("image", profileURL);
+        setLoadingRegister(true);
         axios
             .post(url, formData)
             .then((imgData) => {
@@ -46,12 +48,12 @@ const Register = () => {
                             name: userCredential?.displayName || name,
                             email: userCredential?.email || email,
                         };
-                      
+
                         createJwtToken(currentUser)
                             .then((tokenData) => {
                                 const userData = {
                                     ...currentUser,
-                                    profileImage:productImgUrl,
+                                    profileImage: productImgUrl,
                                     role: role,
                                 };
                                 const data = tokenData.data;
@@ -60,27 +62,33 @@ const Register = () => {
                                     data.token
                                 );
                                 saveNewUser(userData);
-                                setUser(result?.user)
+                                setUser(result?.user);
                                 reset();
                                 navigate("/");
                                 setLoading(false);
+                                setLoadingRegister(false);
                             })
                             .catch((error) => {
                                 setLoading(false);
                                 console.log(error.message);
+                                setLoadingRegister(false);
                             });
                     })
                     .catch((error) => {
                         setLoading(false);
+                        setLoadingRegister(false);
                         toast.error(error.message.split("Firebase: ").join(""));
-                    })
+                    });
             })
             .catch((error) => {
                 setLoading(false);
+                setLoadingRegister(false);
                 console.log(error.message);
-            }).finally(() => {
+            })
+            .finally(() => {
                 setLoading(false);
-            });;
+                setLoadingRegister(false);
+            });
     };
 
     const handleProfileUpdate = (name, photoURL) => {
@@ -123,7 +131,7 @@ const Register = () => {
                     .then((tokenData) => {
                         const userData = {
                             ...currentUser,
-                            profileImage:userCredential?.photoURL,
+                            profileImage: userCredential?.photoURL,
                             role: "user",
                         };
                         const data = tokenData.data;
@@ -279,11 +287,13 @@ const Register = () => {
                             </p>
                         )}
                     </div>
-                    <input
+                    <button
+                        disabled={loadingRegister}
                         type="submit"
-                        className="btn btn-primary text-white hover:bg-transparent hover:text-primary border-2"
-                        value="Register"
-                    />
+                        className="btn block hover:bg-transparent hover:text-primary text-white btn-primary disabled:opacity-75 disabled:border-2 disabled:border-primary disabled:text-primary mt-2"
+                    >
+                        {loadingRegister ? "Loading" : "Register"}
+                    </button>
                 </form>
                 <hr className="my-4"></hr>
                 <p className="text-primary">

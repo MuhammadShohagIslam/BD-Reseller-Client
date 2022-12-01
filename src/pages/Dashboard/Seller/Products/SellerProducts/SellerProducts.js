@@ -33,7 +33,6 @@ const SellerProducts = () => {
     const handleDeleteProduct = (productId) => {
         deleteProductByProductId(productId)
             .then((data) => {
-                console.log(data);
                 toast.error("Product Delete Successfully");
                 refetch();
             })
