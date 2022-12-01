@@ -5,6 +5,9 @@
 
 ### BdSeller Application Live: [https://bdseller-7e25f.web.app/](https://bdseller-7e25f.web.app/)
 
+### Admin Email: admin@gmail.com
+### Admin Password: 123456
+
 ### Description About My Project
 
 -   ### Home Page
