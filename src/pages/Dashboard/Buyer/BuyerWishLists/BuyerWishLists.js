@@ -55,11 +55,9 @@ const BuyerWishLists = () => {
     });
 
     const addToWishList = (wishList, isProductIdFromWishList, productId) => {
-        console.log(wishList._id);
         if (isProductIdFromWishList) {
             removeWishListProductByProductId(productId)
                 .then((data) => {
-                    console.log(data);
                     if (data.data.acknowledged) {
                         toast.success(
                             `${wishList.productName} Product Removed To Wish-List!`

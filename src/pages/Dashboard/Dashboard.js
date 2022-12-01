@@ -1,21 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Loader from "../../components/shared/Loader/Loader";
 import { useAuth } from "./../../context/AuthProvider/AuthProvider";
 import useAdmin from "./../../hooks/useAdmin";
 import useSeller from "./../../hooks/useSeller";
 import { Helmet } from "react-helmet-async";
+import useBuyer from "./../../hooks/useBuyer";
 
 const Dashboard = () => {
     const { user } = useAuth();
+    const [fetching, setFetching] = useState(true);
     const [isAdmin] = useAdmin(user?.email);
     const [isSeller] = useSeller(user?.email);
+    const [isBuyer] = useBuyer(user?.email);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setFetching(false);
+        }, 800);
+    }, [fetching]);
 
     return (
         <>
             <Helmet>
                 <title>Dashboard</title>
             </Helmet>
-            {!isAdmin && !isSeller ? (
+
+            {fetching ? (
                 <Loader />
             ) : (
                 <section className="container h-screen flex justify-center py-10">
@@ -28,7 +38,9 @@ const Dashboard = () => {
                                     ? "Admin"
                                     : isSeller
                                     ? "Seller"
-                                    : "User"}
+                                    : isBuyer
+                                    ? "User"
+                                    : ""}
                             </span>
                             '''
                         </h2>
