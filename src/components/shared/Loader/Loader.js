@@ -1,8 +1,8 @@
 import React from "react";
 
-const Loader = () => {
+const Loader = ({height}) => {
     return (
-        <div className="text-center h-96 w-full flex items-center justify-center">
+        <div className={`text-center ${height ? height:"h-96"} w-full flex items-center justify-center`}>
             <div role="status">
                 <svg
                     className="inline mr-2 w-8 h-8 text-primary animate-spin fill-green-600"

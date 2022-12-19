@@ -10,7 +10,7 @@ import useDimensions from "./../../hooks/useDimensions";
 
 const Blogs = () => {
     const [count, setCount] = useState(0);
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const { pageSize } = useDimensions();
     const pages = Math.ceil(count / pageSize);
 
@@ -38,7 +38,7 @@ const Blogs = () => {
             </Helmet>
             <div className="container mt-14">
                 {isLoading ? (
-                    <Loader />
+                    <Loader height="h-[490px]"/>
                 ) : (
                     <div className="grid grid-cols-3 gap-5 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1">
                         {blogs?.length > 0 ? (

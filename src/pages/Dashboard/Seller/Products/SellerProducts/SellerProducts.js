@@ -17,7 +17,7 @@ import { Helmet } from "react-helmet-async";
 
 const SellerProducts = () => {
     const [count, setCount] = useState(0);
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const { pageSize } = useDimensions();
     const { user } = useAuth();
     const pages = Math.ceil(count / pageSize);
@@ -93,7 +93,7 @@ const SellerProducts = () => {
                 <SectionTitle title="All Products of Seller" />
 
                 {isLoading ? (
-                    <Loader />
+                    <Loader height="h-[570px]"/>
                 ) : (
                     <div className="grid grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 mt-7 gap-5">
                         {data?.length > 0 ? (

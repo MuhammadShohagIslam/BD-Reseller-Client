@@ -12,4 +12,41 @@
 .customTooltip::before{
     @apply py-2 px-8 text-white flex justify-center items-center bg-gray-800
 }
+.scroll-to-top{
+    background-color: #36D399 !important;
+    transition: all .4s;
+}
+.scroll-to-top svg {
+    width: 19px;
+    height: 27px;
+    display: inline-block;
+    fill: white;
+    transition: all .4s;
+}
+.scroll-to-top:hover {
+    background-color: #000 !important;
+}
+
+@media only screen and (max-width: 767px) {
+    .scroll-to-top {
+        right: 10px !important;
+        bottom: 33px !important;
+        width: 33px !important;
+        height: 33px !important;
+    }
+    .scroll-to-top svg {
+        width: 12px;
+        height: 22px;
+        display: inline-block;
+        fill: #000;
+        transition: all .5s;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .scroll-to-top {
+        right: 12px !important;
+        bottom: 33px !important;
+    }
+}
 
