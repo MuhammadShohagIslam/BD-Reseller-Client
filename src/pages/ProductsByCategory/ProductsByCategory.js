@@ -22,8 +22,6 @@ const ProductsByCategory = () => {
         user,
         bookingProduct,
         closeModal,
-        loadingBookingProduct,
-        loadingWishList,
         bookingProductRefetch,
         bookingError,
         bookingProducts,
@@ -62,7 +60,7 @@ const ProductsByCategory = () => {
                 <SectionTitle
                     title={`All Products Of  '''${categoryName}''' Category`}
                 />
-                {isLoading || loadingWishList || loadingBookingProduct ? (
+                {isLoading ? (
                     <Loader height="h-[572px]"/>
                 ) : (
                     <div className="grid grid-cols-3 gap-5 md:grid-cols-2 sm:grid-cols-1 mt-6">
